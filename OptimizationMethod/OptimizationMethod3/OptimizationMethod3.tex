@@ -1,0 +1,218 @@
+\input{../../homework.cls}
+
+\newcommand\Title{最优化方法第3次作业}
+
+
+\begin{document}
+
+
+\begin{remark}
+    Farkas 引理：设 $\boldsymbol{A}$ 为 $m \times n$ 矩阵，$\boldsymbol{c}$ 为 $n$ 维列向量，则 $\boldsymbol{A}\boldsymbol{x}\le \boldsymbol{0},\boldsymbol{c}^T\boldsymbol{x} > 0$ 有解的充要条件是 $\boldsymbol{A}^T\boldsymbol{y} =\boldsymbol{c}, \boldsymbol{y} \ge \boldsymbol{0}$ 无解。
+\end{remark}
+
+\begin{remark} 
+    Gordan定理：给定矩阵 $\boldsymbol{A} \in \mathbb{R}^{m\times n}$，下列两个系统只有一个有解
+    \begin{gather*}
+        \boldsymbol{A}x < 0\\
+        \boldsymbol{y} \ge 0, \boldsymbol{y} \neq 0, \boldsymbol{A}^T\boldsymbol{y} = 0
+    \end{gather*}
+\end{remark}
+
+\begin{problem}
+    设 $A$ 是 $m\times n$ 矩阵，$B$ 是 $l \times n$ 矩阵，$c\in\mathbb{R}^n$，证明下列两个系统恰有一个有解：
+    \begin{itemize}
+        \item 系统1：$Ax \le 0, Bx = 0, c^Tx > 0$，对某些 $x\in\mathbb{R}^n$
+        \item 系统2：$A^Ty + B^Tz = c, y \ge 0$，对某些 $y \in \mathbb{R}^m$ 和 $z\in\mathbb{R}^l$
+    \end{itemize}  
+\end{problem}
+\begin{solution}
+    证系统 1 有解，即
+    \[\begin{bmatrix}
+        A\\
+        B\\
+        -B
+    \end{bmatrix}x\le 0, c^Tx>0\]
+    有解，则根据 Farkas定理，有
+    \[\begin{pmatrix}
+        A^T & B^T & -B^T
+    \end{pmatrix}\begin{bmatrix}
+        y\\
+        z_1\\
+        z_2
+    \end{bmatrix}=c,\begin{bmatrix}
+        y\\
+        z_1\\
+        z_2
+    \end{bmatrix}\ge 0\]
+    无解，即 $A^Ty + B^Tz_1 - B^Tz_2 = c, y\ge 0, z_1\ge 0, z_2\ge 0$无解，即 $A^T + B^Tz = c, y\ge 0$ 无解。
+
+    反之，若 $A^T + B^Tz = c, y\ge 0$ 有解，即 $A^Ty + B^Tz_1 - B^Tz_2 = c, y\ge 0, z_1\ge 0, z_2\ge 0$ 有解，根据 Farkas定理，有 
+    \[\begin{bmatrix}
+        A\\
+        B\\
+        -B
+    \end{bmatrix}x\le 0, c^Tx>0\]
+    无解，即 $Ax \le 0, Bx = 0, c^Tx > 0$ 无解。
+\end{solution}
+
+\begin{problem}
+    证明：设 $f(x)$ 是凸集 $S$ 上的凸函数，对每一个实数 $c$，则集合 \[S_c=\left\{x|x\in S, f(x) \le c\right\}\] 是一个凸集。
+\end{problem}
+\begin{solution}
+    $\forall x_1, x_2 \in S_c, z = \lambda x_1 + (1 - \lambda) x_2$，有 
+    \begin{align*}
+        f(z) &= f(\lambda x_1 + (1 - \lambda) x_2) \\
+        &\le \lambda f(x_1) + (1 - \lambda)f(x_2)\\
+        &\le \lambda c + (1 - \lambda)c \\
+        &= c
+    \end{align*}
+
+    得到 $f(z) \le c$，所以 $z \in S_c$，则集合 $S_c$ 是一个凸集。 
+\end{solution}
+
+\begin{problem}
+    用定义验证下列集合是凸集。
+    \[S = \left\{(x_1, x_2) | x_1^2 + x_2^2 \le 10\right\}\]
+\end{problem}
+\begin{solution}
+    任取 $x,y\in S$，满足 $x=(x_1, x_2),y=(y_1, y_2),x_1^2 + x_2^2 \le 10, y_1^2 + y_2^2 \le 10$。
+
+    \[z = \lambda x + (1 - \lambda)y = \left(\lambda x_1 + (1 - \lambda) y_1, \lambda x_2 + (1 - \lambda) y_2\right)\]
+    \begin{align*}
+        &z_1^2 + z_2^2\\
+        =& \lambda^2 x_1^2 + (1-\lambda)y_1^2 + 2\lambda x_1(1-\lambda)y_1\\
+        &+\lambda^2 x_2^2 + (1-\lambda)y_2^2 + 2\lambda x_2(1-\lambda)y_2\\
+        =& \lambda (x_1^2 + x_2^2) + (1-\lambda)^2(y_1^2 + y_2^2) + 2\lambda(1 - \lambda)(x_1y_1 + x_2y_2)\\
+        \le & 10\lambda^2 + 10(1-\lambda)^2 + \lambda(1 - \lambda)(x_1^2 + y_1^2 + x_2^2 + y_2^2)\\
+        \le & 10\lambda^2 + 10(1-\lambda)^2 + \lambda(1 - \lambda)\cdot 20\\
+        =& 10
+    \end{align*}
+
+    所以 $z$ 也在集合内，集合 $S$ 是一个凸集。
+\end{solution}
+
+\begin{problem}
+    证明下列集合 $S$ 是凸集：
+    \[S = \left\{x | x = Ay, y \ge 0\right\}\]
+    其中 $A$ 是 $n\times m$ 矩阵，$x \in \mathbb{R}^n, y\in\mathbb{R}^m$。
+\end{problem}
+\begin{solution}
+    $\forall x^{(1)}, x^{(2)} \in S$，$\lambda x^{(1)} + (1 - \lambda)x^{(2)}= A \left[\lambda y_1 + (1 - \lambda)y_2\right]$，而 $\lambda y_1 + (1 - \lambda)y_2 \ge 0$，则 $\lambda x^{(1)} + (1 - \lambda)x^{(2)} \in S$，所以集合 $S$ 是凸集。
+\end{solution}
+
+\begin{problem}
+    设$A$ 是 $m\times n$ 矩阵，$c\in\mathbb{R}^m$，则下列两个系统中恰有一个有解：
+    \begin{itemize}
+        \item 系统1： $Ax\le 0,x\ge 0,c^Tx>0$，对某些 $x\in\mathbb{R}^n$。
+        \item 系统2： $A^Ty\ge c,y\ge 0$，对某些 $y\in\mathbb{R}^m$。
+    \end{itemize}
+\end{problem}
+\begin{solution}
+    证系统1有解，即
+    \[\begin{bmatrix}
+        A\\
+        -I
+    \end{bmatrix}x\le 0, c^Tx > 0\]
+    有解，则根据 Farkas 定理，有
+    \[(A^T - I)\begin{bmatrix}
+        y\\
+        u
+    \end{bmatrix} = c, \begin{bmatrix}
+        y\\
+        u
+    \end{bmatrix}\ge 0\]
+    无解，即 $A^Ty - u = c, y\ge 0, u\ge 0$ 无解，即 $A^Tt\ge c, y\ge 0$ 无解。
+
+    反之，若 $A^Ty\ge c, y\ge 0$ 有解，即
+    \[A^Ty - u = c, y\ge 0, y\ge 0\]
+    有解，即
+    \[(A^T - I)\begin{bmatrix}
+        y\\
+        u
+    \end{bmatrix} = c, \begin{bmatrix}
+        y\\
+        u
+    \end{bmatrix} \ge 0\]
+    有解，根据 Farkas 定理，有
+    \[\begin{bmatrix}
+        A\\
+        -I
+    \end{bmatrix}x\le 0, c^Tx>0\]
+    无解，即 $Ax\le 0, x\ge 0, c^Tx>0$无解。
+\end{solution}
+
+\begin{problem}
+    证明下列不等式组无解：
+    \[\begin{cases}
+        x_1 + 3x_2 < 0 \\
+        3x_1 - x_2 < 0 \\
+        17x_1 + 11x_2 > 0
+    \end{cases}\]
+\end{problem}
+\begin{solution}
+    $A = \begin{bmatrix}
+        1 & 3\\
+        3 & -1\\
+        -17 & -11
+    \end{bmatrix}$，即证 $Ax < 0$ 无解。
+
+    根据 Gordan 定理，只需证明 $A^Ty = 0, y \ge 0, y \neq 0$ 有解，对系数矩阵 $A^T$ 做初等行变换：
+    \[\begin{bmatrix}
+        1 & 3 & -17\\
+        3 & -1 & -11
+    \end{bmatrix} \longrightarrow \begin{bmatrix}
+        1 & 3 & -17\\
+        0 & -10 & 40
+    \end{bmatrix} \longrightarrow \begin{bmatrix}
+        1 & 0 & -5\\
+        0 & 1 & -4
+    \end{bmatrix}\]
+    所以 $A^Ty = 0, y\ge 0, y \neq 0$ 有解，根据 Gordan 定理，原来的不等式组无解。
+\end{solution}
+
+\begin{problem}
+    判别下列函数是否为凸函数。
+    \[f(x_1, x_2) = (x_1 - x_2)^2 + 4x_1x_2 + e^{x_1 + x_2}\]
+\end{problem}
+\begin{solution}
+    \begin{align*}
+        \partial f_{x_1} &= 2(x_1 - x_2) + 4x_2 + e^{x_1 + x_2}\\
+        \partial f_{x_2} &= -2(x_1 - x_2) + e^{x_1 + x_2}\\
+        \partial f_{x_1, x_1} &= 2 + e^{x_1 + x_2}\\
+        \partial f_{x_1, x_2} &= 2 + e^{x_1 + x_2}\\
+        \partial f_{x_2, x_2} &= 2 + e^{x_1 + x_2}\\
+        \nabla^2f(x) &= \begin{bmatrix}
+            2 + e^{x_1 + x_2} & 2 + e^{x_1 + x_2}\\
+            2 + e^{x_1 + x_2} & 2 + e^{x_1 + x_2}
+        \end{bmatrix} = (2 + e^{x_1 + x_2}) \begin{bmatrix}
+            1 & 1\\
+            1 & 1
+        \end{bmatrix}
+    \end{align*}
+
+    $\nabla^2f(x)$ 矩阵是一个半正定矩阵，因此 $f(x)$ 是凸函数。
+
+    
+\end{solution}
+
+\begin{problem}
+    设 $f(x_1, x_2) = 10 - 2(x_2 - x_1^2)^2$，
+    \[S = \left\{(x_1, x_2) | -11 \le x_1 \le 1, -1\le x_2 \le 1\right\}\]
+    $f(x_1, x_2)$ 是否为 $S$ 上的凸函数？
+\end{problem}
+\begin{solution}
+    \begin{align*}
+        \partial f_{x_1} &= 8x_1(x_2 - x_1^2)\\
+        \partial f_{x_2} &= -4(x_2 - x_1^2)\\
+        \partial f_{x_1, x_1} &= 8(x_2 - 3x_1^2)\\
+        \partial f_{x_1, x_2} &= 8x_1\\
+        \partial f_{x_2, x_2} &= -4\\
+        \nabla^2f(x) &= \begin{bmatrix}
+            8(x_2 - 3x_1^2) & 8x_1 \\
+            8x_1 & -4
+        \end{bmatrix}
+    \end{align*}
+    $\nabla^2f(x)$ 不是半正定矩阵，因此 $f(x_1, x_2)$ 不是 $S$ 上的凸函数。
+\end{solution}
+
+\end{document}

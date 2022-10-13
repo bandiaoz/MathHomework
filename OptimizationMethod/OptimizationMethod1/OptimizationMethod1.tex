@@ -1,0 +1,36 @@
+\input{../../homework.cls}
+
+\newcommand\Title{最优化方法第1次作业}
+
+
+\begin{document}
+
+% \title{最优化方法第1次作业}
+% \author{22120307 陈景龙}
+%\date{} % 若不需要自动插入日期，则去掉前面的注释；{ } 中也可以自定义日期格式
+% \maketitle
+
+
+\begin{problem}
+  设有 $n$ 个市场，第 $j$ 个市场的位置为 $(a_j, b_j)$ ， 对某种货物的需要量为 $q_j(j=1,\dots,n)$ 。现计划建立 $m$ 个货栈，第$i$个货栈的容量为 $c_i(i=1, \dots, m)$。试确定货栈的位置，使各货栈到各市场的运输量与路程乘积之和最小。
+\end{problem}
+
+
+\begin{solution}
+
+第 $i$ 个货栈的位置为 $(u_i, v_i)$，假设使用欧几里得距离，那么第 $i$ 个货栈到第 $j$ 个市场的距离为 $\sqrt{(u_i-a_j)^2+(v_i-b_j)^2}$。
+
+第 $i$ 个货栈向第 $j$ 个市场运输 $x_{i,j}$ 的货物，那么各货栈到各市场的运输量与路程乘积之和为 $\sum_{1\le i \le m, 1\le j \le n}x_{i,j}\sqrt{(u_i-a_j)^2+(v_i-b_j)^2}$，记为$\sum_{1\le i \le m, 1\le j \le n}x_{i,j}d_{i,j}$。
+
+$$\operatorname{minimize} \sum_{1\le i \le m, 1\le j \le n}x_{i,j}d_{i,j}$$
+
+$$\operatorname{subject \ to}\left\{\begin{matrix} 
+  d_{i,j}=\sqrt{(u_i-a_j)^2+(v_i-b_j)^2}\\
+  \sum_{i=1}^m x_{i,j}=q_j, \forall j\\  
+  \sum_{j=1}^n x_{i,j}\le c_i, \forall i\\
+  x_{i,j}\ge 0, \forall i,j
+\end{matrix}\right. $$
+
+\end{solution}
+  
+\end{document}

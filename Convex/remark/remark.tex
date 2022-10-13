@@ -1,0 +1,445 @@
+\input{../../homework.cls}
+% \usepackage{enumerate}
+
+\newcommand\Title{CVX Remark}
+\renewcommand\due{due: 11 weeks}
+\newcommand\tr{\operatorname{tr}} % 迹
+\newcommand\dom{\operatorname{dom}} % 定义域
+\newcommand\diag{\operatorname{diag}} % 对角矩阵
+\newcommand\epi{\operatorname{epi}} % 上镜图
+\newcommand\minimize{\operatorname{minimize}} % 最小化
+\newcommand\maximize{\operatorname{maximize}} % 最大化
+\newcommand\subject{\operatorname{subject\ to}}
+\newcommand\rank{\operatorname{rank}} % 秩
+
+
+
+
+\begin{document}
+
+总成绩(100\%) = 考勤(10\%) + 习题(30\%) + 测验(60\%)，习题每个点至少完成一半
+
+\textbf{课程概况：}
+\begin{itemize}
+    \item 绪论 2h
+    \item 凸集和凸函数 3h
+    \item 凸优化问题 6h
+    \item 拉格朗日乘子 5h
+    \item 凸优化应用 6h
+    \item 无约束凸优化问题求解 5h
+    \item 有约束凸优化问题求解 4h
+    \item 课程测试 2h
+\end{itemize}
+
+\section{绪论}
+\begin{remark}
+    $f$ 是凸函数，$\nabla f_x = 0\Leftrightarrow $点 $x$ 是最小值点
+\end{remark}
+
+\section{凸集和凸函数}
+\begin{remark}
+    凸集：$\forall x, y \in C, \theta \in [0, 1] \Longrightarrow \theta x + (1 - \theta)y \in C$。空集、点、线段都是凸集。
+\end{remark}
+
+\begin{remark}
+    凸集的例子：
+    \begin{itemize}
+        \item 超平面：$\left\{x : a^tx = b\right\}$，$a \in \mathbb{R}^n - \left\{0\right\}$ 是法向量
+        \item 半平面：$\left\{x : a^tx \le b\right\}$，$a \in \mathbb{R}^n - \left\{0\right\}$
+        \item 欧几里得球：$B(x_c, r) = \left\{x: \|x - x_c\| < r\right\} = \left\{x_c + ru: \|u\| < 1\right\}$
+        \item 椭球：$\left\{x: (x - x_c)^tP^{-1}(x - x_c) < 1\right\}, P \in S_{++}^n$ 或 $\left\{x_c + Au: \|u\| < 1\right\}, A \in S_{++}^n$
+        \item 多面体：$\left\{x : Ax \preceq b, Cx = d\right\}, A \in \mathbb{R}^{m \times n}, C \in \mathbb{R}^{p \times n}, b \in \mathbb{R}^{m}, d \in \mathbb{R}^{p}$，多面体是半空间和超平面的交集，任意个数的凸集的交集是凸集。
+    \end{itemize}
+\end{remark}
+
+\begin{remark}
+    凸集 $S$：是 $S$ 中所有点的凸组合的最小集合
+    \begin{itemize}
+        \item 如果 $C$ 是一个凸集，则 $aC + b = \left\{ax + b : x \in C\right\}, a \in \mathbb{R}, b \in \mathbb{R}^n$ 也是一个凸集
+        \item 对于仿射函数 $f(x) = Ax + b, A \in \mathbb{R}^{m \times n}, b \in \mathbb{R}^m$\begin{itemize}
+            \item 凸集在 $f$ 下的像是凸集 \[S \subset \mathbb{R}^{n} \text { convex } \Longrightarrow f(S)=\{f(x): x \in S\} \subset \mathbb{R}^{m} \text { convex }\]
+            \item 凸集在 $f$ 下的逆像是凸集 \[C \subset \mathbb{R}^{m} \text { convex } \Longrightarrow f^{-1}(C)=\{x: f(x) \in C\} \subset \mathbb{R}^{n} \text { convex }\]
+        \end{itemize}
+        \item 两个凸集可以用一个超平面分离（证明困难）
+        \item 支撑超平面：$\left\{x: a^tx = a^tx_0\right\}, a \in \mathbb{R}^n - \left\{0\right\}, a^tx \le a^tx_0, \forall x\in C$，其中 $C$ 是一个凸集，$x_0$ 是凸集上一边界点
+        \item 支撑超平面定理：如果 $C$ 是凸的，则在 $C$ 的每个边界点上都存在一个支撑超平面
+    \end{itemize}
+\end{remark}
+
+\begin{remark}
+    凸函数：$f: \mathbb{R}^n \to \mathbb{R}$ 的定义域 $\dom(f)$ 是一个凸集，满足$\forall x, y \in \dom(f), \theta \in [0, 1]$\[f(\theta x+(1-\theta) y) \leq \theta f(x)+(1-\theta) f(y)\]
+    $f$ 是一个凸函数，则 $f$ 在定义域的任何内点都是连续的，并且 $f$ 是局部有界的：$\exists B(x, r) \subset \dom(f)$
+    \[z=\theta x+(1-\theta) y \Longrightarrow \frac{f(z)-f(x)}{1-\theta} \leq \frac{f(y)-f(z)}{\theta} \Longrightarrow \frac{f(z)-f(x)}{\|z-x\|} \leq \frac{f(y)-f(z)}{\|y-z\|}\]
+\end{remark}
+
+\begin{remark}
+    一些凸函数的例子：
+    \begin{itemize}
+        \item 仿射函数：$a^tx + b, \forall a \in \mathbb{R}^n, b \in \mathbb{R}$
+        \item 幂函数 $x^\alpha$ on $\mathbb{R}_{++} = (0, \infty), \alpha \ge 1 $ or $\alpha \le 0$
+        \item $l^p$ 范数：$\|x\|_p = \sum_{i = 1}^n (|x_i|^p)^\frac{1}{p}$ on $\mathbb{R}^n$ for $p \ge 1$
+    \end{itemize}
+\end{remark}
+
+\begin{remark}
+    \text{凸函数的性质}
+
+    \begin{itemize}
+        \item $f$ is convex $\Longrightarrow \alpha f$ for $\alpha > 0$ is convex.
+        \item $f_1, \dots, f_m$ are convex $\Longrightarrow f_1 + \dots + f_m$ is convex.
+        \item Composition with affine function: $f$ is convex $\Longrightarrow f(Ax + b)$ is convex.
+        \item $f_1, \dots, f_m$ are convex $\Longrightarrow f(x) = \max\left\{f_1(x), \dots, f_m(x)\right\}$ is convex.\begin{itemize}
+            \item 分段线性函数(piecewise-linear function): $f(x) = \max_{1 \le i \le m} \left\{a_i^tx + b_i\right\}$
+        \end{itemize}
+    \end{itemize}
+\end{remark}
+
+\begin{remark}
+    严格凸函数 strictly convex function，$f:\mathbb{R}^n \to \mathbb{R}$
+    \begin{itemize}
+        \item $\dom(f)$ is convex set
+        \item $\forall x \neq y \in \dom(f), \theta \in (0, 1)$ \[f(\theta x + (1 - \theta)y) < \theta f(x) + (1 - \theta) f(y)\]
+    \end{itemize}
+    $l^p$-norm and $l^\infty$-norm are not strictly convex.
+\end{remark}
+
+\begin{remark}
+    强凸函数strongly convex function，$f:\mathbb{R}^n \to \mathbb{R}$
+    \begin{itemize}
+        \item $\dom(f)$ is convex set
+        \item $\exists m > 0$, satisfy $f(x) - \frac{m}{2}\|x\|^2$ is convex.
+        \item 判定方法：$\nabla^2f \succ 0$
+        \item 谱分解：$A = P^tQP$，其中 $Q$ 的对角线是 $A$ 的特征值
+        \item $\nabla^2f - mI \succeq 0 \Longrightarrow u^t(\nabla^2f - mI)u \ge 0 \Longrightarrow u^t\nabla^2f u \ge m\|u\|^2  \Longrightarrow u^t P^tQP u \ge m\|u\|^2 \Longrightarrow \forall \lambda \ge m, \lambda$ 是 $\nabla^2f(x)$ 的特征值
+        \item $f(x)$ is convex $\Longrightarrow f(x) + \frac{m}{2}\|x\|^2$ is strictly convex.
+    \end{itemize}
+    strongly convex $\Longrightarrow$ strictly convex $\Longrightarrow$ convex
+\end{remark}
+
+\begin{remark}
+    凸函数判定：
+    \begin{itemize}
+        \item First-order condition: \textbf{differentiable} $f$ with \textbf{convex domain} is convex iff $\forall x, y \in \dom(f)$\[f(y) \geq f(x)+\nabla f(x)^{t}(y-x)\]
+        \begin{itemize}
+            \item \proof\begin{itemize}
+                \item $f$ is convex $\Longleftrightarrow \frac{f(z)-f(x)}{z-x} \leq \frac{f(y)-f(z)}{y-z} \Longrightarrow $ with $z \to x,\frac{f(y)-f(x)}{y-x} \ge f^\prime(x) \Longrightarrow f(y) \ge f(x) + f^\prime(x)(y - x)$
+                \item $f(y) \ge f(x) + f^\prime(x)(y - x) \Longrightarrow \frac{f(y) - f(z)}{y - z} \ge f^\prime(z) \ge \frac{f(x) - f(z)}{x - z} \Longrightarrow $ by $z = \theta x + (1 - \theta)y,f$ is convex
+            \end{itemize}
+            \item $f(x^*) = 0 \Longleftrightarrow x^*$ is global minimum of $f$. 
+            \item $f$ is strictly convex $\Longleftrightarrow \forall x \neq y\in \dom(f), f(y) > f(x) + \nabla f(x)^t(y - x)$
+        \end{itemize}
+        \item Second-order conditions: for \textbf{twice differentiable} $f$ with \textbf{convex domain} is convex iff $x \in \dom(f)$ \[\nabla^2f(x) \succeq 0\]
+        \begin{itemize}
+            \item if $\nabla^2 f(x) \succ 0$ for $\forall x \in \dom(f) \Longrightarrow f$ is strictly convex.
+            \item $\exists m > 0$, satisfy $\nabla^2f(x) \succeq mI$ for $\forall x \in \dom(f)$ $\Longleftrightarrow f$ is strongly convex.
+        \end{itemize}
+        \item Restriction of a convex function to a line:
+        \begin{itemize}
+            \item $f: \mathbb{R}^n \to \mathbb{R}$ is convex iff the function $g: \mathbb{R} \to \mathbb{R}$\[g(t) = f(x + tv), \quad \dom(g) = \left\{t: x + tv \in \dom(f)\right\}\] is convex for any $x \in \dom(f)$ and $v \in \mathbb{R}^n$
+            \item \begin{proof}$g(t) = f(x + t(y - x))$ is convex $\Longleftrightarrow g(\theta) \le \theta g(0) + (1 - \theta)g(1) \Longleftrightarrow$ $f(\theta x + (1 - \theta y)) \le \theta f(x) + (1 - \theta)f(y) \Longleftrightarrow f$ is convex.\end{proof}
+        \end{itemize}
+    \end{itemize}
+\end{remark}
+
+\begin{remark}
+    $X \in \mathbb{S}^n_{++} \Longrightarrow  X = P^tQP = P^t\diag(q_1, \dots, q_n)P \Longrightarrow X^\alpha \triangleq P^t\diag(q_1^\alpha, \dots, q_n^\alpha)P$, satisfy $X^\alpha X^\beta = X^{\alpha + \beta}$, $X^0 = I$.
+\end{remark}
+
+\begin{remark}
+    \text{}
+    \begin{itemize}
+        \item sublevel set(下水平集) of $f: \mathbb{R}^n \to \mathbb{R}$
+        \[C_\alpha = \left\{x \ in \dom(f): f(x) \le \alpha\right\}\] sublevel set of convex functions are convex.
+        \item Epigraph(上境图) set of $f: \mathbb{R}^n \to \mathbb{R}$ \[\epi(f) = \left\{(x, t) \in \mathbb{R}^{n + 1}: x \in \dom(f), t \ge f(x)\right\}\] $f$ is convex iff $\epi$ is convex set.
+    \end{itemize}
+\end{remark}
+
+\section{凸优化问题}
+\begin{remark}
+    Optimization problem:
+    \[\begin{cases}
+        \minimize \quad &f(x)\\
+        \subject \quad &f_i(x) \le 0, \quad 1 \le i \le m\\
+        &h_i(x) = 0, \quad 1 \le i \le p
+    \end{cases}\]
+
+    \begin{itemize}
+        \item  feasible set $X \subset \mathcal{D}$ \[\mathcal{D}=\operatorname{dom}(f) \cap\left(\cap_{i=1}^{m} \operatorname{dom}\left(f_{i}\right)\right) \cap\left(\cap_{i=1}^{p} \operatorname{dom}\left(h_{i}\right)\right)\]
+        \item optimal value: $p^* = \inf\left\{f(x): x \text{ is feasible}\right\}$
+        \item a feasible $x$ is an optimal solution(minimizer) if $f(x) = p^*$
+    \end{itemize}
+\end{remark}
+
+\begin{remark}
+    Convex optimization problem(COP):
+    \[\begin{cases}
+        \minimize \quad &f(x)\\
+        \subject \quad &f_i(x) \le 0, \quad 1 \le i \le m\\
+        &Ax = b
+    \end{cases}\]
+    \begin{itemize}
+        \item objective function $f$ is convex
+        \item inequality constraints $f_1., \dots, f_m$ are convex
+        \item equality constraints are affine: $A \in \mathbb{R}^{p \times n}, b \in \mathbb{R}^p$
+        \item the feasible set $X$ of COP is convex \begin{itemize}
+            \item $X = \dom(f) \cap (\cap_{i = 1}^m X_i) \cap \text{hyperplanes}$ \begin{itemize}
+                \item $X_i = \left\{x \in \dom(f_i): f_i(x) \le 0\right\}$
+            \end{itemize}
+            \item so a COP is actually an unconstrained COP defined on a convex set. 
+        \end{itemize}
+        \item any local minimum of a COP is globally optimal.\begin{itemize}
+            \item $x^*$ is a local minimum: a solution of the COP in $B(x^*, r) \cap X$
+            \item $\forall y \in X$, take $\theta \to 0$, satisfy $z = \theta x^* + (1 - \theta)y \in B(x^*, r)$, by convexity, $\theta f(x^*) + (1 - \theta)f(y) \ge f(z) \ge f(x^*)$, thus $f(y) \ge f(x^*)$.
+        \end{itemize}
+        \item the set of optimal solutions is convex.
+    \end{itemize}
+\end{remark}
+
+\begin{remark}
+    Important examples:
+    \begin{itemize}
+        \item Linear program(LP):
+            \[\begin{cases}
+                \minimize \quad &c^tx\\
+                \subject \quad &Gx \preceq h\\
+                &Ax = b
+            \end{cases}\]
+            \begin{itemize}
+                \item convex problem with affine object over a polyhedron
+                \item standard from \[\begin{cases}
+                    \minimize \quad &c^tx\\
+                    \subject \quad &x \succeq 0\\
+                    &Ax = b
+                \end{cases}\]
+            \end{itemize}
+        \item Quadratic program(QP):
+            \[\begin{cases}
+                \minimize \quad &\frac{1}{2}x^tPx + q^tx + r\\
+                \subject \quad &Gx \preceq h\\
+                &Ax = b
+            \end{cases}\]
+            $P \in \mathcal{S}_{+}^n$, convex problem with quadratic object over a polyhedron.
+        \item Quadratically constrained quadratic program(QCQP)
+            \[\begin{cases}
+                \minimize \quad &\frac{1}{2}x^tPx + q^tx + r\\
+                \subject \quad &\frac{1}{2}x^tP_ix + q_i^tx + r \preceq 0,\quad 1 \le i \le m\\
+                &Ax = b
+            \end{cases}\]
+            \begin{itemize}
+                \item $P, P_i \in \mathbb{S}_+^n$, objective and constraints are convex quadratic.
+                \item if $P_1, \dots, P_m \in \mathbb{S}_{++}^n$, feasible region is intersection of $m$ ellipsoids andan affine set.
+            \end{itemize}
+    \end{itemize}
+\end{remark}
+
+\begin{remark}
+    For \textbf{differentiable} $f$, $x \in X$ is optimal iff \[\nabla f(x)^t(y - x) \ge 0, \quad \forall y \in X\]
+    \begin{itemize}
+        \item if $x$ is optimal, let  $g(\theta) = f(x + \theta(y - x))$ \[0 \leq \lim _{\theta \downarrow 0} \frac{f(x+\theta(y-x))-f(x)}{\theta}=g^{\prime}(0)=\nabla f(x)^{t}(y-x)\]
+        \item conversely, by convexity(First order condition) \[f(y) \ge f(x) + \nabla f(x)^t(y - x) \Longrightarrow \nabla f(x)^t(y - x) \ge 0\]
+    \end{itemize}
+    \textbf{Important}, for COP:\[x \text{ optimal} \Longleftrightarrow \nabla f(x)^t(y - x) \ge 0, \forall y \in X\]
+\end{remark}
+
+\begin{remark}
+    Unconstrained COP, with differentiable $f$ \[\minimize{f(x)}\]
+    \begin{itemize}
+        \item $x \in \dom{(f)}$ (open set!) is optimal iff $\nabla f(x) = 0$ \begin{itemize}
+            \item if $x$ is optimal, $\nabla f(x)^t(y - x) \ge 0$ for any feasible $y$, take $y = x - \lambda \nabla f(x)$ for sufficient small $\lambda > 0$, thus $\nabla f(x) = 0$
+            \item conversely, $\nabla f(x)^t(y - x) = 0$
+            \item Intuitive interpretation: $x$ is optimal, then $\langle\nabla f(x), y - x\rangle \ge 0$. if $\nabla f(x) \neq 0$, $\exists y$ satisfy $\langle\nabla f(x), y - x\rangle < 0$, so $\nabla f(x) = 0$.
+        \end{itemize}
+    \end{itemize}
+\end{remark}
+
+\begin{remark}
+    Equality constrained COP, with differentiable $f$, $A \in \mathbb{R}^{p \times n}, b \in \mathbb{R}^p$ \[\begin{cases}
+        \minimize \quad &f(x)\\
+        \subject \quad &Ax = b
+    \end{cases}\]
+    \begin{itemize}
+        \item $x \in \dom{(f)}$ is optimal iff:\begin{center}
+            $Ax = b$, and there exists $v \in \mathbb{R}^p$, s.t. $\nabla f(x) = A^tv, \nabla f(x) \in \mathcal{R}(A^t)$
+        \end{center}
+        \begin{proof}[Proof. $x$ optimal $\Longleftrightarrow Ax = b, \nabla f(x) = A^tv$ ]
+            \text{}
+            \begin{itemize}
+                \item "$\Longleftarrow$": $\forall y \in X$, $Ay = b \Longrightarrow (\nabla f(x))^t(y - x) = v^tA(y - x) = v^t(b - b) = 0 \Longrightarrow$, $x$ is optimal.
+                \item $\mathcal{N}(A) = \mathcal{R}(A^t)^\perp, \mathcal{N}(A)^\perp = \mathcal{R}(A^\perp)$
+                \item "$\Longrightarrow$": $\forall u \in \mathcal{N}(A)$, $x + \theta u \in \dom{(f)}$ for $\theta \to 0$. make $y = x + \theta u$, $\nabla f(x)(y - x) \ge 0 \Longrightarrow \theta \langle\nabla f(x), u\rangle \ge 0$ satisfy for all $\theta \to 0$, so $\langle\nabla f(x), u\rangle = 0$. As a result, $\nabla f(x)^t \in \mathcal{N}(A)^\perp$, then $\exists v \in \mathbb{R}^p$ s.t. $\nabla f(x) = A^tv$.
+            \end{itemize}
+        \end{proof}
+    \end{itemize}
+\end{remark}
+
+\begin{remark}
+    Equality constrained QP: $P \in \mathbb{S}_+^n, q \in \mathbb{R}^n, r \in \mathbb{R}, A \in \mathbb{R}^{p \times n}$ with $\rank(A) = p$,$\ b \in \mathbb{R}^p$ \[\begin{cases}
+        \minimize \quad & \frac{1}{2}x^tPx + q^tx + r \\
+        \subject \quad & Ax = b
+    \end{cases}\]
+    \begin{itemize}
+        \item $x^*$ is optimal $\Longleftrightarrow \exists v^* \in \mathbb{R}^p$ s.t.\[\begin{bmatrix}
+            P & A^t \\
+            A & 0
+        \end{bmatrix} \begin{bmatrix}
+            x^* \\ v^*
+        \end{bmatrix} = \begin{bmatrix}
+            -q \\ b
+        \end{bmatrix}\]
+        \item coefficient matrix is called KKT matrix.
+        \item KKT matrix is nonsingular $\Longleftrightarrow "Ax = 0, x \neq 0 \Longrightarrow x^tPx > 0"$
+    \end{itemize}
+\end{remark}
+
+\begin{remark}
+    Inequality constrained COP, with differentiable $f, f_1, \dots, f_m$\[\begin{cases}
+        \minimize \quad &f(x) \\
+        \subject \quad & f_i(x) \le 0, \quad , 1 \le i \le m
+    \end{cases}\]
+    \begin{itemize}
+        \item sufficient condition: for a feasible $x$, if $\lambda_i \ge 0$ for $i \in [1, m]$ and $\nabla f(x)+\sum_{i=1}^{m} \lambda_{i} \nabla f_{i}(x)=0$, $\lambda_{1} f_{1}(x)=\ldots=\lambda_{m} f_{m}(x)=0$, $x$ is optimal if the following is established\begin{itemize}
+            \item $f_i(x) \neq 0 \Longrightarrow \lambda_i = 0$
+            \item $f_i(x) = 0 \Longrightarrow \nabla f_i(x)^t(y - x) \le 0$ for any feasible $y$
+            \item for any feasible $y$, $\nabla f(x)^t (y - x) = -\sum_{i = 1}^m \lambda_i \nabla f_i(x)^t(y - x) \ge 0$
+        \end{itemize}
+        \item the converse is false.
+    \end{itemize}
+\end{remark}
+
+
+\begin{remark}
+    COP over nonnegative orthant, with differentiable $f$\[\begin{cases}
+        \minimize \quad &f(x) \\
+        \subject \quad & x \succeq 0
+    \end{cases}\]
+    \begin{itemize}
+        \item $x \in \dom(f)$ is optimal iff \[x \succeq 0,\quad \begin{cases}
+            \nabla f(x)_i \ge 0 \quad &\text{ if } x_i = 0\\
+            \nabla f(x)_{i} = 0 \quad &\text{ if } x_i > 0
+        \end{cases}\]
+        \item \begin{proof}
+            \text{by observe}
+            \begin{itemize}
+                \item $x$ is optimal $\Longrightarrow \nabla f(x)^t(y - x) \ge 0$ holds \textbf{for all feasible} $y$
+                \item for $x_i > 0 \Longrightarrow y_i - x_i$ can be positive or negative, so $\nabla f(x)_i = 0$
+                \item for $x_i = 0 \Longrightarrow y_i - x_i \ge 0, \nabla f(x)_i \ge 0$
+            \end{itemize}
+        \end{proof}
+    \end{itemize}
+\end{remark}
+
+\begin{remark}
+    \[\lim_{\varepsilon \to 0}\frac{f(x + a\varepsilon) - f(x)}{\varepsilon} = \langle\nabla f(x), a\rangle, \quad \quad \varepsilon \to x + a\varepsilon \to f(x + a\varepsilon)\]
+\end{remark}
+
+\begin{remark}
+    COP over a simplex, with differentiable $f$
+    \[\begin{cases}
+        \minimize \quad &f(x)\\
+        \subject \quad &x \succeq 0, \sum_{i = 1}^nx_i = 1
+    \end{cases}\]
+    \begin{itemize}
+        \item $x \in \dom(f)$ is optimal iff\[\partial_jf(x) \ge \partial_if(x)\text{ for all } 1 \le j \le n \text{ when } x_i > 0\]
+        \item \begin{proof}
+            \text{by observe}
+            \begin{itemize}
+                \item if $x$ is optimal, $\nabla f(x)^t(y - x) \ge 0$ holds for all feasible $y$
+                \item for $x_i > 0 \Longrightarrow y_i - x_i$ can be positive or negative, so $\partial_j f(x) \ge \partial_i f(x) = 0$ for any j
+                \item the converse is obvious\[\nabla f(x)^t(y - x) = \sum_{x_i > 0}\partial_i f(x)(y_i - x_i) + \sum_{x_i = 0}\partial_i f(x)(y_i - x_i) \ge C\sum_{i = 1}^n(y_i - x_i) = 0\]
+            \end{itemize}
+        \end{proof}
+    \end{itemize}
+\end{remark}
+
+\section{拉格朗日乘子}
+\begin{remark}
+    Standard form optimization problem (not necessarily convex)\[\begin{cases}
+        \minimize \quad &f(x)\\
+        \subject \quad &f_i(x) \le 0, \quad 1 \le i \le m\\
+        &h_i(x) = 0, \quad 1 \le i \le p
+    \end{cases}\]
+    $x \in \mathcal{D} =\dom(f) \cap\left(\cap_{i=1}^{m} \dom\left(f_{i}\right)\right) \cap\left(\cap_{i=1}^{p} \dom\left(h_{i}\right)\right)$, optimal value denoted $p^*$. $x \in \mathcal{D}$ \textbf{do not need to satisfy constraints.}
+    \begin{itemize}
+        \item Lagrange function, $L: \mathcal{D} \times \mathbb{R}^m \times \mathbb{R}^p \mapsto \mathbb{R}$ \[L(x, \lambda, \mu) = f(x) + \sum_{i = 1}^m\lambda_if_i(x) + \sum_{i = 1}^p \mu_ih_i(x)\]
+        \item Lagrange dual function, $g: \mathbb{R}^m \times \mathbb{R}^p \mapsto \mathbb{R}$ \[g(\lambda, \mu) = \inf_{x \in \mathcal{D}} L(x, \lambda, \mu)\]\begin{itemize}
+            \item $g$ is concave, can be $-\infty$ for some $(\lambda, \mu)$
+            \item lower bound property: if $\lambda \succeq 0$, then $g(\lambda, \mu) \le p^*$
+        \end{itemize}
+    \end{itemize}
+\end{remark}
+
+\begin{remark}
+    Standard form LP: \[\begin{cases}
+        \minimize \quad & c^tx\\
+        \subject \quad & x \succeq 0\\
+        & Ax = b
+    \end{cases}\]
+    \begin{itemize}
+        \item Lagrangian: \[L(x, \lambda, \mu) = c^tx - \lambda^t x + \mu^t(Ax - b) = -\mu^tb + (c + A^t\mu - \lambda)^tx\]
+        \item dual function: \begin{align*}
+            g(\lambda, \mu) &= \inf_{x} \left(-\mu^tb + (c + A^t\mu - \lambda)^tx\right)\\
+            &= \begin{cases}
+                -\mu^tb, \quad &\text{if } c + A^t\mu - \lambda = 0\\
+                -\infty, \quad &\text{otherwise}
+            \end{cases}
+        \end{align*}
+        \item lower bound property: $p^* \ge -\mu^tb$ if $c + A^t\mu \succeq 0$.
+    \end{itemize}
+\end{remark}
+
+\begin{remark}
+    Tow-way partitioning, for $W \in \mathbb{S}^n$ \[\begin{cases}
+        \minimize \quad &x^tWx\\
+        \subject \quad &x_i^2 = 1, \quad i = 1, \dots, n
+    \end{cases}\]
+    \begin{itemize}
+        \item a nonconvex problem, feasible set contains $2^n$ discrete points
+        \item Lagrangian: $L(x, \mu) = f(x) + \sum_{i = 1}^n\mu_i(x_i^2 - 1)$
+        \item dual function:\begin{align*}
+            g(\mu) &= \inf_{x}\ (x^tWx + \sum_{i = 1}^n \mu_i(x_i^2 - 1))\\
+            &= \inf_{x}\ x^t(W + \diag(\mu))x - \sum_{i = 1}^n\mu_i\\
+            &=\begin{cases}
+                -\sum_{i = 1}^n \mu_i, \quad &\text{if } W + \diag(\mu) \succeq 0\\
+                -\infty, \quad &\text{otherwise}
+            \end{cases}
+        \end{align*}
+        \item lower bound property: $p^* \ge -\sum_{i = 1}^n \mu_i$ if $W + \diag(\mu) \succeq 0$.\begin{itemize}
+            \item $p^* \ge n\lambda_{\min}(W)$, where $\lambda_{min}(W)$ is the smallest eigenvalue of $W$.
+            \item \begin{proof}
+                $W + \diag(\mu) = P^tQP + \theta I = P^t(Q + \theta I)P \succeq 0$, let $\diag(\mu) = \theta I$, so $\lambda_i + \theta \ge 0, \theta = -\lambda_{\min}(W)$, $p^* \ge n\lambda_{\min}(W)$.
+            \end{proof}
+        \end{itemize}
+    \end{itemize}
+\end{remark}
+
+\begin{remark}
+    Lagrange dual problem\[\begin{cases}
+        \maximize \quad &g(\lambda, \mu)\\
+        \subject \quad &\lambda \succeq 0
+    \end{cases}\]
+    \begin{itemize}
+        \item COP, optimal value denoted $d^*$
+        \item finds best lower bound on $p*$, obtained from Lagrange dual function.
+        \item week duality: $d^* \le p^*$\begin{itemize}
+            \item always holds (for both convex and nonconvex problems)
+            \item can be used to find nontrivial lower bounds for difficult problems
+        \end{itemize}
+        \item strong duality: $d^* = p^*$\begin{itemize}
+            \item does not hold in general, but usually holds for COP
+            \item an example that the strong duality does not hold\[\begin{cases}
+                \minimize \quad &e^{-x}\\
+                \subject \quad &x^2 / y \le 0
+            \end{cases}\]\begin{itemize}
+                \item $\mathcal{D} = \left\{(x, y): x \in \mathbb{R}, y > 0\right\}, g(\lambda) = 0 \Longrightarrow d^* = 0 < p^* = 1$
+            \end{itemize}
+        \end{itemize}
+    \end{itemize}
+\end{remark}
+
+
+
+\section{凸优化应用}
+\section{无约束凸优化问题求解}
+\section{有约束凸优化问题求解}
+
+\end{document}

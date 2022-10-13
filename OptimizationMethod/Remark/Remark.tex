@@ -1,0 +1,357 @@
+\input{../../homework.cls}
+% \usepackage{enumerate}
+
+\newcommand\Title{最优化方法笔记}
+\renewcommand\due{due: 16 weeks}
+\newcommand\tr{\operatorname{tr}}
+
+
+\begin{document}
+
+总成绩=平时成绩（30\%）+ 小论文(20\%)+期末考试成绩（50\%）
+\section{Introduction}
+\begin{remark}
+    给定二次型 $f(X) = X^T AX$，若对 $\forall X \neq 0$，都有 $f(X) = X^T AX > 0$ 成立，则称 $f(X)$ 为正定二次型，$A$ 为正定矩阵。
+
+    对于 $n$ 阶实对称矩阵 $A$，下列命题等价：
+    \begin{itemize}
+        \item $A^T AX$ 是正定二次型（或 $A$ 是正定矩阵）
+        \item $A$ 的 $n$ 个顺序主子式都大于 0
+        \item $A$ 的 $n$ 个特征值都大于 0
+        \item 存在可逆矩阵 $P$，使得 $A = P^T P$
+    \end{itemize}
+\end{remark}
+
+\begin{remark}
+    给定二次型 $f(X) = X^T AX$，若对 $\forall X \neq 0$，都有 $f(X) = X^T AX \ge 0$ 成立，则称 $f(X)$ 为半正定二次型，$A$ 为半正定矩阵。
+
+    对于 $n$ 阶实对称矩阵 $A$，下列命题等价：
+    \begin{itemize}
+        \item $A^T AX$ 是半正定二次型（或 $A$ 是半正定矩阵）
+        \item $A$ 的所有主子式都大于等于 0，而且至少有一个等于 0
+        \item $A$ 的 $n$ 个特征值都大于等于 0，而且至少有一个等于 0
+    \end{itemize}
+\end{remark}
+
+\begin{remark}
+    设 $S \subseteq E^n$，若对 $\forall x, y \in S, \forall \lambda \in [0, 1]$，都有 $\lambda x + (1 - \lambda)y \in S$，则称 $S$ 为凸集。
+    \begin{itemize}
+        \item $x_1, \dots, x_k \in S, \lambda_1 + \cdots + \lambda_k = 1$，称 $\sum_{i = 1}^k \lambda_ix_i$ 为 $x_1, \dots, x_k$ 的凸组合
+        \item $S$ 是非空凸集，$x\in S$，若由 $x = \lambda x_1 + (1 - \lambda)x_2$，其中 $\lambda \in (0, 1), x_1, x_2 \in S$，必推出 $x = x_1 = x_2$，则称 $x$ 是 $S$ 的极点。
+        \item $S$ 是 $E^n$ 中的闭凸集，$d \in E^n, d \neq 0$，如果对 $\forall x \in S$，有 $\left\{x + \lambda d | \lambda > 0\right\} \subset S$，则称向量 $d$ 为 $S$ 的方向。若 $S$ 的方向 $d$ 不能表示为集合的两个不同方向的\textbf{正线性组合}，则称 $d$ 为 $S$ 的极方向。
+    \end{itemize}
+\end{remark}
+
+\begin{remark}
+    设 $S = \left\{x | Ax = b, x \ge 0\right\}$ 为非空多面集，则有
+    \begin{itemize}
+        \item 极点集非空，且存在有限个极点
+        \item 极方向集合为空集的充要条件是 $S$ 有界；若 $S$ 无界，则存在有限个极方向
+        \item (多面集表示定理)$x \in S$ 的充要条件是 \begin{gather*}
+            x = \sum_{j = 1}^k \lambda_j x^{(j)} + \sum_{j = 1}^l \mu_j d^{(j)}\\
+            \lambda_j \ge 0, \forall j = 1, \dots, k\\
+            \sum_{j = 1}^k \lambda_j = 1\\
+            \mu_j \ge 0, \forall j = 1, \dots, l
+        \end{gather*}
+    \end{itemize}
+\end{remark}
+
+\begin{remark}
+    凸集分离定理：
+    \begin{itemize}
+        \item 设 $S$ 为 $E^n$ 的闭凸集，$y\notin S$，则存在唯一的 $\overline{x} \in S$，使得\[ \|y - \overline{x}\| = \sideset{}{}{\operatorname{inf}}_{x \in S}\|y - x\| > 0 \]
+        $\overline{x}$ 是这一最小距离点 $\Leftrightarrow (y - \overline{x})^T(\overline{x} - x) \ge 0, \forall x \in S$。
+
+        \item 设 $S$ 是 $E^n$ 的非空闭凸集，$y\notin S$，则存在非零向量 $p$ 以及数 $\varepsilon > 0$，使得对 $\forall x \in S$，有 $p^T y \ge \varepsilon + p^T x$
+        
+        \item 设 $S$ 是 $E^n$ 的非空凸集，$y\in \partial S$，则存在非零向量 $p$，使得对 $\forall x \in clS$（$S$ 的闭包，由 $S$ 的内点和边界点组成），有 $p^Ty \ge p^Tx$。
+        
+        \item 设 $S_1$ 和 $S_2$ 是 $E^n$ 的两个非空凸集，$S_1 \cap S_2 = \emptyset$，则存在非零向量，使得\[p^Ty \ge p^T x \quad \text{其中}\forall y \in S_1, \forall x \in S_2\]
+    \end{itemize}
+\end{remark}
+
+\begin{remark}
+    两个系统恰有一个有解：
+    \begin{itemize}
+        \item Farkas 引理：设 $A$ 为 $m\times n$ 矩阵，$c$ 为 $n$ 维列向量，则 $Ax \le 0, c^Tx > 0$ 有解的充分条件是 $A^Ty = c, y\ge 0$ 无解。
+        \item Gordan定理：给定矩阵 $\boldsymbol{A} \in \mathbb{R}^{m\times n}$，下列两个系统只有一个有解
+        \begin{gather*}
+            \boldsymbol{A}x < 0\\
+            \boldsymbol{y} \ge 0, \boldsymbol{y} \neq 0, \boldsymbol{A}^T\boldsymbol{y} = 0
+        \end{gather*}
+    \end{itemize}
+\end{remark}
+
+\begin{remark}
+    设 $S$ 是 $E^n$ 中的非空凸集，$f(x)$ 是定义在 $S$ 上的实函数，如果对于每一对 $x_1, x_2 \in S$ 及每一个 $\lambda, 0\le \lambda \le 1$ 都有 \[f(\lambda x_1 + (1 - \lambda)x_2) \le \lambda f(x_1) + (1 - \lambda)f(x_2)\]
+    则称函数 $f(x)$ 为 $S$ 上的凸函数。
+
+    凸函数的根本重要性：设 $S$ 是 $E^n$ 中的非空凸集，$f$ 是定义在 $S$ 上的凸函数，则 $f$ 在 $S$ 上的局部极小点事整体极小点，且极小点的集合是凸集。
+\end{remark}
+
+\begin{remark}
+    $f(x)$ 是凸集 $S$ 上的凸函数，对每一个实数 $c$，则集合 $S_c = \left\{x | x \in S, f(x) \le c\right\}$ 是凸集。
+\end{remark}
+
+\begin{remark}
+    凸函数的判别：
+    \begin{itemize}
+        \item (一阶充要条件)设 $S$ 是 $E^n$ 中的非空开凸集，$f(x)$ 是定义在 $S$ 上的\textbf{可微}函数，则 $f(x)$ 为凸函数的充要条件是对任意两点 $x_1, x_2 \in S$，有 \[f(x_2) \ge f(x_1) + \nabla f(x_1)^T(x_2 - x_1)\]
+        $f(x)$ 为严格凸函数的充要条件是对任意互不相同两点 $x_1, x_2 \in S$，有 \[f(x_2) > f(x_1) + \nabla f(x_1)^T(x_2 - x_1)\]
+
+        几何意义：$f(x)$ 是凸函数当且仅当任意点处的切线增量不超过函数的增量。
+        \item (二阶充要条件)设 $S$ 是 $E^n$ 中的非空开凸集，$f(x)$ 是定义在 $S$ 上的\textbf{二次可微}函数，则 $f(x)$ 为凸函数的充要条件是对任意 $x \in S$，$f(x)$ 在 $x$ 处的Hessian矩阵 $\nabla ^2f(x)$ 是半正定的。
+        
+        $f(x)$ 为严格凸函数的充要条件是对任意 $x \in S$，$f(x)$ 在 $x$ 处的Hessian矩阵 $\nabla ^2f(x)$ 是正定的。
+    \end{itemize}
+\end{remark}
+
+\begin{remark}
+    设 $f(x)$ 是定义在凸集 $S$ 上的可微凸函数，若 $\exists x^* \in S$，使对 $\forall x \in S$，都有 \[\nabla f(x^*)^T(x - x^*) \ge 0\]
+    则 $x^*$ 是 $f(x)$ 在凸集 $S$ 上的全局极小点。
+\end{remark}
+
+\begin{remark}
+    凸规划：求凸函数在凸集上的极小点。
+    \begin{align*}
+        \min \quad &f(x)\\ 
+        s.t. \quad &g_{i}(x) \le 0, i=1, \cdots, m \\  
+        &h_{j}(x)=0, j=1, \cdots, l 
+    \end{align*}
+    若 $f(x)$ 是凸函数，$g_i(x)$ 是凸函数，$h_j(x)$ 是线性函数，则原问题为凸规划。
+    \begin{itemize} 
+        \item 凸规划的局部极小点就是整体极小点
+        \item 且极小点的集合为凸集
+    \end{itemize}
+\end{remark}
+
+\section{LP 基本性质}
+\begin{remark}
+    LP 基本定理：
+    \begin{itemize}
+        \item 可行域的极点对应 LP 问题的基本可行解
+        \item LP 的最优解一定可以在基本可行解中找到
+        \item 设 $S$ 是 LP 的可行域，$\bar{x} \in S$，则 $\bar{x}$ 是 $S$ 的极点 $\Longleftrightarrow \bar{x}$ 是 LP 的基本可行解
+        \item 如果LP有可行解，则一定存在基本可行解
+        \item 如果LP有最优解，则存在一个基本可行解是最优解
+        \item 若LP问题有最优解，则要么最优解唯一，要么有无
+        穷多最优解
+    \end{itemize}
+\end{remark}
+
+\section{单纯形法}
+\begin{remark}
+    最优解一定在极点达到，而极点对应于基本可行解，求解线性规划问题归结为找最优基本可行解。可以从一个基本可行解出发，求一个使目标丽数值有所改善的基本可行解：通过不断改进基本可行解，力图达到最优基本可行解。
+\end{remark}
+
+\begin{remark}
+    \[(L P)\left\{\begin{array}{lc}
+        \min & f(x)=c x \\
+        \text { s.t. } & A x=b \\
+        & x \geq 0
+    \end{array}\right.\]
+    其中 $A$ 是 $m \times n$ 矩阵，秩为 $m$，$c$ 是 $n$ 维列向量，$b\ge 0$ 是 $m$ 维列向量。
+    \begin{itemize}
+        \item 初始基本可行解
+            $A = (P_1, \dots, P_m, P_{m + 1}, \dots, P_n) = \begin{pmatrix}
+                B & N
+            \end{pmatrix}$
+
+            基本解 $x^{(0)} = \begin{pmatrix}
+                B^{-1}b \\
+                0
+            \end{pmatrix}$，若 $B^{-1}b \ge 0$，则 $x^{(0)}$ 是基本可行解。
+
+            目标函数 $f_0 = cx^{(0)} = \begin{pmatrix}
+                C_B & C_N
+            \end{pmatrix} \begin{pmatrix}
+                B^{-1}b \\
+                0
+            \end{pmatrix} = C_BB^{-1}b$
+        \item 从初始基本可行解出发，求一个改进的基本可行解。
+        \item 进基和终止条件
+            \[x=\left(\begin{array}{l}
+                x_{B} \\
+                x_{N}
+                \end{array}\right),A x=b \Rightarrow\begin{pmatrix}
+                    B & N
+                \end{pmatrix}\left(\begin{array}{l}
+                x_{B} \\
+                x_{N}
+                \end{array}\right)=B x_{B}+N x_{N}=b \Rightarrow x_{B}=B^{-1}b-B^{-1} N x_{N}\]
+            目标函数值
+            \begin{align*}
+                f = cx &= \begin{pmatrix}
+                    c_B & c_N
+                \end{pmatrix}\begin{pmatrix}
+                    x_B \\
+                    x_N
+                \end{pmatrix} = c_Bx_B + c_Nx_N \\
+                &= c_B(B^{-1}b - B^{-1}Nx_N) + c_Nx_N \\
+                &= c_BB^{-1}b - (c_BB^{-1}N - c_N)x_N \\
+                &= f_0 - \sum_{j\in R}(c_BB^{-1}P_j - c_j)x_j \quad R :\text{非基变量下标集} \\
+                &=f_0 - \sum_{j\in R}(z_j - c_j)x_j
+            \end{align*}
+            \begin{enumerate}
+                \item 如果 $\forall j\in R$，有 $z_j - c_j \le 0$，则 $x^{(0)}$ 为最优解；
+                \item 否则 $z_k - c_k = \max_{j \in R}\left\{z_j - c_j\right\}$，$P_k$ 为进基向量，$x_k$ 为进基变量，$x_k = 0 \to x_k > 0$。
+            \end{enumerate}
+        \item 出基下标和进基变量的值
+        
+            $Ax = b$ 解的变化，原 $x_B = B^{-1}b - B^{-1}Nx_N$，$x_k$ 由 0 变为正以后，$x_B = B^{-1}b - B^{-1}P_kx_k$，$x_B = \bar{b}-y_{k} x_{k}$，其中 $\bar{b} = B^{-1}b,y_k = B^{-1}P_k$。
+            \begin{enumerate}
+                \item 若 $y_{ik}\le 0$，则 $\forall x_k \Longrightarrow x_{B_i} > 0,x_k$ 可以取无限大，故 $f\to -\infty$，原问题无界。
+                \item 要满足 $x_B = \bar{b}-y_{k} x_{k} \ge 0$，则取 $x_k = \min(\frac{\bar{b}}{y_{ik}},y_{ik}>0) = \frac{\bar{b}}{y_{rk}} > 0$，$r$ 为出基下标。
+            \end{enumerate}
+    \end{itemize}
+\end{remark}
+
+\begin{remark}
+    单纯形表
+    \begin{itemize}
+        \item 做初等行变换
+        \item 若 $z_j - c_j > 0$，对应的系数列向量 $\le 0$，则该 LP 存在无界解；
+        \item 若某个非基变量的检验数为 0，则该 LP 存在多个最优解。
+    \end{itemize}
+    \begin{figure}[htbp]
+        \centering
+        \includegraphics[width=0.8\textwidth]{./figures/img1.png}
+        \caption{单纯形表 \label{fig1}}
+    \end{figure}
+\end{remark}
+
+\section{对偶理论}
+\begin{remark}
+    对称形式的对偶规划的要点
+    \begin{itemize}
+        \item min变成max，价值系数 $c$ 与右端向量 $b$ 互换，系数矩阵 $A$ 转置，$\ge$ 变为 $\le$
+        \item 原问题中约束条件的个数 = 对偶问题中变量的个数
+        \item 原问题中变量的个数 = 对偶问题中约束条件的个数
+        \item $\begin{cases}
+            \min \quad &c^Tx\\
+            s.t. \quad &Ax \ge b\\
+            & x \ge 0
+        \end{cases}\quad  \Longrightarrow \quad \begin{cases}
+            \max\quad &b^Tw \\
+            s.t.\quad &A^Tw \le c\\
+            &w \ge 0
+        \end{cases}$
+        \item 对偶问题的对偶问题是原问题
+        \item 一般情形 LP 问题的对偶问题\[\begin{cases}
+            \min \quad & c^Tx\\
+            s.t. \quad & A_1x \ge b_1\\
+            & A_2x = b_2\\
+            &A_3x \le b_3\\
+            &x \ge 0
+        \end{cases} \quad \Longrightarrow \quad \begin{cases}
+            \max \quad & b_1^Tw_1 + b_2^Tw_2 + b_3^Tw_3\\
+            s.t. \quad & A_1^Tw_1 + A_2^Tw_2 + A_3^Tw_3 \le c\\
+            &w_1 \ge 0, w_2\  \text{free}, w_3 \le 0
+        \end{cases}\]
+        图\ref{fig2}中，右边是原问题，左边是对偶问题。
+        \begin{figure}[htbp]
+            \centering
+            \includegraphics[width=0.4\textwidth]{./figures/img2.png}
+            \caption{LP问题的对偶问题转换规则 \label{fig2}}
+        \end{figure}
+        \[\begin{cases}
+            \min \quad & 2x_1 + x_2 + 2x_3\\
+            s.t. \quad & x_1 + x_2 + 2x_3 \ge 1\\
+            &x_1 - x_2 + x_3 \le 2\\
+            &-x_1 + x_2 + x_3 = 1\\
+            &x_1 \ge 0, x_2 \ \text{free}, x_3 \le 0
+        \end{cases} \Longrightarrow \begin{cases}
+            \max \quad & w_1 + 2w_2 + w_3\\
+            s.t. \quad & w_1 + w_2 - w_3 \le 2\\
+            &w_1 - w_2 + w_3 = 1\\
+            &2w_1 + w_2 + w_3 \ge 2\\
+            &w_1 \ge 0, w_2 \le 0, w_3 \ \text{free}
+        \end{cases}\]
+        原问题的变量对应对偶问题的约束，并且\textbf{符号改变}。
+    \end{itemize}
+\end{remark}
+
+\begin{remark}
+    对偶问题的基本性质
+    \begin{itemize}
+        \item 弱对偶定理：若 $x^{(0)}, w^{(0)}$ 分别是原问题(P)和对偶问题(D)的可行解，则 $c^Tx^{(0)} \ge b^Tw^{(0)}$，即最小化目标的函数值大于等于最大化目标的函数值。\begin{itemize}
+            \item Proof:\begin{itemize}
+                \item $Ax^{(0)} \ge b, x^{(0)} \ge 0$，同时 $A^Tw^{(0)} \le c, w^{(0)} \ge 0$，故 $c^Tx^{(0)} \ge (A^Tw^{(0)})^Tx^{(0)} = (w^{(0)})^TAx^{(0)} \ge (w^{(0)})^Tb = b^Tw^{(0)}$
+            \end{itemize}
+            \item 推论1：若原问题(P)或对偶问题(D)有无界解，则其对偶问题(D)或原问题(P)无可行解
+            \item 推论2：极大化问题的任何一个可行解所对应的目标函数值都是其对偶问题的目标函数值的下界。
+            \item 推论3：极小化问题的任何一个可行解所对应的目标函数值都是其对偶问题的目标函数值的上界。
+        \end{itemize}
+        \item 最优性准则：若 $x^{(0)}, w^{(0)}$ 分别为原问题(P)对偶问题(D)的可行解，且 $cx^{(0)} = w^{(0)}b$，则 $x^{(0)}, w^{(0)}$ 分别为原问题(P)对偶问题(D)的最优解
+        \item 强对偶定理：若原问题(P)和对偶问题(D)均有可行解，则原问题(P)和对偶问题(D)均有最优解，且(P)(D)的最优目标函数值相等。\begin{itemize}
+            \item 推论：若问题(P)或(D)无可行解，则其对偶问题(D)或(P)或者无可行解,或者目标函数值趋于无穷。
+            \item 推论：在用单纯形法求解LP问题(P)的最优单纯形表中松弛变量的检验数的相反数为单纯形乘子$w = c_BB^{-1}$，也就是其对偶问题(D)的最优解.
+        \end{itemize}
+    \end{itemize}
+\end{remark}
+
+\begin{remark}
+    总结：
+    \begin{itemize}
+        \item 原问题有最优解，对偶问题一定有最优解，且相同
+        \item 原问题有无界解，则对偶问题无可行解
+        \item 原问题无可行解，则对偶问题有无界解或无可行解
+    \end{itemize}
+\end{remark}
+
+\begin{remark}
+    互补松弛定理：设 $x^{(0)}, w^{(0)}$ 分别是 (P), (D) 问题的可行解，则 $x^{(0)},w^{(0)}$ 分别为 (P), (D) 的最优解的充要条件是 $\forall i, j (1 \le i \le m, 1\le j \le n)$ 有 \begin{itemize}
+        \item 若 $x_j^{(0)} > 0$，则 $w^{(0)}P_j = c_j$
+        \item 若 $w^{(0)}P_j < c_j$，则 $x_j^{(0)} = 0$
+        \item 若 $w_i^{(0)} > 0$，则 $A_ix^{(0)} = b_i$
+        \item 若 $A_ix^{(0)} > b_i$，则 $w_i^{(0)} = 0$
+    \end{itemize}
+    即 $\begin{cases}
+        (c - w^{(0)}A)x^{(0)} = 0\\
+        w^{(0)}(Ax^{(0)} - b) = 0
+    \end{cases}$，其中 $P_j$ 是 $A$ 的第 $j$ 列，$A_i$ 是 $A$ 的第 $i$ 行。
+
+    互补松弛定理（非对称形式）
+
+    设 $x^{(0)}$ 和 $w^{(0)}$ 分别是 $\begin{cases}
+        \min \quad & c^Tx \\
+        s.t. \quad & Ax = b\\
+        &x \ge 0
+    \end{cases}$ 和 $\begin{cases}
+        \max \quad & b^Tw \\
+        s.t. \quad & A^Tw \le c
+    \end{cases}$ 的可行解，则 $x^{(0)}$ 和 $w^{(0)}$ 是最优解的充要条件是 $\forall j$ \begin{itemize}
+        \item $x_j^{(0)} > 0 \Longrightarrow w^{(0)}P_j = c_j$
+        \item $w^{(0)}P_j < c_j \Longrightarrow x_j^{(0)} = 0$
+    \end{itemize}
+\end{remark}
+
+\begin{remark}
+    对偶单纯形法步骤：
+    \begin{enumerate}
+        \item 化标准型，建立初始单纯形表
+        \item 判断，若 $B^{-1}b \ge 0$，则已得到最优解
+        \item 换基迭代 \begin{enumerate}
+            \item 确定换出变量，$\bar{b_r} = \min_i\left\{\bar{b_i}\right\} < 0, x_r$ 为换出变量
+            \item 确定换入变量，$\min_{j}\left\{\frac{z_j - c_j}{y_{rj}}\ |\ y_{rj} < 0\right\} = \frac{z_k - c_k}{y_{rk}}$，$x_k$ 为换入变量（若所有 $y_{rj} \ge 0$，则该 LP 问题无可行解）
+            \item 换基迭代，$y_{rk}$ 为主元
+        \end{enumerate}
+        \item 回到第 2 步
+    \end{enumerate}
+\end{remark}
+
+\begin{remark}
+    对偶单纯形法与原单纯形法的区别：
+    \begin{itemize}
+        \item 原单纯形法保持原问题的可行性，对偶单纯形法保持所有检验数 $wP_j - c_j \le 0$，即保持对偶问题的可行性。
+        \item 特点：先选择出基变量，再选择进基变量。
+    \end{itemize}
+\end{remark}
+
+
+\section{算法概述}
+\begin{remark}
+    
+\end{remark}
+
+\end{document}

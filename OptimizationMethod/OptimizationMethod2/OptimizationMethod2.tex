@@ -1,0 +1,104 @@
+\input{../../homework.cls}
+
+\newcommand\Title{最优化方法第2次作业}
+
+
+\begin{document}
+
+\begin{problem}
+    求实值函数在任一点的梯度及 Hesse 矩阵 $f(x)=f(x_1, x_2)=(x_1-x_2)^2+4x_1x_2+e^{x1+x2}$。
+\end{problem}
+
+\begin{solution}
+    $$\begin{aligned}
+        \partial_1f(\boldsymbol{x}) &= 2(x_1-x_2)+4x_2+e^{x_1+x_2}\\
+        \partial_2f(\boldsymbol{x}) &= -2(x_1-x_2)+4x_1+e^{x_1+x_2}\\
+        \nabla f(\boldsymbol{x}) &= (2x_1+2x_2+e^{x_1+x_2},2x_1+2x_2+e^{x_1+x_2})^T\\
+        \partial_{1,1}f(\boldsymbol{x}) &= 2+e^{x_1+x_2}\\
+        \partial_{1,2}f(\boldsymbol{x}) &= 2+e^{x_1+x_2}\\
+        \partial_{2,1}f(\boldsymbol{x}) &= 2+e^{x_1+x_2}\\
+        \partial_{2,2}f(\boldsymbol{x}) &= 2+e^{x_1+x_2}\\
+        \nabla^2f(\boldsymbol{x})&=\begin{pmatrix}
+            2+e^{x_1+x_2} & 2+e^{x_1+x_2} \\
+            2+e^{x_1+x_2} & 2+e^{x_1+x_2}
+        \end{pmatrix}
+    \end{aligned}$$
+\end{solution}
+  
+\begin{problem}
+    求二次函数在任一点的梯度以及 Hesse 矩阵 $f(\boldsymbol{x})=\frac{1}{2}\boldsymbol{x}^T\boldsymbol{A}\boldsymbol{x}+\boldsymbol{b}^T\boldsymbol{x}+c$，其中 $\boldsymbol{A}\in\mathbb{R}^{n\times n},\boldsymbol{b}\in \mathbb{R}^{n}, c\in \mathbb{R}$。
+\end{problem}
+
+\begin{solution}
+    $$\begin{aligned}
+        f(\boldsymbol{x}+\boldsymbol{\epsilon})-f(\boldsymbol{x}) =& \frac{1}{2}(\boldsymbol{x}+\boldsymbol{\epsilon})^T\boldsymbol{A}(\boldsymbol{x}+\boldsymbol{\epsilon})+\boldsymbol{b}^T(\boldsymbol{x}+\boldsymbol{\epsilon})+c\\
+        &-\frac{1}{2}\boldsymbol{x}^T\boldsymbol{A}\boldsymbol{x}-\boldsymbol{b}^T\boldsymbol{x}-c\\
+        =&\frac{1}{2}\boldsymbol{x}^T\boldsymbol{A}\boldsymbol{\epsilon}+\frac{1}{2}\boldsymbol{\epsilon}^T\boldsymbol{A}\boldsymbol{x}+\boldsymbol{b}^T\boldsymbol{\epsilon}+\frac{1}{2}\boldsymbol{\epsilon}^T\boldsymbol{A}\boldsymbol{\epsilon}\\
+        =&(\frac{1}{2}\boldsymbol{x}^T\boldsymbol{A}+\frac{1}{2}\boldsymbol{x}^T\boldsymbol{A}^T+\boldsymbol{b}^T)\boldsymbol{\epsilon}+\frac{1}{2}\boldsymbol{\epsilon}^T\boldsymbol{A}\boldsymbol{\epsilon}
+    \end{aligned}$$
+    由 $f(\boldsymbol{x}+\boldsymbol{\epsilon})=f(\boldsymbol{x})+\nabla^Tf(\boldsymbol{x})\boldsymbol{\epsilon}+\frac{1}{2}\boldsymbol{\epsilon}^T\nabla^2f(\boldsymbol{x})\boldsymbol{\epsilon} + o(\|\boldsymbol{\epsilon}\|^2)$，可得
+    $$\begin{aligned}
+        \nabla f(\boldsymbol{x}) &= \frac{1}{2}(\boldsymbol{A}^T\boldsymbol{x}+\boldsymbol{A}\boldsymbol{x})+\boldsymbol{b}\\
+        \nabla^2 f(\boldsymbol{x}) &= \frac{1}{2}(\boldsymbol{A} + \boldsymbol{A}^t)
+    \end{aligned}$$
+\end{solution}
+
+\begin{problem}
+    求向量值函数 $\boldsymbol{f}(\boldsymbol{x})$ 在任一点的导数（即 Jacobi 矩阵）。
+    $$\boldsymbol{f}(\boldsymbol{x})=\boldsymbol{f}(x_1,x_2)=\begin{bmatrix}
+        \sin x_1+\cos x_2\\
+        e^{2x_1+x_2}\\
+        2x_1^2+x_1x_2
+    \end{bmatrix}$$
+\end{problem}
+
+\begin{solution}
+    $$\begin{aligned}
+        \boldsymbol{J}=\nabla_{\boldsymbol{x}} \boldsymbol{f}=\frac{\mathrm{d} \boldsymbol{f}(\boldsymbol{x})}{\mathrm{d} \boldsymbol{x}}&=\begin{bmatrix}
+            \frac{\partial \boldsymbol{f}(\boldsymbol{x})}{\partial x_{1}}  & \frac{\partial \boldsymbol{f}(\boldsymbol{x})}{\partial x_{2}}
+        \end{bmatrix}\\
+        &=\begin{bmatrix}
+            \frac{\partial f_{1}(\boldsymbol{x})}{\partial x_{1}} & \frac{\partial f_{1}(\boldsymbol{x})}{\partial x_{2}} \\
+            \frac{\partial f_{2}(\boldsymbol{x})}{\partial x_{1}} & \frac{\partial f_{2}(\boldsymbol{x})}{\partial x_{2}} \\
+            \frac{\partial f_{3}(\boldsymbol{x})}{\partial x_{1}} & \frac{\partial f_{3}(\boldsymbol{x})}{\partial x_{2}}
+        \end{bmatrix}\\
+        &=\begin{bmatrix}
+            \cos x_1 & -\sin x_2\\
+            2e^{2x_1+x_2} & e^{2x_1+x_2}\\
+            4x_1+x_2 & x_1
+        \end{bmatrix}
+    \end{aligned}$$
+\end{solution}
+
+\begin{problem}
+    用定义验证下列集合为凸集。
+    $$S=\left\{(x_1, x_2) | x_1 + 2x_2 \ge 1, x_1 - x_2 \ge 1\right\}$$
+\end{problem}
+
+\begin{solution}
+    任取集合中的两个点 $\boldsymbol{x} = (x_1, x_2)$ 和 $\boldsymbol{y} = (y_1, y_2)$，满足 
+    $$\begin{aligned}
+        \left\{\begin{matrix} 
+            x_1 + 2x_2 &\ge 1 \\  
+            x_1 - x_2 &\ge 1
+        \end{matrix}\right.\\
+        \left\{\begin{matrix}
+            y_1 + 2y_2 &\ge 1 \\  
+            y_1 - y_2 &\ge 1
+        \end{matrix}\right. 
+    \end{aligned}$$
+    对于 $\forall \theta \in \left[0, 1\right]$，点 $\boldsymbol{z} = (z_1, z_2) = \theta\boldsymbol{x} + (1 - \theta)\boldsymbol{y} = (\theta x_1 + (1 - \theta) y_1, \theta x_2 + (1 - \theta) y_2)$，都满足
+    $$\begin{aligned}
+        z_1 + 2z_2 &= \theta x_1 + (1 - \theta) y_1 + 2\theta x_2 + 2(1 - \theta) y_2\\
+        &=\theta (x_1 + 2x_2) + (1 - \theta)(y_1 + 2y_2)\\
+        &\ge \theta + (1 - \theta)\\
+        &\ge 1\\
+        z_1 - z_2 &= \theta x_1 + (1 - \theta) y_1 - \theta x_2 - (1 - \theta) y_2\\
+        &=\theta(x_1 - x_2) + (1 - \theta)(y_1 - y_2) \\
+        &\ge \theta + (1 - \theta)\\
+        &\ge 1
+    \end{aligned}$$
+    所以 $\boldsymbol{z}$ 也在集合 $S$ 中，所以集合 $S$ 是一个凸集。
+\end{solution}
+
+\end{document}

@@ -1,0 +1,146 @@
+\input{../../homework.cls}
+
+\newcommand\Title{最优化方法第6次作业}
+
+
+\begin{document}
+
+\begin{problem}
+    写出下列原问题的对偶问题
+    \[\begin{cases}
+        \max \quad &4x_1 - 3x_2 + 5x_3 \\
+        s.t. \quad &3x_1 + x_2 + 2x_3 \le 15\\
+        &-x_1 + 2x_2 - 7x_3 \ge 3\\
+        &x_1 + x_3 = 1\\
+        &x_1, x_2, x_3 \ge 0
+    \end{cases}\]
+\end{problem}
+\begin{solution}
+    对偶问题如下
+    \[\begin{cases}
+        \min \quad &15w_1 + 3w_2 + w_3\\
+        s.t. \quad &3w_1 - w_2 + w_3 \ge 4\\
+        &w_1 + 2w_2 \ge -3\\
+        &2w_1 - 7w_2 + w_3 \ge 5\\
+        &w_1 \ge 0, w_2 \le 0, w_3\ \text{free}
+    \end{cases}\]
+\end{solution}
+
+\begin{problem}
+    写出下列原问题的对偶问题
+    \[\begin{cases}
+        \min \quad &-4x_1 - 5x_2 - 7x_3 + x_4 \\
+        s.t. \quad &x_1 + x_2 + 2x_3 - x_4 \ge 1\\
+        &2x_1 - 6x_2 + 3x_3 + x_4 \le -3\\
+        &x_1 + 4x_2 + 3x_3 + 2x_4 = -5\\
+        &x_1, x_2, x_4 \ge 0
+    \end{cases}\]
+\end{problem}
+\begin{solution}
+    对偶问题如下
+    \[\begin{cases}
+        \min \quad &w_1 - 3w_2 - 5w_3\\
+        s.t. \quad &w_1 + 2w_2 + w_3 \le -4\\
+        &w_1 - 6w_2 + 4w_3 \le -5\\
+        &2w_1 + 3w_2 + 3w_3 = -7\\
+        &-w_1 + w_2 + 2w_3 \le 1\\
+        &w_1 \ge 0, w_2 \le 0, w_3 \ \text{free}
+    \end{cases}\]
+\end{solution}
+
+\begin{problem}
+    给定原问题
+    \[\begin{cases}
+        \min \quad &4x_1 + 3x_2 + x_3 \\
+        s.t. \quad &x_1 - x_2 + x_3 \ge 1\\
+        &x_1 + 2x_2 - 3x_3 \ge 2\\
+        &x_1, x_2, x_3 \ge 0
+    \end{cases}\]
+    已知对偶问题的最优解 $(w_1, w_2) = (\frac{5}{3}, \frac{7}{3})$，利用对偶性质求原问题的最优解。
+\end{problem}
+\begin{solution}
+    对偶问题如下：
+    \[\begin{cases}
+        \max \quad &w_1 + 2w_2\\
+        s.t. \quad &w_1 + w_2 \ge 4\\
+        &-w_1 + 2w_2 \ge 3\\
+        &w_1 - 3w_2 \ge 1\\
+        &w_1 \ge 0, w_2 \ge 0
+    \end{cases}\]
+    得到对偶问题的最优解为 $w_1 = \frac{5}{3} > 0, w_2 = \frac{7}{3} > 0$，由互补松弛定理可得，$x_3 = 0$，从而
+    \[\begin{cases}
+        x_1 - x_2 + x_3 &= 1\\
+        x_1 + 2x_2 - 3x_3 &= 2\\
+        x_3 &= 0
+    \end{cases}\]
+    解得 $x^* = (\frac{4}{3}, \frac{1}{3}, 0), f_{min}^* = \frac{19}{3}$
+\end{solution}
+
+\begin{problem}
+    给定下列线性规划问题
+    \[\begin{cases}
+        \max \quad &10x_1 + 7x_2 + 30x_3 + 2x_4 \\
+        s.t. \quad &x_1 - 6x_3 + x_4 \le -2\\
+        &x_1 + x_2 + 5x_3 - x_4 \le -7\\
+        &x_2, x_3, x_4 \le 0
+    \end{cases}\]
+    \begin{enumerate}
+        \item 写出上述原问题的对偶问题
+        \item 用图解法求对偶问题的最优解
+        \item 利用对偶问题的最优解及对偶性质求原问题的最优解和目标函数的最优值
+    \end{enumerate}
+\end{problem}
+\begin{solution}
+    \begin{enumerate}
+        \item 对偶问题如下 \[\begin{cases}
+            \min \quad &-2w_1 - 7w_2\\
+            s.t. \quad &w_1 + w_2 = 10\\
+            &w_2 \le 7\\
+            &-6w_1 + 5w_2 \le 30\\
+            &w_1 - w_2 \le 2\\
+            &w_1 \ge 0, w_2 \ge 0
+        \end{cases}\]
+        \item 对偶问题的可行域是直线 $w_1 + w_2 = 10$ 上的一线段，最优解为 $(w_1, w_2) = (3, 7)$，最优值为 $f_{min} = -55$
+        \item 由于对偶问题的最优解中，$w_1 > 0, w_2 > 0$，以及对偶问题约束的后两个条件没有取到等号，由互补松弛定理可得
+        \[\begin{cases}
+            x_1 - 6x_3 + x_4 = -2\\
+            x_1 + x_2 + 5x_3 - x_4 = -7\\
+            x_3 = 0\\
+            x_4 = 0
+        \end{cases}\]
+        解得 $x^* = (-2, -5, 0, 0), f_{max} = -55$。
+    \end{enumerate}
+\end{solution}
+
+\begin{problem}
+    给定线性规划问题
+    \[\begin{cases}
+        \min \quad &5x_1 + 21x_3 \\
+        s.t. \quad &x_1 - x_2 + 6x_3 \ge b_1\\
+        &x_1 + x_2 + 2x_3 \ge 1\\
+        &x_1, x_2, x_3 \ge 0
+    \end{cases}\]
+    其中 $b_1$ 是某一个正数，已知这个问题的一个最优解为 $(x_1, x_2, x_3) = (\frac{1}{2}, 0, \frac{1}{4})$。
+    \begin{enumerate}
+        \item 写出对偶问题。
+        \item 求对偶问题的最优解。
+    \end{enumerate}
+\end{problem}
+\begin{solution}
+    \begin{enumerate}
+        \item 对偶问题如下$\begin{cases}
+            \max \quad &b_1w_1 + w_2\\
+            s.t. \quad &w_1 + w_2 \le 5\\
+            & -w_1 + w_2 \le 0\\
+            &6w_1 + 2w_2 \le 21\\
+            &w_1 \ge 0, w_2 \ge 0
+        \end{cases}$
+        \item 原问题中 $x_1 > 0, x_3 > 0$，由互补松弛定理可得\[\begin{cases}
+            w_1  + w_2 = 5\\
+            6w_1 + 2w_2 = 21
+        \end{cases}\]
+        解得 $w_1 = \frac{11}{4}, w_2 = \frac{9}{4}, g_{max} = f_{min} = \frac{31}{4}$。
+    \end{enumerate}
+\end{solution}
+
+\end{document}

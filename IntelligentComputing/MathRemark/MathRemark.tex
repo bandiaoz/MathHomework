@@ -1,0 +1,518 @@
+\input{../../homework.cls}
+
+
+\newcommand\Title{智能计算数学基础笔记}
+\renewcommand\due{due: November 6, 2022}
+\newcommand\tr{\operatorname{tr}}
+
+
+\begin{document}
+
+% \maketitle
+
+\section{微积分}
+\begin{remark}
+	$\|A\| = \tr{(AA^t)}$
+\end{remark}
+\begin{remark}
+	对于无约束优化问题 $minimize\ f(x)$：
+	\begin{itemize}
+		\item $x^*$ 是局部极小值点的必要条件为 $\nabla f(x^*) = 0, \nabla^2f(x^*)\succeq 0$；
+		\item $x^*$ 是局部极小值点的充分条件为 $\nabla f(x^*) = 0, \nabla^2f(x^*)\succ 0$；
+		\item 如果 $f$ 是凸函数，$x^*$ 为极小值点的充要条件为 $\nabla f(x^*) = 0$；
+		\item $f$ 是凸函数的充要条件为 $\nabla^2f\succeq 0$。
+	\end{itemize}
+\end{remark}
+
+\begin{remark}
+	对于等式约束（$Ax=b, A\in \mathbb{R}^{p\times n}$）优化问题 $minimize\ f(x)$：
+	\begin{itemize}
+		\item $x^*$ 是局部极小值点的必要条件为 $Ax^*=b, B^t\nabla f(x^*) = 0, B^t\nabla^2f(x^*)B \succeq 0$；
+		\item $x^*$ 是局部极小值点的充分条件为 $Ax^*=b, B^t\nabla f(x^*) = 0, B^t\nabla^2f(x^*)B \succ 0$;
+		\item 如果 $f$ 是凸函数，$x^*$ 为极小值点的充要条件为 $Ax^*=b, B^t\nabla f(x^*) = 0$。
+		\item 其中 $B=(\alpha_1, \dots, \alpha_{n - p})$，$\left\{\alpha_1, \dots, \alpha_{n - p}\right\}$ 是 $\mathcal{N}(A)$ 的一组基；
+		\item 使用拉格朗日乘子求解 $x^*$，再进行验证。
+	\end{itemize}
+\end{remark}
+
+\section{线性代数}
+\begin{remark}
+	$n = \dim \mathcal{N}(A) + \operatorname{rank}(A), A\in \mathbb{R}^{m\times n}$。
+\end{remark}
+
+\begin{remark}
+    行空间：$Ax = 0$
+    \begin{itemize}
+        \item 零空间 $\mathcal{N}(A)$ 中的元素 $x$ 与 $A$ 的每一行正交
+        \item 零空间 $\mathcal{N}(A)$ 中的元素 $x$ 与 $A$ 的行空间正交 $x \perp C(A^T)$
+        \item 若 $x$ 为行空间 $C(A^T)$ 中的非零元素（行向量线性组合），$Ax \neq 0$。
+        \item $\mathcal{N}(A) \perp C(A^T), \mathcal{N}(A^T) \perp C(A)$，分别在 $\mathbb{R}^n$ 和 $\mathbb{R}^m$ 中互为正交补。
+        \item $\mathcal{N}(A)$ 的维度为 $n - r$，$\mathcal{N}(A^T)$ 的维度为 $m - r$。
+    \end{itemize}
+\end{remark}
+
+\begin{remark}
+	$A^TA$ 的零空间等于 $A$ 的零空间：$\mathcal{N}(A^TA) = \mathcal{N}(A)$。
+	\begin{itemize}
+		\item $x\in\mathcal{N}(A) \Leftrightarrow Ax=0 \Rightarrow A^TAx=0 \Rightarrow x \in \mathcal{N}(A^TA)$
+		\item $x \in \mathcal{N}(A^TA)\Leftrightarrow A^TAx = 0 \Rightarrow Ax \in \mathcal{N}(A^T) \Rightarrow Ax \in \mathcal{N}(A^T)\cap C(A)=\left\{0\right\} \Rightarrow x\in \mathcal{N}(A)$
+	\end{itemize}
+\end{remark}
+
+\begin{remark}
+	$A$ 的列向量线性无关，则 $A^TA$ 可逆。
+	\begin{itemize}
+		\item $A$ 的列向量线性无关 $\Rightarrow \mathcal{N}(A) = \left\{0\right\}\Rightarrow \mathcal{N}(A^TA) = \left\{0\right\}\Rightarrow A^TA$ 可逆。
+	\end{itemize}
+\end{remark}
+
+\begin{remark}
+    满足 $Q^TQ$ 的方阵 $Q$ 是一个正交方阵。
+    \begin{itemize}
+        \item 等距：$\|Qx\|^2 = x^TQ^TQx = x^Tx = \|x\|^2$
+        \item 特征值的模长为 $1$：$Qx = \lambda x, \|Qx\|^2 = \|x\|^2\Rightarrow |\lambda|^2 = 1$
+    \end{itemize}
+\end{remark}
+
+\begin{remark}
+    正交方阵：
+    \begin{itemize}
+        \item 向量 $x$ 逆时针旋转 $\theta$ 角得到向量 $y = \begin{bmatrix}
+            \cos\theta & -\sin\theta \\ 
+            \sin\theta & \cos\theta
+        \end{bmatrix}x$；
+        \item 向量 $x$ 沿 $\theta/2$ 角对称得到向量 $y = \begin{bmatrix}
+            \cos\theta & \sin\theta \\ 
+            \sin\theta & -\cos\theta
+        \end{bmatrix}x = \begin{bmatrix}
+            \cos\theta & -\sin\theta \\ 
+            \sin\theta & \cos\theta
+        \end{bmatrix}\begin{bmatrix}
+            1 & 0 \\
+            0 & -1
+        \end{bmatrix}x$；也就是先关于 $x$ 轴对称，再旋转 $\theta$ 度。
+        \item 向量 $x$ 关于单位向量 $u$ 对称，得到向量 $y = (2uu^T-I)x$。
+    \end{itemize}
+\end{remark}
+
+\begin{remark}
+    $\boldsymbol{y}$ 在 $\boldsymbol{x}$ 上的投影向量为 \[\frac{\boldsymbol{x}^{T} \boldsymbol{y}}{\|\boldsymbol{x}\|} \cdot \frac{\boldsymbol{x}}{\|\boldsymbol{x}\|}=\frac{\boldsymbol{x}^{T} \boldsymbol{y}}{\boldsymbol{x}^{T} \boldsymbol{x}} \boldsymbol{x}=\boldsymbol{x} \frac{\boldsymbol{x}^{T} \boldsymbol{y}}{\boldsymbol{x}^{T} \boldsymbol{x}}=\frac{\boldsymbol{x} \boldsymbol{x}^{T}}{\boldsymbol{x}^{T} \boldsymbol{x}} \boldsymbol{y}\]
+    
+    $P = \frac{\boldsymbol{x} \boldsymbol{x}^{T}}{\boldsymbol{x}^{T} \boldsymbol{x}}$ 称为投影矩阵。
+\end{remark}
+
+\begin{remark}
+    $\left\{v_1, \dots, v_n\right\}$ 是 $V$ 的一组基，$S_{i, j} = \left\langle v_{i}, v_{j}\right\rangle$。则 $V$ 空间下的任意两个向量 $\boldsymbol{x}, \boldsymbol{y}$ 的内积 $\left\langle\boldsymbol{x}, \boldsymbol{y}\right\rangle=\boldsymbol{x}^T\boldsymbol{S}\boldsymbol{y}$。当 $\left\langle v_{i}, v_{i}\right\rangle = 1, \left\langle v_{i}, v_{j}\right\rangle = 0$ 时，$S$ 为单位阵，内积变为 \[\boldsymbol{x}^T\boldsymbol{S}\boldsymbol{y} = x_1y_1 + \cdots + x_ny_n\]
+    此时 $\left\{v_i\right\}$ 是一组标准正交基。
+\end{remark}
+
+\begin{remark}
+    Gram-Schmidt 正交化：
+    线性无关向量 $a_1, \dots, a_n$ 通过 Gram-Schmidt 正交化生成标准正交向量 $q_1, \dots, q_n$：
+    \begin{align*}
+        \boldsymbol{q}_{1}= & \boldsymbol{a}_{1} /\left\|\boldsymbol{a}_{1}\right\| & & \\
+        \boldsymbol{a}_{2}^{\prime}= &\boldsymbol{a}_{2}-\boldsymbol{q}_{1} \boldsymbol{q}_{1}^{T} \boldsymbol{a}_{2}, & \boldsymbol{q}_{2}=&\boldsymbol{a}_{2}^{\prime} /\left\|\boldsymbol{a}_{2}^{\prime}\right\| \\
+        \boldsymbol{a}_{3}^{\prime}= & \boldsymbol{a}_{3}-\boldsymbol{q}_{1} \boldsymbol{q}_{1}^{T} \boldsymbol{a}_{3}-\boldsymbol{q}_{2} \boldsymbol{q}_{2}^{T} \boldsymbol{a}_{3}, & \boldsymbol{q}_{3}=&\boldsymbol{a}_{3}^{\prime} /\left\|\boldsymbol{a}_{3}^{\prime}\right\| \\
+        & \vdots & \vdots &
+    \end{align*}
+
+    \[\begin{bmatrix}
+        \boldsymbol{a}_{1} & \cdots & \boldsymbol{a}_{n}
+    \end{bmatrix}\begin{bmatrix}
+        b_{11} & b_{12} & \cdots & b_{1 n} \\
+        & b_{22} & \cdots & b_{2 n} \\
+        & & \ddots & \vdots \\
+        & & & b_{n n}
+    \end{bmatrix}=\begin{bmatrix}
+        \boldsymbol{q}_{1} & \cdots & \boldsymbol{q}_{n}
+    \end{bmatrix}\]
+
+    $A_{m\times n}$ 的列向量线性无关，通过 Gram-Schmidt 正交化：
+    \[A_{m\times n}T_{n\times n} = Q_{m\times n}\]
+    $T$ 为可逆上三角矩阵，$Q$ 的列向量标准正交。当 $m=n$ 时，$Q$ 是正交方阵。两边同时乘以 $T$ 的逆矩阵（上三角的逆矩阵还是上三角）
+    \[A_{m \times n}=Q_{m \times n} R_{n \times n}=\begin{bmatrix}
+        \boldsymbol{q}_{1} & \boldsymbol{q}_{n}
+    \end{bmatrix}\begin{bmatrix}  
+        &  &  \\  
+      \vdots  & \ddots &  \\  
+      0  & \cdots &   
+    \end{bmatrix} \]
+    可以验证：
+    \[\begin{bmatrix}
+        \boldsymbol{a}_1 & \boldsymbol{a}_2 & \boldsymbol{a}_3
+    \end{bmatrix} = \begin{bmatrix}
+        \boldsymbol{q}_1 & \boldsymbol{q}_2 & \boldsymbol{q}_3
+    \end{bmatrix}\begin{bmatrix}
+        \boldsymbol{q}_{1}^{T} \boldsymbol{a}_{1} & \boldsymbol{q}_{1}^{T} \boldsymbol{a}_{2} & \boldsymbol{q}_{1}^{T} \boldsymbol{a}_{3} \\
+        & \boldsymbol{q}_{2}^{T} \boldsymbol{a}_{2} & \boldsymbol{q}_{2}^{T} \boldsymbol{a}_{3} \\
+        & & \boldsymbol{q}_{3}^{T} \boldsymbol{a}_{3}
+    \end{bmatrix}\]
+\end{remark}
+
+\begin{remark}
+    根据 $\det(xI-A) = x^n - \tr(A)x^{n - 1} + \cdots + (-1)^n\det(A)$ 可得
+    \begin{itemize}
+        \item $A$ 的所有特征值（允许重复）的和等于 $A$ 的迹 \[\sum_{i = 1}^n \lambda_i = \tr(A) = a_{11} + \cdots + a_{nn}\]
+        \item $A$ 的所有特征值（允许重复）的积等于 $A$ 的行列式 \[\prod_{i = 1}^n\lambda_i = \det(A)\]
+    \end{itemize}
+\end{remark}
+
+\begin{remark}
+    若方阵 $B = M^{-1}AM$，称 $B$ 与 $A$ 相似
+    \begin{itemize}
+        \item $A$ 和 $B$ 有相同的特征方程 \[|\lambda I - A| = |M^{-1}||\lambda I-A||M| = |M^{-1}(\lambda I - A)M| = |\lambda I - B|\]
+        \item $A$ 和 $B$ 有相同的特征值，且若 $Bx = \lambda x$，则 $A(Mx) = \lambda Mx$
+        \item 特征方程和特征值是相似不变量
+        \item 若将方阵看成线性变换，线性变换在不同基下的矩阵相似
+    \end{itemize}
+\end{remark}
+
+\begin{remark}
+    $A_{m\times n}B_{n\times m}$ 与 $B_{n\times m}A_{m\times n}$ 具有相同的非零特征值
+    \begin{itemize}
+        \item 若 $ABx = \lambda x(\lambda \neq 0)$，则有 $Bx \neq x$，且 $BA(Bx) = B\lambda x = \lambda (Bx)$。
+    \end{itemize}
+\end{remark}
+
+\begin{remark}
+    EVD 分解：设 $A_{n\times n}$ 有 $n$ 个线性无关的特征向量 $x_1, \dots, x_n$，对应特征值分别为 $\lambda_1, \dots, \lambda_n$。
+    
+    \[A\begin{bmatrix}
+        x_1 & \cdots & x_n 
+    \end{bmatrix} = \begin{bmatrix}
+        \lambda_1 x_1 & \cdots & \lambda_n x_n 
+    \end{bmatrix} = \begin{bmatrix}
+        x_1 & \cdots & x_n 
+    \end{bmatrix} \begin{bmatrix}
+        \lambda_1 & & \\
+        & \ddots & \\
+        & & \lambda_n
+    \end{bmatrix}\]
+    
+    因此有 EVD 分解 \[AX = X\Lambda, A = X\Lambda X^{-1}\]
+    其中 $X$ 为 $x_1, \dots, x_n$（列向量）构成的矩阵，$\Lambda = \operatorname{diag}(\lambda_1, \dots, \lambda_n)$。
+    \begin{itemize}
+        \item 即使固定 $\Lambda$，$X$ 也不唯一
+    \end{itemize} 
+\end{remark}
+
+\begin{remark}
+    若 $S$ 是实对称方阵，则 
+    \begin{itemize}
+        \item $S$ 的特征值 $\lambda$ 是实数
+        \item $S$ 有一组线性无关的特征向量
+        \item $S$ 有一组正交的特征向量
+    \end{itemize}
+
+    由谱定理可得 \[SQ = Q\Lambda, S = Q\Lambda Q^T\]
+    其中 $Q$ 为 $q_1, \dots, q_n$（列向量）构成的正交方阵，$\Lambda = \operatorname{diag}(\lambda_1, \dots, \lambda_n)$。
+    \[S = Q\Lambda Q^T = \lambda_1q_1q_1^T + \cdots + \lambda_nq_nq_n^T\]
+    此时 $S$ 作为线性变换的效果是：每个投影都放大 $\lambda_i$ 倍。
+\end{remark}
+
+\section{概率统计}
+\begin{remark}
+    发送图像，对于发送方来说，是确定信号，对于接收方来说，是随机信号。
+\end{remark}
+
+\begin{remark}
+    中心极限定理：
+    \begin{itemize}
+        \item 从 $n$ 个均值为 $\mu$，方差为 $\sigma^2$ 的任意一个总体中抽取样本量为 $n$ 的样本，当 $n$ 充分大是，样本均值的抽样分布近似服从 $\mathcal{N}(\mu, \frac{\sigma^2}{n})$。
+    \end{itemize}
+\end{remark}
+
+\begin{remark}
+    独立，不相关，正交：
+    \begin{itemize}
+        \item 独立：$f(x, y) = f_X(x)f_Y(y), P(XY) = P(X)P(Y)$
+        \item 独立的性质：$E(XY) = E(X)E(Y)$
+        \item 协方差：$cov(X, Y) = E((X - E(X))(Y - E(y))) = E(XY) - E(X)E(Y)$
+        \item 相关系数：$\rho_{X, Y} = \frac{cov(X, Y)}{\sqrt{D(X)}\sqrt{D(Y)}} \in \left[-1, 1\right]$
+        \item 独立 $\Rightarrow E(XY) = E(X)E(Y) \Rightarrow cov(X, Y) = 0 \Rightarrow X, Y$ 不相关 
+        \item 变量 $X,Y$ 正交 $\Leftrightarrow E(XY) = 0$
+    \end{itemize}
+\end{remark}
+
+\begin{remark}
+    马尔可夫不等式：$P(X \ge \alpha) \le \frac{E(X)}{\alpha}$，其中 $X$ 是非负随机变量，$\alpha > 0$。 
+    \begin{itemize}
+        \item $E(X) = \int_{-\infty}^{\infty}xp(x)dx = \int_{0}^{\infty}xp(x)dx \ge \int_{\alpha}^{\infty}xp(x)dx \ge \int_{\alpha}^{\infty}\alpha p(x)dx = \alpha P(X \ge \alpha)$
+    \end{itemize}
+\end{remark}
+
+\begin{remark}
+    常见分布：
+    \begin{itemize}
+        \item 高斯随机变量的线性组合仍然是高斯分布。
+        \item Rayleigh 分布：$x_1\sim N(0, \sigma^2), x_2\sim N(0, \sigma^2)$，$x_1,x_2$ 独立同分布。$x = \sqrt{x_1^2 + x_2^2}$ 服从 Rayleigh 分布。   
+        \item Chi-Squared 分布：$x_i\sim N(0, 1), x = \sum_{i = 1}^{v} x_i^2$ 服从 Chi-Squared 分布。
+    \end{itemize}
+\end{remark}
+
+\begin{remark}
+    在数学模型：$y(n) = 0.5 = 0.1x(n) + w(n)$ 中：先验概率，后验概率，似然函数的表示以及意义：
+    \begin{itemize}
+        \item 先验概率：$p(x(n))$
+        \item 似然函数：$p(y(n)|x(n))$，ML准则使用似然函数估计，最大似然。
+        \item 后验概率：$p(x(n)|y(n)) = \frac{p(x(n))p(y(n)|x(n))}{p(y(n))}$。实际估计中不考虑分母，因为分母都相同。MAP准则（贝叶斯推断）使用后验概率估计，最大后验概率，后验推断在先验等概的情况下，简化为最大似然。
+        \item 求 $y(n)$ 用全概率公式：\begin{align*}
+            p(y(n) = 0.5) =& p(x(n) = 10)p(y(n) = 0.5 | x(n) = 10) \\
+            &+ p(x(n) = -10)p(y(n) = 0.5 | x(n) = -10)
+        \end{align*}
+    \end{itemize}
+\end{remark}
+
+\section{信息论}
+\begin{remark}
+    信息论：信息是事物运动状态或存在方式的不确定性的描述。
+    \begin{itemize}
+        \item 消息：是信息的载体，用文字，语言，图像等形式，把客观事物运动和主观思维活动的状态表达出来。
+        \item 信号：是信息的物理表达层，最具体，是载荷信息的实体。
+        \item 信息：它是更高层次哲学上的抽象，是信号与消息的更高表达层次。可以定量的描述。
+        \item 对通信系统来说，传输的是信号，信号承载着消息，消息中的不确定成份是信息。
+    \end{itemize}
+\end{remark}
+
+\begin{remark}
+    按照性质，可以把信息划分成语法信息、语义信息和语用信息三个基本类型，其中最基本也是最抽象的类型是语法信息，也是迄今为止在理论上研究得最多的类型。
+
+    语法、语义、语用构成语言的三个基本方面。
+    \begin{itemize}
+        \item 语法学研究符号与符号之间的关系
+        \item 语义学研究符号与所指事物之间的关系
+        \item 语用学研究符号与使用者之间的关系
+    \end{itemize}
+\end{remark}
+
+\begin{remark}
+    有 8 只灯泡，其中有一只灯丝已断，用一节电池来测，最少需要测 $-\log_2p(x) = \log_28 = 3$ 次。每次测量可解除 $1\operatorname{bit}$ 不确定度，至少需要测量 3 次。
+\end{remark}
+
+\begin{remark}
+    称重问题中，$13$个外观完全一样的小球，其中有$1$个小球重量与其余$12$个不同，要找到这个小球并判断其轻重。
+
+    \begin{itemize}
+        \item 异常球存在于 13 个球中，这是一个等概率事件，并且还要判断轻重，需要增加一个二元判断，所以不确定度为 $\log_2 13 + \log_2 2 = \log 26$
+        \item 由于天平有三个状态，每次可以解除的不确定度为 $\log_3 3 = 1\operatorname{Tet}$，根据 $\log _{3} 9<\log _{3} 26<\log _{3} 27$ 可得，需要三次可以完全解除不确定度。
+    \end{itemize}
+\end{remark}
+
+\begin{remark}
+    自信息：若一随机事件的概率为 $p(x_i)$，它的自信息的数学定义为：\[I(x_i) = f(p(x_i)) = -\log p(x_i)\]
+    \begin{itemize}
+        \item 性质：非负，单调递减，当 $p(x_i) = 0$ 时，$I(x_i) \to \infty$，不可能事件，当 $p(x_i) = 1$ 时，$I(x_i) = 0$，确定事件。
+        \item 当事件 $x_i$ 发生以前，表示事件 $x_i$ 发生的不确定性。
+        \item 当事件 $x_i$ 发生以后，表示事件 $x_i$ 所提供的信息量。
+        \item 自信息的单位取决于对数的底，当底为 2 时，单位是 bit，底为 $e$ 时，单位是 nat，底为 10，单位是 hat。
+    \end{itemize}
+\end{remark}
+
+\begin{remark}
+    从 26 个英文字母中，随机选取一个字母，该事件的自信息量为 $I=-\log _{2}(1 / 26) \approx 4.7 \mathrm{bit}$
+\end{remark}
+
+\begin{remark}
+    联合自信息和条件自信息：
+    \begin{itemize}
+        \item 联合自信息：$I(x_i y_j) = -\log p(x_iy_j)$
+        \item 条件自信息：$I(x_i|y_j) = -\log p(x_i|y_j)$
+        \item 关系：\begin{align*}
+            I\left(x_{i} y_{j}\right)&=-\log _{2} p\left(x_{i}\right) p\left(y_{j} | x_{i}\right)=I\left(x_{i}\right)+I\left(y_{j} | x_{i}\right) \\
+            &=-\log _{2} p\left(y_{j}\right) p\left(x_{i} | y_{j}\right)=I\left(y_{j}\right)+I\left(x_{i} | y_{j}\right)
+        \end{align*}
+        当 $X$ 和 $Y$ 独立时，$I\left(x_{i} y_{j}\right)=-\log _{2} p\left(x_{i}\right)-\log _{2} p\left(y_{j}\right)=I\left(x_{i}\right)+I\left(y_{j}\right)$
+    \end{itemize}
+\end{remark}
+
+\begin{remark}
+    某地男青年中有25\%是大学生，他们其中75\%有驾照，而当地所有男青年中有驾照的比例为一半。问：当得知“某地有驾照的某位男青年是大学生”的消息时，我们获得多少信息量？
+    \begin{itemize}
+        \item 由贝叶斯公式计算得，$P(\text{某地有驾照的某位男青年是大学生}) = \frac{3}{8}$
+        \item 所以 $I(x) = -\log_2(\frac{3}{8}) = \SI{1.415}{\mathrm{bit}}$ 
+    \end{itemize}
+\end{remark}
+
+\begin{remark}
+    互信息：
+    \begin{itemize}
+        \item 信源发出消息 $x_i$ 的概率 $p(x_i)$ 称为先验概率，信宿收到 $y_j$ 后推测信源发出 $x_i$ 的概率 $p(x_i|y_j)$ 称为后验概率。
+        \item 由于有信道噪声的存在，一般情况下，$p(x_i|y_j) \neq p(x_i)$。
+        \item $x_i$ 的后验概率与先验概率比值的对数为 $y_j$ 对 $x_i$ 的互信息，用 $I(x_i;y_j)$ 表示，即 \[I\left(x_{i} ; y_{j}\right)=\log _{2} \frac{p\left(x_{i} | y_{j}\right)}{p\left(x_{i}\right)} \]
+        \item 互信息量等于自信息量减去条件自信息：\[I\left(x_{i} ; y_{j}\right)=-\log _{2} p\left(x_{i}\right)+\log _{2} p\left(x_{i} | y_{j}\right)=I\left(x_{i}\right)-I\left(x_{i} | y_{j}\right)\]
+        \item 第三种表达方式：$I(x_i;y_j) = I(x_i) + I(y_j) - I(x_iy_j)$
+    \end{itemize}
+\end{remark}
+
+\begin{remark}
+    互信息的物理意义：
+    \begin{itemize}
+        \item $I(x_i;y_j) = I(x_i) - I(x_i|y_j)$
+        \item 自信息 $I(x_i)$：信宿收到 $y_j$ 之前，对信源发 $x_i$ 的不确定度
+        \item 条件自信息 $I(x_i|y_j)$：信宿收到 $y_j$ 之后，对信源发 $x_i$ 的不确定度
+        \item 互信息 $I(x_i; y_j)$：收到 $y_j$ 而得到关于 $x_i$ 的互信息，为不确定度的减少量
+    \end{itemize}    
+\end{remark}
+
+\begin{remark}
+    互信息的性质：
+    \begin{itemize}
+        \item 互易性：$I(x_i; y_j) = I(y_j; x_i)$
+        \item 当事件 $x_i$ 与 $y_j$ 统计独立时，互信息为零，即 $I(x_i; y_j) = 0$
+        \item 互信息可正可负
+        \item 任何两事件之间的互信息不可能大于其中任一事件的自信息：$I(x_i; y_j) \le I(x_i)$，\begin{sloppypar}$I(x_i;y_j) \le I(y_j)$\end{sloppypar}
+    \end{itemize}
+\end{remark}
+
+\begin{remark}
+    条件互信息：联合集 $XYZ$ 中，给定条件 $z_l$ 下，$x_i$ 与 $y_j$ 之间的互信息定义为 \[I(x_i; y_j | z_l) = I(x|z) - I(x|yz) = \log\frac{p(x_i|y_jz_l)}{p(x_i|z_l)} \]
+    推论：
+    \begin{itemize}
+        \item $I(x_i;y_jz_l) = I(x_i; z_l) + I(x_i; y_j | z_l)$
+        \item (不考) $I(x; y|z) - I(x;y) = I(y;z|x) - I(y;z) = I(z;x|y) - I(z;x)$
+    \end{itemize}
+\end{remark}
+
+\begin{remark}
+    理想信道模型如下，完成表格：
+    \[\begin{array}{|c|c|c|c|c|c|}
+        \hline \mathbf{U} & X=Y=y_{1} y_{2} y_{3} & p\left(u_{i}\right) & p\left(u_{i} / y_{1}=0\right) & p\left(u_{i} / y_{1}=0, y_{2}=1\right) & p\left(u_{i} / y_{1} y_{2} y_{3}=010\right) \\
+        \hline u_{1} & 000 & 1 / 4 & \mathbf{1 / 3} & \mathbf{0} & \mathbf{0} \\
+        \hline u_{2} & 001 & 1 / 4 & \mathbf{1 / 3} & \mathbf{0} & \mathbf{0} \\
+        \hline u_{3} & 010 & 1 / 8 & \mathbf{1 / 6} & \mathbf{1} / \mathbf{2} & \mathbf{1} \\
+        \hline u_{4} & 011 & 1 / 8 & \mathbf{1 / 6} & \mathbf{1 / 2} & \mathbf{0} \\
+        \hline u_{5} & 100 & 1 / 16 & \mathbf{0} & \mathbf{0} & \mathbf{0} \\
+        \hline u_{6} & 101 & 1 / 16 & \mathbf{0} & \mathbf{0} & \mathbf{0} \\
+        \hline u_{7} & 110 & 1 / 16 & \mathbf{0} & \mathbf{0} & \mathbf{0} \\
+        \hline u_{8} & 111 & 1 / 16 & \mathbf{0} & \mathbf{0} & \mathbf{0} \\
+        \hline
+    \end{array}\]
+\end{remark}
+
+\begin{remark}
+    实际信道模型有噪声存在，一个\textbf{等概率}信源有八种消息符号，用四比特码字序列编码，码字中每一个二进制符号经信道输出可得二元符号 $y$，已知条件概率（信道特性） 为：$P_{00} = P_{11} = 1 - \varepsilon$，$P_{01} = P_{10} = \varepsilon$，这里，$P_{00}$ 定义为信道转移概率$P(y = 0 | x = 0)$，以此类推。当实验结果得了 $\vec{y} = 0000$ 时，求：
+
+    \begin{minipage}{0.5\linewidth}
+        \begin{enumerate}
+            \item 第一位码测定后所得的关于 $\vec{x_1}$ 的自信息
+            \item 第二第三第四位码测定后各得多少关于 $\vec{x_1}$ 的自信息
+            \item 全部结果 $\vec{y} = 0000$ 关于 $\vec{x_1}$ 的自信息
+            \item 讨论 $\varepsilon = 0$ 和 $\varepsilon = \frac{1}{2}$ 时上述各自信息的情况
+        \end{enumerate}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.35\linewidth}
+        \[\begin{array}{|c|c|c|}
+            \hline \mathbf{U} & X=Y=y_{1} y_{2} y_{3} y_{4} & p\left(u_{i}\right) \\
+            \hline u_{1} & 0000 & 1/8 \\
+            \hline u_{2} & 0011 & 1/8 \\
+            \hline u_{3} & 0101 & 1/8 \\
+            \hline u_{4} & 0110 & 1/8 \\
+            \hline u_{5} & 1001 & 1/8 \\
+            \hline u_{6} & 1010 & 1/8 \\
+            \hline u_{7} & 1100 & 1/8 \\
+            \hline u_{8} & 1111 & 1/8 \\
+            \hline
+        \end{array}\]
+    \end{minipage}
+    
+    \begin{solution}
+        由己知，编码端码字序列为：
+        \begin{gather*}
+            \overrightarrow{x_{1}}=0000, \overrightarrow{x_{2}}=0011, \overrightarrow{x_{3}}=0101, \overrightarrow{x_{4}}=0110,\\
+            \overrightarrow{x_{5}}=1001, \overrightarrow{x_{6}}=1010, \overrightarrow{x_{7}}=1100, \overrightarrow{x_{8}}=1111\\
+            p(\overrightarrow{x_i}) = \frac{1}{n}, p(x = 0) = p(x = 1) = \frac{1}{2} \\I(\overrightarrow{x_i}) = \log_2 8 = \SI{3}{\mathrm{bit}}
+        \end{gather*}
+        利用四比特码字表示三比特信息，有纠错功能。
+        \begin{enumerate}
+            \item 第一位码测定后所得的关于 $\vec{x_1}$ 的自信息 
+            \begin{align*}
+                &P(\overrightarrow{x_1}) = \frac{1}{8}\\
+                &P(\overrightarrow{x_1} | y_1 = 0) = \frac{P(\overrightarrow{x_1})P(y_1 = 0 | \overrightarrow{x_1})}{P(y_1 = 0)} = \frac{\frac{1}{8} \cdot (1 - \varepsilon)}{\frac{1}{2}} = \frac{1}{4}(1 - \varepsilon) \\
+                &I(\overrightarrow{x_1}; y_1 = 0) = I(\overrightarrow{x_1}) - I(\overrightarrow{x_1} | y_1 = 0) = \log(2(1 - \varepsilon))
+            \end{align*}
+            \item 第二位码测定后所得的关于 $\vec{x_1}$ 的自信息
+            \begin{align*}
+                &P(\overrightarrow{x_1} | y_1 = 0) = \frac{1}{4}(1 - \varepsilon) \\
+                &P(\overrightarrow{x_1} | y_1 = y_2 = 0) = \frac{P(\overrightarrow{x_1}) P(y_1 = y_2 = 0|\overrightarrow{x_1})}{P(y_1 = y_2 = 0)} = \frac{\frac{1}{8} (1 - \varepsilon)^2}{\frac{1}{4}} = \frac{1}{2} (1 - \varepsilon)^2\\
+                &I(\overrightarrow{x_1}; y_2 = 0 | y_1 = 0) = I(\overrightarrow{x_1} | y_1 = 0) - I(\overrightarrow{x_1} | y_1 = y_2 = 0) = \log(2(1 - \varepsilon))
+            \end{align*}
+            第三位码测定后所得的关于 $\vec{x_1}$ 的自信息
+            \begin{align*}
+                &P(\overrightarrow{x_1} | y_1 = y_2 = 0) = \frac{1}{2} (1 - \varepsilon)^2\\
+                &P(\overrightarrow{x_1} | y_1 = y_2 = y_3 = 0) = \frac{P(\overrightarrow{x_1})P(y_1 = y_2 = y_3 = 0 | \overrightarrow{x_1})}{P(y_1 = y_2 = y_3 = 0)} = \frac{\frac{1}{8} (1 - \varepsilon)^3}{\frac{1}{8}} = (1 - \varepsilon)^3\\
+                &I(\overrightarrow{x_1}; y_3 = 0 | y_1 = y_2 = 0) = I(\overrightarrow{x_1} | y_1 = y_2 = 0) - I(\overrightarrow{x_1} | y_1 = y_2 = y_3 = 0) = \log(2(1 - \varepsilon))
+            \end{align*}
+            第四位码测定后所得的关于 $\vec{x_1}$ 的自信息
+            \begin{align*}
+                &P(\overrightarrow{x_1} | y_1 = y_2 = y_3 = 0) = (1 - \varepsilon)^3\\
+                &P(\overrightarrow{x_1} | y = 0000) = \frac{P(\overrightarrow{x_1}) P(y = 0000 | \overrightarrow{x_1})}{P(y = 0000)} = \frac{\frac{1}{8} (1 - \varepsilon)^4}{\frac{1}{8}((1 - \varepsilon)^4 + 6\varepsilon^2 (1 - \varepsilon)^2 + \varepsilon^4)}\\
+                &I(\overrightarrow{x_1} ; y_4 = 0 | y_1 = y_2 = y_3 = 0) = I(\overrightarrow{x_1} | y_1 = y_2 = y_3 = 0) - I(\overrightarrow{x_1} | y = 0000)\\
+                &I(\overrightarrow{x_1} ; y_4 = 0 | y_1 = y_2 = y_3 = 0) = \log\frac{1 - \varepsilon}{((1 - \varepsilon)^4 + 6(1 - \varepsilon)^2\varepsilon^2 + \varepsilon^4)}
+            \end{align*}
+            \item 全部结果 $\vec{y} = 0000$ 关于 $\vec{x_1}$ 的自信息
+            \begin{align*}
+                I(\overrightarrow{x_1};\overrightarrow{y} = 0000) =& I\left(x_{1} ; y_{1}=0\right)+I\left(x_{1} ; y_{2}=0 / y_{1}=0\right) \\
+                &+I\left(\vec{x}_{1} ; y_{3}=0 / y_{1}=y_{2}=0\right)+I\left(\overrightarrow{x_{1}} ; y_{4}=0 / y_{1}=y_{2}=y_{3}=0\right)\\
+                =& 3\log(2(1 - \varepsilon)) + \log\frac{1 - \varepsilon}{((1 - \varepsilon)^4 + 6(1 - \varepsilon)^2\varepsilon^2 + \varepsilon^4)}
+            \end{align*}
+            \item 当 $\varepsilon = 0$ 时
+            \begin{align*}
+                &I(\overrightarrow{x_1}; y_1 = 0) = \SI{1}{\mathrm{bit}}\\
+                &I(\overrightarrow{x_1}; y_2 = 0 | y_1 = 0) = \SI{1}{\mathrm{bit}}\\
+                &I(\overrightarrow{x_1}; y_3 = 0 | y_1 = y_2 = 0) = \SI{1}{\mathrm{bit}}\\
+                &I(\overrightarrow{x_1} ; y_4 = 0 | y_1 = y_2 = y_3 = 0) = \SI{0}{\mathrm{bit}}\\
+                &I(\overrightarrow{x_1} ; \overrightarrow{y} = 0000) = \SI{3}{\mathrm{bit}}
+            \end{align*}
+            当 $\varepsilon = \frac{1}{2}$ 时，上述互信息全部为 0。
+        \end{enumerate}
+    \end{solution}
+\end{remark}
+
+\begin{remark}
+    信源熵：为了研究整个事件集合或符号序列(如信源)的平均的信息量(总体特征)，定义自信息的数学期望为信源的平均信息量，称为信源的平均自信息量（信源熵）：\[H(X)=E\left[I\left(a_{i}\right)\right]=\sum_{i=1}^{n} p_{i} I\left(a_{i}\right)=-\sum_{i=1}^{n} p_{i} \log p\left(a_{i}\right)\]
+
+    信息熵具有以下三种物理含义：
+    \begin{itemize}
+        \item 表示信源输出前，信源的平均不确定性
+        \item 表示信源输出后，每个符号所携带的平均信息量
+        \item 反映了变量 $X$ 的随机性
+    \end{itemize}
+\end{remark}
+
+\begin{remark}
+    联合熵和条件熵：
+    \begin{itemize}
+        \item 联合熵表示每个元素对 $x_iy_j$ 的联合自信息量的数学期望，表示 $X$ 和 $Y$ 同时发生的不确定度：\[H(XY) = \sum_{i = 1}^n\sum_{j = 1}^m p(x_iy_j)I(x_iy_j) = -\sum_{i = 1}^n\sum_{j = 1}^m p(x_iy_j)\log_2 p(x_iy_j)\]
+        \item 条件熵是在联合符号集合 $XY$ 上的条件自信息量的数学期望。在已知随机变量 $X$ 的条件下，随机变量 $Y$ 的条件熵定义为：\begin{align*}
+            H(Y | X) = E[I(y_j | x_i)] &= \sum_{i = 1}^n\sum_{j = 1}^m p(x_iy_j)I(y_j | x_i)\\
+            &= -\sum_{i = 1}^n\sum_{j = 1}^m p(x_iy_j) \log_2 p(y_j | x_i)
+        \end{align*}
+        \item 扩展性：\[\operatorname{Lim}_{\varepsilon \rightarrow 0} H_{n+1}\left(p_{1}, p_{2}, \ldots, p_{n}-\varepsilon, \varepsilon\right)=H_{n}\left(p_{1}, p_{2}, \ldots, p_{n}\right)\]
+        信源空间中增加某些概率很小的符号，虽然当发出这些符号时，提供很大的信息量，但由于其概率接近于 0，在信源熵中占极小的比重，并不影响信源的总体特征。
+        \item 非负性：$H(X)\ge 0$（离散信源）
+        \item 可加性：$H(XY) = H(X) + H(Y | X) = H(Y) + H(X | Y)$
+            \begin{itemize}
+                \item 可加性是熵函数的性质中最重要的一条性质，此性质的物理含义为知识的可积累性。
+                \item 可加性表明任何复杂问题，都可以分步解决。即对于某一事物存在的不确定度，如果无法一步完全解除，则可分步解除。
+            \end{itemize}
+        \item 极值性：$H_{n}(p_{1}, p_{2}, \dots, p_{n}) \leq \log n$，上式表明，对于具有 $n$ 个符号的离散信源，只有在 $n$ 个信源符号等可能出现的情况下，信源熵才能达到最大值，这也表明\textbf{等概分布}的信源的平均不确定性最大，这是一个很重要得结论，称为最大离散熵定理。
+        \item 任何概率分布下的信息熵一定不会大于它对其它概率分布下自信息的数学期望（交叉熵有极小值）\begin{gather*}
+            H_n(p_1, \dots, p_n) = -\sum_{i = 1}^n p_i\log p_i \le -\sum_{i = 1}^n p_i\log q_i \\
+            \forall p_i, q_i \ge 0, \sum_{i = 1}^n p_i = \sum_{i = 1}^n q_i = 1
+        \end{gather*}
+        \item 条件熵一定不会大于无条件熵，即 $H(Y) \ge H(Y | X)$
+        \item 熵函数具有上凸性：$H[\alpha P + (1 - \alpha)Q] \ge \alpha H(P) + (1 - \alpha)H(Q)$，由于熵函数具有上凸性，熵函数必有最大值。
+        \item 联合熵与信息熵、条件熵的关系，等号成立的条件是 $X,Y$ 相互独立。\begin{align*}
+            H(X Y)&=H(X)+H(Y \mid X)=H(Y)+H(X | Y) \\
+            H(X Y) &\leq H(X)+H(Y) \\
+            H(X | Y) &\leq H(X), H(Y | X) \leq H(Y)
+        \end{align*}
+    \end{itemize}
+\end{remark}
+
+\section{组合优化}
+
+\section{博弈论}
+
+\end{document}
