@@ -1,7 +1,11 @@
 import os
 
-for i in range(1, 8):
-    os.system("git rm -r --cached ./OptimizationMethod/OptimizationMethod{}/*.aux".format(i))
-    os.system("git rm -r --cached ./OptimizationMethod/OptimizationMethod{}/*.log".format(i))
-    os.system("git rm -r --cached ./OptimizationMethod/OptimizationMethod{}/*.out".format(i))
-    os.system("git rm -r --cached ./OptimizationMethod/OptimizationMethod{}/*.synctex.gz".format(i))
+def get_files():
+    for filepath,dirnames,filenames in os.walk(r'.'):
+        for filename in filenames:
+            if filename.split('.')[-1] in ['aux', 'log', 'out', 'gz']:
+                # print("git rm -r --cached" + filepath + '/' + filename)
+                os.system("git rm -r --cached " + filepath + '/' + filename)
+        # print(filepath, '\n')
+
+get_files()
