@@ -4,6 +4,7 @@
 \newcommand\Title{最优化方法笔记}
 \renewcommand\due{due: 16 weeks}
 \newcommand\tr{\operatorname{tr}}
+\newtheorem*{theorem}{定理}
 
 
 \begin{document}
@@ -351,7 +352,130 @@
 
 \section{算法概述}
 \begin{remark}
+    一类线搜索下降迭代算法的步骤：
+    \begin{enumerate}
+        \item 选定某一初始点 $x^{(0)}$，置 $k = 0$；
+        \item 确定搜索方向 $d^{(k)}$；
+        \item 从 $x^{(0)}$ 出发，沿方向 $d^{(k)}$ 求步长 $\lambda_k$，以产生下一个迭代点 $x^{(k + 1)}$；
+        \item 检查 $x^{(k + 1)}$ 是否为极小点或近似极小点，若是，则停止迭代；否则，令 $k:= k + 1$，返回2。
+    \end{enumerate}
+
+    选取搜索方向是最关键的一步，各种算法的区别， 主要在于确定搜索方向的方法不同。
+\end{remark}
+
+\begin{remark}
+    解集合：把满足某些条件的点集定义为解集合．当迭代点属于该集合时，停止迭代。
     
+    常用的解集合：
+    \begin{itemize}
+        \item $\Omega = \left\{\bar{x}\ |\ \|\nabla f(\bar{x})\| = 0\right\}$
+        \item $\Omega = \left\{\bar{x}\ |\ \bar{x} \text{为KKT点}\right\}$
+        \item $\Omega = \left\{\bar{x}\ |\ \bar{x} \in S, f(\bar{x}) \le b\right\}$，其中 $b$ 是某个可接受的目标函数值。
+    \end{itemize}
+\end{remark}
+
+\begin{remark}
+    实用收敛准则
+    \begin{itemize}
+        \item $\|x^{(k + 1)} - x^{(k)}\| < \varepsilon$ 或者 $\frac{\|x^{(k + 1)} - x^{(k)}\|}{\|x^{(k)}\|} < \varepsilon$
+        \item $f(x^{(k)}) - f(x^{(k + 1)}) < \varepsilon$ 或者 $\frac{f(x^{(k)}) - f(x^{(k + 1)})}{|f(x^{(k)})|} < \varepsilon$
+        \item $\|\nabla f(x^{(k)})\| < \varepsilon$ （无约束最优化中）
+    \end{itemize}
+\end{remark}
+
+\begin{remark}
+    Q-收敛速率(Quotient)
+
+    设序列 $\left\{\gamma^{(k)}\right\}$ 收敛于 $\gamma^*$，定义满足 \[\lim _{k \rightarrow+\infty} \frac{\left\|\gamma^{(k+1)}-\gamma *\right\|}{\left\|\gamma^{(k)}-\gamma *\right\|^{p}}=\beta<\infty\] 的非负数 $p$ 的上确界为序列 $\left\{\gamma^{(k)}\right\}$ 的收敛级。
+    \begin{itemize}
+        \item 若序列的收敛级为 $p$，则称序列是 $p$ 级收敛的。
+        \item 若 $p = 1$ 且 $0 < \beta < 1$，则称序列是以收敛比 $\beta$ 线性收敛的。
+        \item 若 $p > 1$，或者 $p = 1$ 且 $\beta = 0$，则称序列是超线性收敛的。
+        \item 收敛级 $p$ 越大，序列收敛得越快；当收敛级 $p$ 相同时，收敛比 $\beta$ 越小，序列收敛得越快。
+    \end{itemize}
+\end{remark}
+
+\begin{remark}
+    R-收敛速率(Root)：
+
+    设点列 $\left\{x_k\right\}$ 收敛到 $x^*$。若存在 $\kappa>0, q \in(0,1)$ 使 $\|x_k - x^*\| \le \kappa q^k$，则称点列 $\left\{x_k\right\}$ R-线性收敛到 $x^*$；若存在 $\kappa > 0$ 和收敛到 $0$ 的正数列 $\left\{q_k\right\}$ 使 $\|x_k - x^*\| \le \kappa \prod_{i = 1}^k q_i$，则称点列 $\left\{x_k\right\}$ R-超线性收敛到 $x^*$。
+
+    \begin{itemize}
+        \item Q-(超)线性收敛 $\Longrightarrow$ R-(超)线性收敛
+    \end{itemize}
+\end{remark}
+
+\begin{remark}
+    算法的二次终止性：若某个算法对任意的\textbf{正定二次函数}，从任意的初始点出发，都能经有限步迭代达到其极小点，则称该算法具有二次终止性。
+    
+    用二次终止性作为判断算法优劣的原因：
+    \begin{enumerate}
+        \item 正定二次函数具有某些较好的性质，因此一个好的算法应能够在有限步内达到其极小点。
+        \item 对于一般的目标函数，若在其极小点处Hesse矩阵正定\[f(x) =f\left(x^{*}\right)+\nabla f\left(x^{*}\right)^{T}\left(x-x^{*}\right) 
+        +\frac{1}{2}(x-x *)^{T} \nabla^{2} f\left(x^{*}\right)\left(x-x^{*}\right)+o\left(\left\|x-x^{*}\right\|\right)\]
+        因此可以猜想，对正定二次函数好的算法，对于一般目标函数也应具有较好的性质。
+    \end{enumerate}
+\end{remark}
+
+\begin{remark}
+    单纯形算法的复杂度为指数时间复杂度。
+\end{remark}
+
+\begin{remark}
+    对于线性规划问题 \[\min_{\lambda \ge 0} \quad f(x^{(k)} + \lambda d^{(k)})\] 如果求得的 $\lambda_k$，使得 \[f(x^{(k)} + \lambda_kd^{(k)}) = \min_\lambda f(x^{(k)} + \lambda d^{(k)})\]则称该一维搜索为精确一维搜索，$\lambda_k$ 为最优步长。否则，该一维搜索为非精确一维搜索。
+\end{remark}
+
+\begin{remark}
+    一维搜索\begin{itemize}
+        \item 精确线搜索\begin{itemize}
+            \item 试探法：黄金分割法、Fibonacci法、二分法
+            \item 函数逼近法：Newton法、割线法、抛物线法、三次插值法
+        \end{itemize}
+        \item 非精确线搜索：Armijo 步长规则、Goldstein 步长规则、Wolfe步长规则
+    \end{itemize}
+\end{remark}
+
+\begin{remark}
+    函数逼近法：牛顿法
+
+    基本思想：在极小点附近用二阶 Taylor 多项式近似。 \[\min \quad f(x)\]
+    令 $\varphi(x)=f\left(x^{(k)}\right)+f^{\prime}\left(x^{(k)}\right)\left(x-x^{(k)}\right)+\frac{1}{2} f^{\prime \prime}\left(x^{(k)}\right)\left(x-x^{(k)}\right)^{2}$，又令 $\varphi^{\prime}(x)=f^{\prime}\left(x^{(k)}\right)+f^{\prime \prime}\left(x^{(k)}\right)\left(x-x^{(k)}\right)=0$，得 $\varphi(x)$ 的驻点，记 $x^{(k + 1)}$，则 $x^{(k+1)}=x^{(k)}-\frac{f^{\prime}\left(x^{(k)}\right)}{f^{\prime \prime}\left(x^{(k)}\right)}$。
+
+    \begin{theorem}
+        设 $f(x)$ 存在连续三阶导数，$\bar{x}$ 满足 $f^\prime(\bar{x}) = 0$，$f^{\prime\prime}(\bar{x}) \neq 0$，初点 $x^{(1)}$ 充分接近 $\bar{x}$，则牛顿法产生的序列 $\left\{x^{(k)}\right\}$ 至少以二级收敛速度收敛于 $\bar{x}$。
+    \end{theorem}
+
+    算法步骤：\begin{enumerate}
+        \item 给定初始点 $x^{(0)}$，允许误差 $\varepsilon > 0$，置 $k = 0$。
+        \item 若 $|f^\prime(x^{(k)})| < \varepsilon$，则停止计算，得点 $x^{(k)}$；否则转 3
+        \item 计算点 $x^{(k + 1)} = x^{(k)} - \frac{f^\prime(x^{(k)})}{f^{\prime\prime}(x^{(k)}}$，置 $k = k + 1$，返回 2
+    \end{enumerate}
+
+    缺点：初始点选择十分重要。如果初始点靠近极小点，则可能很快收敛；如果初始点远离极小点，迭代产生的点列可能不收敛于极小点。
+\end{remark}
+
+\begin{remark}
+    非精确搜索：
+    \begin{itemize}
+        \item Armijo 步长规则\begin{itemize}
+            \item 设 $\beta > 0, \gamma \in (0, 1), \sigma \in (0, 1)$。取步长 $\lambda_k = \beta \gamma^{m_k}$，其中 $m_k$ 是满足下式的最小非负整数：\[f\left(x^{(k)}+\beta \gamma^{m} d^{(k)}\right) \leq f\left(x^{(k)}\right)+\sigma \beta \gamma^{m} \nabla f\left(x^{(k)}\right)^{T} d^{(k)}\]
+            \item 根据目标函数的 Taylor 展开式，满足这种规则的步长一定存在。
+        \end{itemize}
+        \item Goldstein 步长规则\begin{itemize}
+            \item 设 $\sigma \in (0, \frac{1}{2})$。取步长满足下式\begin{gather*}
+                f\left(x^{(k)}+\lambda d^{(k)}\right) \leq f\left(x^{(k)}\right)+\sigma \lambda \nabla f\left(x^{(k)}\right)^{T} d^{(k)} \\
+                f\left(x^{(k)}+\lambda d^{(k)}\right)>f\left(x^{(k)}\right)+(1-\sigma) \lambda \nabla f\left(x^{(k)}\right)^{T} d^{(k)}
+            \end{gather*}
+            \item 由于 $\lambda > 0$ 充分小时，第二式必不成立，故改规则在保证目标函数下降的前提下，使下一迭代点尽可能远离当前迭代点。
+        \end{itemize}
+        \item Wolfe 步长规则\begin{itemize}
+            \item 设 $0 < \sigma_1 < \sigma_2 < 1$。取步长 $\lambda_k$ 满足下式\begin{gather*}
+                f\left(x^{(k)}+\lambda d^{(k)}\right) \leq f\left(x^{(k)}\right)+\sigma_{1} \lambda \nabla f\left(x^{(k)}\right)^{T} d^{(k)} \\
+                \nabla f\left(x^{(k)}+\lambda d^{(k)}\right)^{T} d^{(k)} \geq \sigma_{2} \nabla f\left(x^{(k)}\right)^{T} d^{(k)}
+            \end{gather*}
+            \item 该规则使函数 $f(x^{(k)} + \lambda d^{(k)})$ 的陡度在 $\lambda_k$ 点比在 $\lambda = 0$ 点有所减缓，从而使下一迭代点尽可能远离当前迭代点。
+        \end{itemize}
+    \end{itemize}
 \end{remark}
 
 \end{document}

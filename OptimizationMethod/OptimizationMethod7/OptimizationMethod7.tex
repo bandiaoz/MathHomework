@@ -1,0 +1,65 @@
+\input{../../homework.cls}
+
+\newcommand\Title{最优化方法第7次作业}
+
+\begin{document}
+\begin{problem}
+    Consider the minimization problem
+    \[\min \frac{1}{2}x^tAx + b^tx + c\]
+    where \[A = \begin{pmatrix}
+        2 & 1 & 1 & 0\\
+        1 & 4 & 0 & 0\\
+        1 & 0 & 2 & 0\\
+        0 & 0 & 0 & 2 
+    \end{pmatrix}, \quad b = \begin{pmatrix}
+        1 \\ 2 \\ 0 \\ 1
+    \end{pmatrix}, \quad c = 2\]
+    
+    Let $x^{(0)} = (1, 1, 1, 1)^t, d^{(0)} = -\nabla f(x^{(0)})$.$\sigma = 1.0e-4, \beta = 1, \gamma = 0.5$. Use Armijo, Goldstein, and Wolfe line search to find the next iterate point $x^{(1)}$.
+
+    \Answer $\nabla f(x) = Ax + b$, we get $d^{(0)} = -\nabla f(x^{(0)}) = (-5, -7, -3, -3)^t$.
+    \begin{itemize}
+        \item Armijo:\begin{itemize}
+            \item the minimum non-negative integer $m = 2$, and $x^{(1)} = (-0.25, -0.75, 0.25, 0.25)^t$. \[f\left(x^{(0)}+\beta \gamma^{m} d^{(0)}\right) \leq f\left(x^{(0)}\right)+\sigma \beta \gamma^{m} \nabla f\left(x^{(0)}\right)^{T} d^{(0)}\]
+        \end{itemize}
+        \item Goldstein:\begin{itemize}
+            \item $\lambda$ satisify the flowing, then we get $\lambda = 0.2441$. \begin{gather*}
+                f\left(x^{(k)}+\lambda d^{(k)}\right) \leq f\left(x^{(k)}\right)+\sigma \lambda \nabla f\left(x^{(k)}\right)^{T} d^{(k)} \\
+                f\left(x^{(k)}+\lambda d^{(k)}\right)>f\left(x^{(k)}\right)+(1-\sigma) \lambda \nabla f\left(x^{(k)}\right)^{T} d^{(k)}
+            \end{gather*}
+            so the $x^{(1)} = (-0.2207, -0.7090, 0.2676, 0.2676)^t$
+        \end{itemize}
+        \item Wolfe:\begin{itemize}
+            \item $\lambda$ satisify the flowing, $0 < \sigma_1 < \sigma_2 < 1$, let $\sigma_1 = 0.2, \sigma_2 = 0.5$, then we get $\lambda = 0.2441$. \begin{gather*}
+                f\left(x^{(k)}+\lambda d^{(k)}\right) \leq f\left(x^{(k)}\right)+\sigma_{1} \lambda \nabla f\left(x^{(k)}\right)^{T} d^{(k)} \\
+                \nabla f\left(x^{(k)}+\lambda d^{(k)}\right)^{T} d^{(k)} \geq \sigma_{2} \nabla f\left(x^{(k)}\right)^{T} d^{(k)}
+            \end{gather*}
+            so the $x^{(1)} = (-0.2207, -0.7090, 0.2676, 0.2676)^t$
+        \end{itemize}
+    \end{itemize}
+\end{problem}
+
+\begin{problem}
+    对严格凸二次函数 $f(x) = \frac{1}{2}x^tAx + b^tx$，试求在 $x_k$ 点沿下降方向 $d_k$ 的最优步长。若取 $d_k = -g_k$，试计算目标函数在每一迭代步的下降量。
+ 
+    \solution \begin{align*}
+        f(x + \lambda_kd_k) &= \frac{1}{2}(x + \lambda_kd_k)^tA(x + \lambda_kd_k) + b^t(x + \lambda_kd_k)\\
+        &= \frac{1}{2}(x^tAx + x^tAd_k\lambda_k + d_k^tAx\lambda_k + d_k^tAd_k\lambda_k^2) + b^tx + b^td_k\lambda_k\\
+        &=\frac{1}{2} d_k^tAd_k\lambda_k^2 + (\frac{1}{2}x^tAd_k\ + \frac{1}{2}x^tA^td_k + b^td_k)\lambda_k + b^tx
+    \end{align*}
+
+    $\min_\lambda f(x + \lambda_kd_k)$ 对应的最优步长 $\lambda^* = -\frac{x^tAd_k\ + x^tA^td_k + 2b^td_k}{2d_k^tAd_k}$。
+\end{problem}
+
+\begin{problem}
+    给出算法线性收敛、超线性收敛和二次收敛的定义。
+
+    \solution 设序列 $\left\{\gamma^{(k)}\right\}$ 收敛于 $\gamma^*$，定义满足 \[\lim _{k \rightarrow+\infty} \frac{\left\|\gamma^{(k+1)}-\gamma *\right\|}{\left\|\gamma^{(k)}-\gamma *\right\|^{p}}=\beta<\infty\] 的非负数 $p$ 的上确界为序列 $\left\{\gamma^{(k)}\right\}$ 的收敛级。
+    \begin{itemize}
+        \item 线性收敛：收敛级 $p = 1$ 且 $0 < \beta < 1$
+        \item 超线性收敛：收敛级 $p > 1$ 或者 $p = 1, \beta = 0$。
+        \item 二次收敛：收敛级 $p = 2$
+    \end{itemize}
+\end{problem}
+
+\end{document}

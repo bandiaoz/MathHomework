@@ -1,0 +1,68 @@
+\input{../../homework.cls}
+
+\usepackage{tikz}
+
+\newcommand{\Title}{CVX HW}
+\renewcommand{\due}{due: 11 weeks}
+\newcommand{\tr}{\operatorname{tr}} % 迹
+\newcommand{\dom}{\operatorname{dom}} % 定义域
+\newcommand{\minimize}{\operatorname{minimize}} % 最小化
+\newcommand{\subject}{\operatorname{subject\ to}}
+
+\newcommand{\todo}{{\color{red} to do}} % to do
+\newcommand{\myline}{{\line(1,0){450}}} % 分割线
+
+
+\begin{document}
+
+\begin{problem}[判断]
+    集合 $\left\{x \in \mathbb{R}^n: \|x\| \le 1\right\}$ 是凸集.
+    \Answer 是.
+\end{problem}
+
+\begin{problem}[判断]
+    集合 $\left\{x \in \mathbb{R}^n: \|x\| > 1\right\}$ 是凸集.
+    \Answer 否.
+\end{problem}
+
+\begin{problem}[判断]
+    有限个凸集的并集是凸集.
+    \Answer 否.
+\end{problem}
+
+\begin{problem}[判断]
+    集合 $\left\{x \in \mathbb{R}^n: \|x\| < 1, a^tx \le 1\right\}$ 是凸集，其中 $a \in \mathbb{R}^n$ 是给定的非 0 向量.
+    \Answer 是.
+\end{problem}
+
+\begin{problem}[判断]
+    集合 $\left\{(x, y) \in \mathbb{R}^2: |e^ax + e^{-a}y| \le 1, -1 \le a \le 1\right\}$ 是凸集.
+    \Answer 是.
+\end{problem}
+
+\begin{problem}[判断]
+    凸函数一定可微.
+    \Answer 否.
+\end{problem}
+
+\begin{problem}[判断]
+    对于一元可微函数 $f$，$f$ 是凸函数当且仅当 $f(y) \ge f(x) + (y - x)f^\prime(x)$ 对任何 $x, y$ 成立.
+    \Answer 否，还要求 $\dom(f)$ 是凸集.
+\end{problem}
+
+\begin{problem}[判断]
+    二元函数 $f(x, y) = x^2 + 2y^2 + 3xy$ 是定义在 $\mathbb{R}^2$ 上的凸函数.
+    \Answer 否.
+\end{problem}
+
+\begin{problem}[判断]
+    若一元函数 $f(x) > 0$ 是开区间 $(a, b)$ 上的凸函数，则 $\log f(x)$ 亦是 $(a, b)$ 上的凸函数.
+    \Answer 否.
+\end{problem}
+
+\begin{problem}[判断]
+    定义在 $\mathbb{R}$ 上的一元单调递增函数一定是凸函数.
+    \Answer 否.
+\end{problem}
+
+\end{document}
