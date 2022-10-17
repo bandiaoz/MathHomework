@@ -82,17 +82,17 @@
 
 \begin{problem}[判断]
     通过梯度下降方法求解凸优化问题，通常可以收敛到全局极小值点.
-    \Answer 
+    \Answer 是.
 \end{problem}
 
 \begin{problem}[判断]
     定义在集合 $\left\{x \in \mathbb{R}^2: \|x\| \le 1\right\}$ 上的凸函数一定存在极小值点.
-    \Answer 
+    \Answer 是.
 \end{problem}
 
 \begin{problem}[判断]
     定义在集合 $\left\{x \in \mathbb{R}^2: \|x\| < 1\right\}$ 上的凸函数一定存在极小值点.
-    \Answer 
+    \Answer 否.
 \end{problem}
 
 \begin{problem}[问答]
@@ -101,7 +101,7 @@
 \end{problem}
 
 \begin{problem}[问答]
-    若整数 $n \ge 0$ 使得 $f(x, y) = x^2 + xy^{n - 1} + y^n$ 是 $\mathbb{R}^\2$ 上的凸函数，则 $n$ 的所有取值是多少？
+    若整数 $n \ge 0$ 使得 $f(x, y) = x^2 + xy^{n - 1} + y^n$ 是 $\mathbb{R}^2$ 上的凸函数，则 $n$ 的所有取值是多少？
     \Answer 
 \end{problem}
 
@@ -110,22 +110,22 @@
         \minimize \quad & a^tx\\
         \subject \quad & x \succeq 0
     \end{cases}$ 的解，其中 $a\in \mathbb{R}^n$.
-    \Answer 
+    \Answer 如果 $c \succeq 0$，则 $x^* = 0, p^* = 0$，否则 $c_i < 0$，当 $j \neq i$，$x_j = 0$，$x_i = \lambda c_i$，$\lambda \to -\infty$.
 \end{problem}
 
 \begin{problem}[问答]
     叙述强凸函数 (strongly convex) 的定义.
-    \Answer 
+    \Answer $f:\mathbb{R}^n \to \mathbb{R}$，$\dom(f)$ 是凸集，$\exists m > 0$, s.t. $g(x) = f(x) - \frac{m}{2}\|x\|^2$ 是凸函数，即 $g(\lambda x + (1 - \lambda)y) \le \lambda g(x) + (1 - \lambda)g(y)$.
 \end{problem}
 
 \begin{problem}[问答]
     叙述严格凸函数(strongly convex)的定义.
-    \Answer 
+    \Answer $f:\mathbb{R}^n \to \mathbb{R}$，$\dom(f)$ 是凸集，并且 $f(\lambda x + (1 - \lambda)y) < \lambda f(x) + (1 - \lambda)f(y)$.
 \end{problem}
 
 \begin{problem}[问答]
     写出 $f(x) = \frac{1}{2}x^tPx + q^tx + r$ 的极小值点和极小值，其中 $P \in \mathbb{S}_{++}^n, q \in \mathbb{R}^n, r \in \mathbb{R}$.
-    \Answer 
+    \Answer $\nabla f(x) = Px + q$，令 $\nabla f(x) = 0$，极小值点$x^* = -P^{-1}q$，极小值 $p^* = -\frac{1}{2}q^tP^{-1}q + r$.
 \end{problem}
 
 \begin{problem}[问答]
@@ -133,7 +133,7 @@
         \minimize \quad &f(x)\\
         \subject \quad &Ax = b
     \end{cases}$ 的拉格朗日乘子函数,其中 $A \in \mathbb{R}^{m \times n}, b \in \mathbb{R}^m$.
-    \Answer 
+    \Answer $L(x, \mu) = f(x) + \mu^t(Ax - b)$，其中 $\mu \in \mathbb{R}^m$.
 \end{problem}
 
 \begin{problem}[问答]
@@ -141,7 +141,7 @@
         \minimize \quad &f(x)\\
         \subject \quad &x \preceq a
     \end{cases}$ 的拉格朗日乘子函数,其中 $a \in \mathbb{R}^n$.
-    \Answer 
+    \Answer $L(x, \lambda) = f(x) + \lambda^t(x - a)$，其中 $\lambda \in \mathbb{R}^n$.
 \end{problem}
 
 \begin{problem}[问答]
@@ -149,19 +149,25 @@
         \minimize \quad &\|x\| \\
         \subject \quad &Ax = b
     \end{cases}$ 的拉格朗日乘子函数,其中 $A \in \mathbb{R}^{m \times n}, b \in \mathbb{R}^m$.
-    \Answer 
+    \Answer $L(x, \mu) = \|x\| + \mu^t(Ax - b)$，其中 $\mu \in \mathbb{R}^m$.
 \end{problem}
 
 \begin{problem}[问答]
     给定点集 $A\subset \mathbb{R}^n$ 以及 $B \subset \mathbb{R}^m$，定义其乘积为 $A \times B = \left\{(a, b): a \in A, b \in B\right\}$.证明：若 $A$ 和 $B$ 皆为凸集，则 $A \times B$ 亦是凸集.
     \begin{proof}
-        
+        $z = \lambda z_1 + (1 - \lambda)z_2 = (\lambda a_1 + (1 - \lambda)a_2, \lambda b_1 + (1 - \lambda)b_2)$，其中 $z_1, z_2 \in A \times B, z_1 = (a_1, b_1), z_2 = (a_2, b_2), a_1, a_2 \in A, b_1, b_2 \in B$. 由于 $A$ 是一个凸集，所以 $\lambda a_1 + (1 - \lambda)a_2 \in A$，同理 $\lambda b_1 + (1 - \lambda)b_2 \in B$. 可得 $z_1 \in A, z_1 \in B \Longrightarrow z \in A\times B$. $A \times B$ 是一个凸集.
     \end{proof}
 \end{problem}
 
 \begin{problem}[问答]
     验证函数 $\|x\|^2 / y$ 是否是凸函数并给出理由，其中 $x \in \mathbb{R}^n$ 以及 $y > 0$.
-    \Answer 
+    \Answer $\nabla^2f = \frac{2}{y^3}\begin{pmatrix}
+        y^2I & -yx \\
+        -yx^t & 2x^tx
+    \end{pmatrix}, \begin{vmatrix}
+        y^2I & -yx \\
+        -yx^t & 2x^tx
+    \end{vmatrix} = y^2x^tx \ge 0$，所以 $\nabla^2f \succeq 0$，$f(x, y) = \|x\|^2 / y$ 是一个凸函数.
 \end{problem}
 
 \begin{problem}[问答]
