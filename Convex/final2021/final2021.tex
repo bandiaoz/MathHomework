@@ -65,4 +65,125 @@
     \Answer 否.
 \end{problem}
 
+\begin{problem}[判断]
+    凸优化问题中，强对偶永远成立.
+    \Answer 否.
+\end{problem}
+
+\begin{problem}[判断]
+    对于凸优化中的QP问题，KKT条件永远成立.
+    \Answer 
+\end{problem}
+
+\begin{problem}[判断]
+    线性模型的 SVM 中，最后得到的解仅依赖于支撑向量.
+    \Answer 
+\end{problem}
+
+\begin{problem}[判断]
+    通过梯度下降方法求解凸优化问题，通常可以收敛到全局极小值点.
+    \Answer 
+\end{problem}
+
+\begin{problem}[判断]
+    定义在集合 $\left\{x \in \mathbb{R}^2: \|x\| \le 1\right\}$ 上的凸函数一定存在极小值点.
+    \Answer 
+\end{problem}
+
+\begin{problem}[判断]
+    定义在集合 $\left\{x \in \mathbb{R}^2: \|x\| < 1\right\}$ 上的凸函数一定存在极小值点.
+    \Answer 
+\end{problem}
+
+\begin{problem}[问答]
+    写出 $f(x) = x\log x$ 的对偶函数.
+    \Answer 
+\end{problem}
+
+\begin{problem}[问答]
+    若整数 $n \ge 0$ 使得 $f(x, y) = x^2 + xy^{n - 1} + y^n$ 是 $\mathbb{R}^\2$ 上的凸函数，则 $n$ 的所有取值是多少？
+    \Answer 
+\end{problem}
+
+\begin{problem}[问答]
+    给出优化问题 $\begin{cases}
+        \minimize \quad & a^tx\\
+        \subject \quad & x \succeq 0
+    \end{cases}$ 的解，其中 $a\in \mathbb{R}^n$.
+    \Answer 
+\end{problem}
+
+\begin{problem}[问答]
+    叙述强凸函数 (strongly convex) 的定义.
+    \Answer 
+\end{problem}
+
+\begin{problem}[问答]
+    叙述严格凸函数(strongly convex)的定义.
+    \Answer 
+\end{problem}
+
+\begin{problem}[问答]
+    写出 $f(x) = \frac{1}{2}x^tPx + q^tx + r$ 的极小值点和极小值，其中 $P \in \mathbb{S}_{++}^n, q \in \mathbb{R}^n, r \in \mathbb{R}$.
+    \Answer 
+\end{problem}
+
+\begin{problem}[问答]
+    写出优化问题 $\begin{cases}
+        \minimize \quad &f(x)\\
+        \subject \quad &Ax = b
+    \end{cases}$ 的拉格朗日乘子函数,其中 $A \in \mathbb{R}^{m \times n}, b \in \mathbb{R}^m$.
+    \Answer 
+\end{problem}
+
+\begin{problem}[问答]
+    写出优化问题 $\begin{cases}
+        \minimize \quad &f(x)\\
+        \subject \quad &x \preceq a
+    \end{cases}$ 的拉格朗日乘子函数,其中 $a \in \mathbb{R}^n$.
+    \Answer 
+\end{problem}
+
+\begin{problem}[问答]
+    写出优化问题 $\begin{cases}
+        \minimize \quad &\|x\| \\
+        \subject \quad &Ax = b
+    \end{cases}$ 的拉格朗日乘子函数,其中 $A \in \mathbb{R}^{m \times n}, b \in \mathbb{R}^m$.
+    \Answer 
+\end{problem}
+
+\begin{problem}[问答]
+    给定点集 $A\subset \mathbb{R}^n$ 以及 $B \subset \mathbb{R}^m$，定义其乘积为 $A \times B = \left\{(a, b): a \in A, b \in B\right\}$.证明：若 $A$ 和 $B$ 皆为凸集，则 $A \times B$ 亦是凸集.
+    \begin{proof}
+        
+    \end{proof}
+\end{problem}
+
+\begin{problem}[问答]
+    验证函数 $\|x\|^2 / y$ 是否是凸函数并给出理由，其中 $x \in \mathbb{R}^n$ 以及 $y > 0$.
+    \Answer 
+\end{problem}
+
+\begin{problem}[问答]
+    证明下述问题是凸优化问题并给出 KKT 条件：\[\begin{cases}
+        \minimize \quad &-\sum_{i = 1}^m a_i\log(b_i^tx)\\
+        \subject \quad &0 \preceq x \preceq 1, \sum_{i = 1}^nx_i = n - 1
+    \end{cases}\] 其中 $x\in \mathbb{R}^n, a_i > 0$ 以及 $b_i \succ 0$.
+    \Answer 
+\end{problem}
+
+\begin{problem}[问答]
+    使用梯度下降方法（精确直线搜索）求出三元函数 $f(x, y, z) = x^2 + 2y^2 + 3z^2$ 的极小值点。 假设起始点为 $(1, 0, 0)$，需写出每次更新迭代的详细过程和结果。
+    \Answer 
+\end{problem}
+
+\begin{problem}[问答]
+    证明下述问题是凸优化问题并求解：\[\begin{cases}
+        \minimize \quad &f(x, y, z) = x^2 + 2y^2 + 2z^2 + 3u^2\\
+        \subject \quad &x + y + z + u = 1\\
+        &x^2 + z^2 \le 1 
+    \end{cases}\]
+    \Answer 
+\end{problem}
+
 \end{document}
