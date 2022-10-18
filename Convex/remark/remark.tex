@@ -121,7 +121,7 @@
     \begin{itemize}
         \item First-order condition: \textbf{differentiable} $f$ with \textbf{convex domain} is convex iff $\forall x, y \in \dom(f)$\[f(y) \geq f(x)+\nabla f(x)^{t}(y-x)\]
         \begin{itemize}
-            \item \proof\begin{itemize}
+            \item \proof\text{}\begin{itemize}
                 \item $f$ is convex $\Longleftrightarrow \frac{f(z)-f(x)}{z-x} \leq \frac{f(y)-f(z)}{y-z} \Longrightarrow $ with $z \to x,\frac{f(y)-f(x)}{y-x} \ge f^\prime(x) \Longrightarrow f(y) \ge f(x) + f^\prime(x)(y - x)$
                 \item $f(y) \ge f(x) + f^\prime(x)(y - x) \Longrightarrow \frac{f(y) - f(z)}{y - z} \ge f^\prime(z) \ge \frac{f(x) - f(z)}{x - z} \Longrightarrow $ by $z = \theta x + (1 - \theta)y,f$ is convex
             \end{itemize}
@@ -192,6 +192,15 @@
             \item $\forall y \in X$, take $\theta \to 0$, satisfy $z = \theta x^* + (1 - \theta)y \in B(x^*, r)$, by convexity, $\theta f(x^*) + (1 - \theta)f(y) \ge f(z) \ge f(x^*)$, thus $f(y) \ge f(x^*)$.
         \end{itemize}
         \item the set of optimal solutions is convex.
+        \item For \textbf{differentiable} $f$, $x \in X$ is optimal iff \[\nabla f(x)^t(y - x) \ge 0, \quad \forall y \in X\]
+            \begin{itemize}
+                \item if $x$ is optimal, let  $g(\theta) = f(x + \theta(y - x))$ \[0 \leq \lim _{\theta \downarrow 0} \frac{f(x+\theta(y-x))-f(x)}{\theta}=g^{\prime}(0)=\nabla f(x)^{t}(y-x)\]
+                \item conversely, by convexity(First order condition) \[\begin{cases}
+                    f(y) \ge f(x) + \nabla f(x)^t(y - x)\\
+                    \nabla f(x)^t(y - x) \ge 0
+                \end{cases} \Longrightarrow f(y) \ge f(x) \Longrightarrow x \text{ is optimal}\]
+            \end{itemize}
+            \textbf{Important}, for COP:\[x \text{ optimal} \Longleftrightarrow \nabla f(x)^t(y - x) \ge 0, \forall y \in X\]
     \end{itemize}
 \end{remark}
 
@@ -218,7 +227,7 @@
                 \subject \quad &Gx \preceq h\\
                 &Ax = b
             \end{cases}\]
-            $P \in \mathcal{S}_{+}^n$, convex problem with quadratic object over a polyhedron.
+            $P \in \mathbb{S}_{+}^n$, convex problem with quadratic object over a polyhedron.
         \item Quadratically constrained quadratic program(QCQP)
             \[\begin{cases}
                 \minimize \quad &\frac{1}{2}x^tPx + q^tx + r\\
@@ -230,15 +239,6 @@
                 \item if $P_1, \dots, P_m \in \mathbb{S}_{++}^n$, feasible region is intersection of $m$ ellipsoids andan affine set.
             \end{itemize}
     \end{itemize}
-\end{remark}
-
-\begin{remark}
-    For \textbf{differentiable} $f$, $x \in X$ is optimal iff \[\nabla f(x)^t(y - x) \ge 0, \quad \forall y \in X\]
-    \begin{itemize}
-        \item if $x$ is optimal, let  $g(\theta) = f(x + \theta(y - x))$ \[0 \leq \lim _{\theta \downarrow 0} \frac{f(x+\theta(y-x))-f(x)}{\theta}=g^{\prime}(0)=\nabla f(x)^{t}(y-x)\]
-        \item conversely, by convexity(First order condition) \[f(y) \ge f(x) + \nabla f(x)^t(y - x) \Longrightarrow \nabla f(x)^t(y - x) \ge 0\]
-    \end{itemize}
-    \textbf{Important}, for COP:\[x \text{ optimal} \Longleftrightarrow \nabla f(x)^t(y - x) \ge 0, \forall y \in X\]
 \end{remark}
 
 \begin{remark}
@@ -261,10 +261,10 @@
         \item $x \in \dom{(f)}$ is optimal iff:\begin{center}
             $Ax = b$, and there exists $v \in \mathbb{R}^p$, s.t. $\nabla f(x) = A^tv, \nabla f(x) \in \mathcal{R}(A^t)$
         \end{center}
-        \begin{proof}[Proof. $x$ optimal $\Longleftrightarrow Ax = b, \nabla f(x) = A^tv$ ]
+        \begin{proof}[Proof. $x$ optimal $\Longleftrightarrow Ax = b, \nabla f(x) = A^tv$]
             \text{}
             \begin{itemize}
-                \item "$\Longleftarrow$": $\forall y \in X$, $Ay = b \Longrightarrow (\nabla f(x))^t(y - x) = v^tA(y - x) = v^t(b - b) = 0 \Longrightarrow$, $x$ is optimal.
+                \item "$\Longleftarrow$": $\forall y \in X$, $Ay = b \Longrightarrow (\nabla f(x))^t(y - x) = v^tA(y - x) = v^t(b - b) = 0 \Longrightarrow x$ is optimal.
                 \item $\mathcal{N}(A) = \mathcal{R}(A^t)^\perp, \mathcal{N}(A)^\perp = \mathcal{R}(A^\perp)$
                 \item "$\Longrightarrow$": $\forall u \in \mathcal{N}(A)$, $x + \theta u \in \dom{(f)}$ for $\theta \to 0$. make $y = x + \theta u$, $\nabla f(x)(y - x) \ge 0 \Longrightarrow \theta \langle\nabla f(x), u\rangle \ge 0$ satisfy for all $\theta \to 0$, so $\langle\nabla f(x), u\rangle = 0$. As a result, $\nabla f(x)^t \in \mathcal{N}(A)^\perp$, then $\exists v \in \mathbb{R}^p$ s.t. $\nabla f(x) = A^tv$.
             \end{itemize}
@@ -292,16 +292,42 @@
 \end{remark}
 
 \begin{remark}
-    Inequality constrained COP, with differentiable $f, f_1, \dots, f_m$\[\begin{cases}
-        \minimize \quad &f(x) \\
-        \subject \quad & f_i(x) \le 0, \quad , 1 \le i \le m
+    \[\begin{cases}
+        \minimize_x \quad &f(x)\\
+        \subject \quad &g_i(x) \le 0, \quad 1 \le i \le m
+    \end{cases} \Longleftrightarrow \begin{cases}
+        \minimize_{(x, y)} \quad &f(x)\\
+        \subject \quad &g_i(x) + y_i^2 = 0, \quad 1 \le i \le m
     \end{cases}\]
     \begin{itemize}
-        \item sufficient condition: for a feasible $x$, if $\lambda_i \ge 0$ for $i \in [1, m]$ and $\nabla f(x)+\sum_{i=1}^{m} \lambda_{i} \nabla f_{i}(x)=0$, $\lambda_{1} f_{1}(x)=\ldots=\lambda_{m} f_{m}(x)=0$, $x$ is optimal if the following is established\begin{itemize}
-            \item $f_i(x) \neq 0 \Longrightarrow \lambda_i = 0$
-            \item $f_i(x) = 0 \Longrightarrow \nabla f_i(x)^t(y - x) \le 0$ for any feasible $y$
-            \item for any feasible $y$, $\nabla f(x)^t (y - x) = -\sum_{i = 1}^m \lambda_i \nabla f_i(x)^t(y - x) \ge 0$
-        \end{itemize}
+        \item $L(x, y, \lambda) = f(x) + \sum_{i = 1}^m \lambda_i(g_i(x) + y_i^2), \quad \partial_xL = \partial_yL = 0$
+        \item $\begin{cases}
+            \nabla f(x) + \sum \lambda_i\nabla g_i(x) = 0\\
+            \lambda_iy_i = 0
+        \end{cases} \Longrightarrow \begin{cases}
+            \lambda_i = 0\\
+            y_i = 0
+        \end{cases} \Longrightarrow \lambda_ig_i(x) = 0$
+    \end{itemize}
+\end{remark}
+
+\begin{remark}
+    Inequality constrained COP, with differentiable $f, f_1, \dots, f_m$\[\begin{cases}
+        \minimize \quad &f(x) \\
+        \subject \quad & f_i(x) \le 0, \quad 1 \le i \le m
+    \end{cases}\]
+    \begin{itemize}
+        \item sufficient condition: for a feasible $x$, if exists  $\lambda_i \ge 0$ for $i \in [1, m]$ and $\nabla f(x)+\sum_{i=1}^{m} \lambda_{i} \nabla f_{i}(x)=0$, $\lambda_{1} f_{1}(x)=\ldots=\lambda_{m} f_{m}(x)=0$, $x$ is optimal.\begin{proof}\text{}
+            \begin{itemize}
+                \item $f_i(x) \neq 0 \Longrightarrow \lambda_i = 0$
+                \item $f_i(x) = 0 \Longrightarrow \nabla f_i(x)^t(y - x) \le 0$ for any feasible $y$\begin{itemize}
+                    \item if $f(x_i) = 0$, then $\forall y \in X \Longrightarrow f_i(y) \le f_i(x) \Longrightarrow \nabla f_i^t(x)(y - x) \le 0$
+                    \item no more proof...
+                \end{itemize}
+                \item for any feasible $y$, $\nabla f(x)^t (y - x) = -\sum_{i = 1}^m \lambda_i \nabla f_i(x)^t(y - x) \ge 0$
+                \item x is optimal.
+            \end{itemize}
+        \end{proof}
         \item the converse is false.
     \end{itemize}
 \end{remark}
@@ -317,8 +343,7 @@
             \nabla f(x)_i \ge 0 \quad &\text{ if } x_i = 0\\
             \nabla f(x)_{i} = 0 \quad &\text{ if } x_i > 0
         \end{cases}\]
-        \item \begin{proof}
-            \text{by observe}
+        \item \begin{proof}[Proof. by observe]\text{}
             \begin{itemize}
                 \item $x$ is optimal $\Longrightarrow \nabla f(x)^t(y - x) \ge 0$ holds \textbf{for all feasible} $y$
                 \item for $x_i > 0 \Longrightarrow y_i - x_i$ can be positive or negative, so $\nabla f(x)_i = 0$
@@ -345,6 +370,7 @@
             \begin{itemize}
                 \item if $x$ is optimal, $\nabla f(x)^t(y - x) \ge 0$ holds for all feasible $y$
                 \item for $x_i > 0 \Longrightarrow y_i - x_i$ can be positive or negative, so $\partial_j f(x) \ge \partial_i f(x) = 0$ for any j
+                \item $\partial_if(x)$ is a constant $C$ for all $x_i > 0$, and $\partial_jf(x) \ge C$ for all $x_j = 0$.
                 \item the converse is obvious\[\nabla f(x)^t(y - x) = \sum_{x_i > 0}\partial_i f(x)(y_i - x_i) + \sum_{x_i = 0}\partial_i f(x)(y_i - x_i) \ge C\sum_{i = 1}^n(y_i - x_i) = 0\]
             \end{itemize}
         \end{proof}
@@ -352,6 +378,10 @@
 \end{remark}
 
 \section{拉格朗日乘子}
+\begin{remark}
+    The Lagrange multiplier only tells the properties satisfied by the solution. The solution can not always be obtained by Lagrange multiplier.
+\end{remark}
+
 \begin{remark}
     Standard form optimization problem (not necessarily convex)\[\begin{cases}
         \minimize \quad &f(x)\\
@@ -363,8 +393,35 @@
         \item Lagrange function, $L: \mathcal{D} \times \mathbb{R}^m \times \mathbb{R}^p \mapsto \mathbb{R}$ \[L(x, \lambda, \mu) = f(x) + \sum_{i = 1}^m\lambda_if_i(x) + \sum_{i = 1}^p \mu_ih_i(x)\]
         \item Lagrange dual function, $g: \mathbb{R}^m \times \mathbb{R}^p \mapsto \mathbb{R}$ \[g(\lambda, \mu) = \inf_{x \in \mathcal{D}} L(x, \lambda, \mu)\]\begin{itemize}
             \item $g$ is concave, can be $-\infty$ for some $(\lambda, \mu)$
-            \item lower bound property: if $\lambda \succeq 0$, then $g(\lambda, \mu) \le p^*$
+            \item lower bound property: if $\lambda \succeq 0$, then $g(\lambda, \mu) \le p^*$\begin{itemize}
+                \item $L(x, \lambda, \mu) = f(x) + \sum_{i = 1}^m\lambda_if_i(x) + \sum_{i = 1}^p \mu_ih_i(x) \le f(x)$
+                \item $g(\lambda, \mu) = \inf_{x \in \mathcal{D}}L(x, \lambda, \mu) \le L(x^*, \lambda, \mu) \le f(x^*) = p^*$.
+                \item $\max g(\lambda, \mu) = d^*$ with $\lambda \succeq 0$, get $d^* \le p^*$.
+            \end{itemize}
         \end{itemize}
+    \end{itemize}
+\end{remark}
+
+\begin{remark}
+    Equality constrained norm minimization, with any norm $\|\cdot\|$ of $\mathbb{R}^n$\[\begin{cases}
+        \minimize \quad &\|x\|\\
+        \subject \quad &Ax = b
+    \end{cases}\]
+    \begin{itemize}
+        \item Lagrangian: $L(x, \mu) = \|x\| + \mu^t(Ax - b)$
+        \item dual function: 
+            \begin{align*}
+                g(\mu) = \inf_{x \in \mathcal{D}}\left(\|x\| + \mu^tAx - b^t\mu\right) &= \inf_{x \in \mathcal{D}}\left(\|x\|(\boldsymbol{1} + \mu^tA\frac{x}{\|x\|}) - b^t\mu\right)\\ 
+                &=\begin{cases}
+                    -b^t\mu, \quad&\text{if }\|A^t\mu\|_* \le 1\\
+                    -\infty, \quad&\text{otherwise}
+                \end{cases}
+            \end{align*}
+        \begin{itemize}
+            \item $\frac{x}{\|x\|}$ is vector of norm 1.
+            \item $\|v\|_* = \sup_{\|u\| \le 1}u^tv$ is the dual norm of $\|\cdot\|$
+        \end{itemize}
+        \item lower bound property: $p^* \ge -b^t\mu$ if $\|A^tu\|_* \le 1$.
     \end{itemize}
 \end{remark}
 
@@ -377,7 +434,7 @@
     \begin{itemize}
         \item Lagrangian: \[L(x, \lambda, \mu) = c^tx - \lambda^t x + \mu^t(Ax - b) = -\mu^tb + (c + A^t\mu - \lambda)^tx\]
         \item dual function: \begin{align*}
-            g(\lambda, \mu) &= \inf_{x} \left(-\mu^tb + (c + A^t\mu - \lambda)^tx\right)\\
+            g(\lambda, \mu) &= \inf_{x \in \mathcal{D}} \left(-\mu^tb + (c + A^t\mu - \lambda)^tx\right)\\
             &= \begin{cases}
                 -\mu^tb, \quad &\text{if } c + A^t\mu - \lambda = 0\\
                 -\infty, \quad &\text{otherwise}
@@ -396,8 +453,8 @@
         \item a nonconvex problem, feasible set contains $2^n$ discrete points
         \item Lagrangian: $L(x, \mu) = f(x) + \sum_{i = 1}^n\mu_i(x_i^2 - 1)$
         \item dual function:\begin{align*}
-            g(\mu) &= \inf_{x}\ (x^tWx + \sum_{i = 1}^n \mu_i(x_i^2 - 1))\\
-            &= \inf_{x}\ x^t(W + \diag(\mu))x - \sum_{i = 1}^n\mu_i\\
+            g(\mu) &= \inf_{x \in \mathcal{D}}\ (x^tWx + \sum_{i = 1}^n \mu_i(x_i^2 - 1))\\
+            &= \inf_{x \in \mathcal{D}}\ x^t(W + \diag(\mu))x - \sum_{i = 1}^n\mu_i\\
             &=\begin{cases}
                 -\sum_{i = 1}^n \mu_i, \quad &\text{if } W + \diag(\mu) \succeq 0\\
                 -\infty, \quad &\text{otherwise}

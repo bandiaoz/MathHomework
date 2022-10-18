@@ -2,4 +2,6 @@
 *.log
 *.out
 *.synctex.gz
+*.synctex(busy)
 *.DS_Store
+tp.py
