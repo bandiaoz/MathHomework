@@ -6,6 +6,8 @@
 \renewcommand{\due}{due: 11 weeks}
 \newcommand{\tr}{\operatorname{tr}} % 迹
 \newcommand{\dom}{\operatorname{dom}} % 定义域
+\newcommand{\rank}{\operatorname{rank}} % 秩
+\newcommand{\diag}{\operatorname{diag}} % 创建对角阵
 \newcommand{\minimize}{\operatorname{minimize}} % 最小化
 \newcommand{\subject}{\operatorname{subject\ to}}
 
@@ -249,15 +251,15 @@
         \item \textit{Negative geometric mean.} $f(x) = -\left(\prod x_i\right)^{1 / n}$ on $\mathbb{R}_{++}^n$.
         \item \textit{Negative generalized logarithm for second-order cone.} $f(x, t) = -\log(t^2 - x^Tx)$ on $\left\{(x, t) \in \mathbb{R}^n\times \mathbb{R}\text{\ } |\text{\ } \|x\|_2 < t\right\}$.
     \end{enumerate}
-
-    \Answer
 \end{problem}
 
 \begin{problem}[3.37]
-    (\todo)
     Show that the conjugate of $f(X) = \tr(X^{-1})$ with $\dom(f) = \mathbb{S}^n_{++}$ is given by\[f^*(Y) = -2\tr(-Y)^{\frac{1}{2}}, \quad \dom(f^*) = -\mathbb{S}_+^n\]
 
     \textit{Hint.} The gradient of $f$ is $\nabla f(X) = -X^{-2}$
+    \Answer Suppose $Y$ has eigenvalue decomposition \[Y = Q\Lambda Q^t = \sum_{i = 1}^n \lambda_i q_i q_i^t\] with $\lambda_1 > 0$. Let $X = Q \diag(t, 1, \dots, 1)Q^t = tq_1q_1^t + \sum_{i = 2}^{n}q_iq_i^t$. We have \[\tr(XY) - \tr(X^{-1}) = t\lambda_1 + \sum_{i = 2}^n\lambda_i - 1 / t - (n - 1)\] which grows unboundedly as $t \to \infty$. Therefore $Y \notin \dom(f)^*$.
+
+    Next, assume $Y \preceq 0$. If $Y \prec 0$, we can find the maximum of \[\tr(XY) - \tr(X^{-1})\] by setting the gradient equal to zero. We obtain $Y = -X^{-2}$, i.e., $X = (-Y)^{-1 / 2}$, and \[f^*(Y) = -2\tr(-Y)^{1 / 2}\]Finally we verify that this expression remains valid when $Y \preceq 0$, but $Y$ is singular. This follows from the fact that conjugate functions are always closed, i.e., have closed epigraphs.
 \end{problem}
 
 \section{Convex optimization problems}
@@ -297,6 +299,24 @@
         \item If $f_0$ is bounded below then its minimum is attained, i.e., there exists an $x$ that satisfies the optimality condition(4.23).
         \item The optimal set is affine: $X_{opt} = \left\{x^* + v\ |\ Av = 0\right\}$, where $x^*$ is any optimal point.
     \end{enumerate}
+    \Answer \text{}\begin{enumerate}
+        \item If such a $v$ exists, $\dom(f_0)$ is unbounded, since $x_0 + tv \in \dom(f_0)$ for all $t \ge 0$. Conversely, suppose $x^k$ is a sequence of points in $\dom(f_0)$ with $\|x^k\|_2 \to \infty$. Define $v^k = x^k / \|x^k\|_2$. The sequence has a convergent subsequence because $\|v^k\|_2 = 1$ for all $k$. Let $v$ be its limit. We have $\|v\|_2 = 1$ and, since $a_i^tv^k < b_i / \|x^k\|_2$ for all $k$, $a_i^tv \le 0$. Therefore $Av \preceq 0$ and $v \neq 0$.
+        \item If there exists such a $v$, then $f_0$ is unbounded below. Let $j$ be an index with $a_j^tv < 0$. For $t \ge 0$, \begin{align*}
+            f_0(x_0 + tv) &= -\sum_{i = 1}^m\log(b_i - a_i^tx_0 - ta_i^tv)\\
+            & \le -\sum_{i \neq j}^m\log(b_i - a_i^tx_0) - \log(b_j - a_j^tx_0 - ta_j^tv)
+        \end{align*} and the righthand side decreases without bound as $t$ increases.
+
+        Conversely, suppose $f$ is unbounded below. Let $x^k$ be a sequence with $b - Ax^k \succ 0$, and $f_0(x^k) \to -\infty$. By convexity,\[f_0(x^k) \ge f_0(x_0) + \sum_{i = 1}^m\frac{1}{b_i - a_i^tx_0}a_i^t(x^k - x_0) = f_0(x_0) + m - \sum_{i = 1}^m\frac{b_i - a_i^tx^k}{b_i - a_i^tx_0}\] so if $f_0(x^k) \to -\infty$, we must have $\max_i(b_i - a_i^tx^k) \to \infty$.
+
+        Suppose there exists a $z$ with $z \succ 0$, $A^tz = 0$. Then \[z^tb = z^t(b - Ax^k) \ge z_i\max_{i}(b_i - a_i^tx^k) \to \infty\]
+        We have reached a contradiction, and conclude that there is no such $z$. Using the theorem of alternatives, there must be a $v$ with $Av \preceq 0, Av \neq 0$.
+        \item We can assume that $\rank(A) = n$.
+        
+        If $\dom(f_0)$ is bounded, then the result follows from the fact that the sublevel sets of $f_0$ are closed.
+
+        If $\dom(f_0)$ is unbounded, let $v$ be a direction in which it is unbounded, i.e., $v \neq 0, Av \preceq 0$. Since $\rank(A) = 0$, we must have $Av \neq 0$, but this implies $f_0$ is unbounded. We conclude that if $\rank(A) = n$, then $f_0$ is bounded below iff its domain is bounded, and therefore its minimum is attained.
+        \item We can limit $\rank(A) = n$. We show that $f_0$ has at most one optimal point. The Hessian of $f_0$ at $x$ is \[\nabla^2f(x) = A^t\diag(d)A, \quad d_i = \frac{1}{(b_i - a_i^tx)^2}, \ i = 1, \dots, m\] which is positive definite if $\rank(A) = n$, i.e., $f_0$ is strictly convex. Therefore the optimal point, if it exists, is unique. 
+    \end{enumerate}
 \end{problem}
 
 \begin{problem}[4.3]
@@ -310,6 +330,7 @@
     \end{bmatrix}, \quad q = \begin{bmatrix}
         -22.0 \\ -14.5 \\ 13.0
     \end{bmatrix}, \quad r = 1\]
+    \Answer $\nabla f_0(x^*) = (-1, 0, 2)$. Therefore the optimality condition is that $\nabla f_0(x^*)^t(y - x) = -(y_1 - 1) + 2(y_2 + 1) \ge 0$ for all $y$ satisfying $-1 \le y_i \le 1$.
 \end{problem}
 
 \begin{problem}[4.8]
@@ -341,6 +362,31 @@
             \subject \quad &d^tx = \alpha, \quad 0 \preceq x \preceq \textbf{1}
         \end{cases}\] with $d \succ 0$, and $0 \le \alpha \le \textbf{1}^td$.
     \end{enumerate}
+    \Answer \text{} \begin{enumerate}
+        \item \begin{itemize}
+            \item If $b \notin \mathcal{R}(A)$, the optimal value is $\infty$.
+            \item If $c$ is orthogonal to the nullspace of $A$. $c = A^t\lambda + \hat{c}, A\hat{c} = 0$. So $c^tx = \lambda^tAx + \hat{c}^tx = \lambda^tb$. The optimal value is $\lambda^tb$.
+            \item If $c$ is not in the range of $A^t(\hat{c}\neq 0)$, the problem is unbounded$(p^* = -\infty)$. To verify this, note that $x = x_0 - t\hat{c}$ is feasible for all $t$, $t \to \infty$, than target $\to $ unbounded.
+        \end{itemize}
+        In summary, \[p^* = \begin{cases}
+            +\infty \quad &b \notin \mathcal{R}(A)\\
+            \lambda^tb\quad &c = A^t\lambda \text{ for some } \lambda\\
+            -\infty \quad &\text{otherwise}
+        \end{cases}\]
+        \item Let $c = a\lambda + \hat{c}$, with $a^t\hat{c} = 0$.\begin{itemize}
+            \item If $\lambda > 0$, the problem is unbounded below. Choose $x = -ta$, and let $t \to \infty$:\[c^tx = -tc^ta = -t\lambda a^ta \to -\infty\] and \[a^tx - b = -ta^ta - b \le 0\] for large $t$, so $x$ is feasible for large $t$. 
+            \item If $\hat{c} \neq 0$, the problem is unbounded blow. Choose $x = ba - t\hat{c}$ and $t \to \infty$.
+            \item If $c = a\lambda$ for some $\lambda \le 0$, the optimal value is $c^tab = \lambda b$
+        \end{itemize}
+        In summary, the optimal value is \[*p = \begin{cases}
+            \lambda b \quad &c = a\lambda \text{ for some } \lambda \le 0\\
+            -\infty \quad &\text{otherwise}
+        \end{cases}\]
+        \item The optimal $x_i^*$ minimizes $c_ix_i$ subject to the constraint $l_i \le x_i \le u_i$. If $c_i > 0$, then $x_i^* = l_i$; if $c_i < 0$, then $x_i^* = u_i$; if $c_i = 0$, then any $x_i$ in the interval $[l_i, u_i]$ is optimal. Therefore, the optimal value of the problem is \[p^* = l^tc^+ + u^tc^-\] where $c_i^+ = \max\left\{c_i, 0\right\}$ and $c_i^- = \max\left\{-c_i, 0\right\}$.
+        \item $c^tx = c_{\min}$, $x_i = 0$ if $c_i > c_{\min}$.
+        \item Suppose $c_i$ is sorted, the optimal value if $p^* = c_1 + c_2 + \cdots + c_{\left \lfloor \alpha \right \rfloor } + c_{1 + \left \lfloor \alpha \right \rfloor }(\alpha - \left \lfloor \alpha \right \rfloor )$. 
+        \item Suppose that \[\frac{c_{1}}{d_{1}} \leq \frac{c_{2}}{d_{2}} \leq \cdots \leq \frac{c_{n}}{d_{n}}\] To minimize the objective, we choose \[y_1 = d_1, \quad y_2 = d_2, \quad \cdots, \quad y_k = d_k\] where $k = \max\left\{i \in \left\{1, \dots, n\right\} |\ d_1 + \cdot + d_i \le \alpha\right\}$ (and $k = 0$ if $d_1 > \alpha$). In trems of the original variables.\[x_{1}=\cdots=x_{k}=1, \quad x_{k+1}=\left(\alpha-\left(d_{1}+\cdots+d_{k}\right)\right) / d_{k+1}, \quad x_{k+2}=\cdots=x_{n}=0\]
+    \end{enumerate}
 \end{problem}
 
 \begin{problem}[4.9]
@@ -351,6 +397,10 @@
         c^tA^{-1}b \quad &A^{-t}c \preceq 0\\
         -\infty \quad &\text{otherwise}
     \end{cases}\]
+    \Answer $y = Ax$. We get \[\begin{cases}
+        \minimize\quad &c^tA^{-1}y\\
+        \subject\quad &y \preceq b
+    \end{cases}\] If $A^{-t}c \preceq 0$, the optimal solution is $y = b$, with $p^* = c^tA^{-1}b$. Otherwise, the LP is unbounded below.
 \end{problem}
 
 \begin{problem}[4.15]
@@ -377,6 +427,10 @@
         \item Show that the optimal value of the LP relaxation(\ref{eq2}) is a lower bound on the optimal value of the Boolean LP (\ref{eq1}). What can you say about the Boolean LP if the LP relaxation is infeasible?
         \item It sometimes happens that the LP relaxation has a solution with $x_i \in \left\{0, 1\right\}$. What can you say in this case?
     \end{enumerate}
+    \Answer \text{}\begin{enumerate}
+        \item The feasible set of the relaxation includes the feasible set of the Boolean LP. It follows that the Boolean LP is infeasible if the relaxation is infeasible, and that the optimal value of the relaxation is less than or equal to the optimal value of the Boolean LP.
+        \item The optimal solution of the relaxation is also optimal for the Boolean LP.
+    \end{enumerate}
 \end{problem}
 
 \begin{problem}[4.21]
@@ -395,6 +449,26 @@
             \minimize \quad &x^tBx \\
             \subject \quad &x^tAx \le 1
         \end{cases}\] where $A \in \mathbb{S}_{++}^n$ and $B \in \mathbb{S}_+^n$. Also consider the nonconvex extension with $B \notin \mathbb{S}_+^n$.
+    \end{enumerate}
+    \Answer \text{}\begin{enumerate}
+        \item If $A \succ 0$, the solution is \[x^{\star}=-\frac{1}{\sqrt{c^{T} A^{-1} c}} A^{-1} c, \quad p^{\star}=-\left\|A^{-1 / 2} c\right\|_{2}=-\sqrt{c^{T} A^{-1} c}\]
+        We make a change of variables $y = A^{1 / 2}x$, and write $\tilde{c} = A^{-1 / 2}c$. With this new variable the optimization problem becomes\[\begin{cases}
+            \minimize \quad &\tilde{c}^ty\\
+            \subject \quad &y^ty \le 1
+        \end{cases}\]The answer is $y^* = -\tilde{c} / \|\tilde{c}\|_2$. \[A = Q\diag(\lambda)Q^t = \sum_{i = 1}^n\lambda_iq_iq_i^t\]
+        We define $y = Qx, b = Qc$, and express the problem as \[\begin{cases}
+            \minimize \quad &\sum_{i = 1}b_iy_i\\
+            \subject\quad &\sum_{i = 1}^n\lambda_iy_i \le 1
+        \end{cases}\]If $\lambda_i > 0$ for all $i$, the problem reduces to the case we already discussed. Otherwise, we can distinguish several cases.\begin{itemize}
+            \item $\lambda_n < 0$. The problem is unbounded below. Let $y_n \to \infty$, we can make any point feasible.
+            \item $\lambda_n = 0$. If for some $i$, $b_i \neq 0$ and $\lambda_i = 0$, the problem is unbounded below.
+            \item $\lambda_n = 0$, and $b_i = 0$ for all $i$ with $\lambda_i = 0$. In this case we can reduce the problem to a smaller one with all $\lambda_i > 0$. 
+        \end{itemize}
+        \item $y = A^{1 / 2}(x - x_c), x = A^{-1 / 2}y + x_c$, and consider the problem\[\begin{cases}
+            \minimize \quad &c^tA^{-1 / 2}y + c^tx_c\\
+            \subject\quad &y^ty \le 1
+        \end{cases}\] The solution is \[y^{\star}=-\left(1 /\left\|A^{-1 / 2} c\right\|_{2}\right) A^{-1 / 2} c, \quad x^{\star}=x_{c}-\left(1 /\left\|A^{-1 / 2} c\right\|_{2}\right) A^{-1} c .\]
+        \item 
     \end{enumerate}
 \end{problem}
 
