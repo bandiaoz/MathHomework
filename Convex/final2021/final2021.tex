@@ -77,7 +77,7 @@
 
 \begin{problem}[判断]
     线性模型的 SVM 中，最后得到的解仅依赖于支撑向量.
-    \Answer 
+    \Answer 是.
 \end{problem}
 
 \begin{problem}[判断]
@@ -175,7 +175,16 @@
         \minimize \quad &-\sum_{i = 1}^m a_i\log(b_i^tx)\\
         \subject \quad &0 \preceq x \preceq 1, \sum_{i = 1}^nx_i = n - 1
     \end{cases}\] 其中 $x\in \mathbb{R}^n, a_i > 0$ 以及 $b_i \succ 0$.
-    \Answer 
+    \Answer 目标函数 $f(x) = -\sum_{i = 1}^m a_i\log(b_i^tx)$，$\partial_{jk}f = \sum_{i = 1}^m\frac{a_ib_{ij}b_{ik}}{(b_i^tx)^2} = (b_ib_i^t)_{jk}\sum_{i = 1}^m\frac{a_i}{(b_i^tx)^2}$。所以 $\nabla^2f(x)$ 正定，目标函数是凸函数。约束条件是仿射，所以是凸优化问题。
+
+    Lagrange 函数: $L(x, \lambda, \mu) = -\sum_{i = 1}^m a_i\log(b_i^tx) - \lambda_1^t x + \lambda_2^t(x - \mathbf{1}) + \mu(\mathbf{1}^tx - n + 1)$
+    
+    KKT 条件如下：\begin{itemize}
+        \item $0 \preceq x \preceq 1, \sum_{i = 1}^nx_i = n - 1$
+        \item $\lambda_1 \succeq 0, \lambda_2 \succeq 0$
+        \item $\lambda_{1i}x_i = 0, \lambda_{2i}(x_i - 1) = 0$
+        \item $\partial_xL = 0, -\sum_{i = 1}^m\frac{a_ib_i}{b_i^tx} - \lambda_1 + \lambda_2 + \mu \mathbf{1} = 0$
+    \end{itemize}
 \end{problem}
 
 \begin{problem}[问答]
@@ -189,7 +198,20 @@
         \subject \quad &x + y + z + u = 1\\
         &x^2 + z^2 \le 1 
     \end{cases}\]
-    \Answer 
+    \Answer 目标函数是二次函数，等式约束是仿射函数，不等约束是二次函数，QCPQ问题是凸优化问题。
+
+    Lagrange 函数: $L(x, y, z, \lambda, \mu) = x^2 + 2y^2 + 2z^2 + 3u^2 + \lambda(x^2 + z^2 - 1) + \mu(x + y + z + u - 1)$
+
+    KKT 条件如下：\begin{itemize}
+        \item $x + y + z + u = 1,\ x^2 + z^2 \le 1$
+        \item $\lambda \ge 0$
+        \item $\lambda(x^2 + z^2 - 1) = 0$
+        \item $2x + 2\lambda x + \mu = 0, 4y + \mu = 0, 4z + 2\lambda z + \mu = 0$
+    \end{itemize}
+    根据 $\lambda(x^2 + z^2 - 1) = 0$，\begin{itemize}
+        \item 当 $\lambda = 0$，$(x, y, z) = (\frac{2 - 2u}{5}, \frac{1 - u}{5}, \frac{1 - u}{5})$
+        \item 当 $\lambda \neq 0 \Longrightarrow x^2 + z^2 = 1$, ... difficult, 
+    \end{itemize}
 \end{problem}
 
 \end{document}
