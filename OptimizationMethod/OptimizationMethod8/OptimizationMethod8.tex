@@ -1,0 +1,29 @@
+\input{../../homework.cls}
+
+\newcommand\Title{最优化方法第8次作业}
+
+\begin{document}
+\begin{problem}
+    给定函数\[f(x) = \frac{x_1 + x_2}{3 + x_1^2 + x_2^2 + x_1x_2}\]求 $f(x)$ 的极小点。
+    \Answer
+    令 \[\begin{cases}
+        \frac{\partial f}{\partial x_{1}}=\frac{3-x_{1}^{2}-2 x_{1} x_{2}}{\left(3+x_{1}^{2}+x_{2}^{2}+x_{1} x_{2}\right)^{2}}=0 \\
+        \frac{\partial f}{\partial x_{2}}=\frac{3-x_{2}^{2}-2 x_{1} x_{2}}{\left(3+x_{1}^{2}+x_{2}^{2}+x_{1} x_{2}\right)^{2}}=0
+    \end{cases}\]
+    解得\[x^{(1)} = (1, 1), \quad x^{(2)} = (-1, -1)\]
+    而 \begin{align*}
+        \frac{\partial^{2} f}{\partial x_{1}^{2}}&=\frac{-18 x_{1}-12 x_{2}+2 x_{1}^{3}-2 x_{2}^{3}+6 x_{1}^{2} x_{2}}{\left(3+x_{1}^{2}+x_{2}^{2}+x_{1} x_{2}\right)^{3}} \\
+        \frac{\partial^{2} f}{\partial x_{2}^{2}}&=\frac{-12 x_{1}-18 x_{2}-2 x_{1}^{3}+2 x_{2}^{3}+6 x_{1} x_{2}^{2}}{\left(3+x_{1}^{2}+x_{2}^{2}+x_{1} x_{2}\right)^{3}} \\
+        \frac{\partial^{2} f}{\partial x_{1} \partial x_{2}}&=\frac{-12 x_{1}-12 x_{2}+6 x_{1}^{2} x_{2}+6 x_{1} x_{2}^{2}}{\left(3+x_{1}^{2}+x_{2}^{2}+x_{1} x_{2}\right)^{3}}
+    \end{align*}
+    故 \[\nabla^2 f(x^{(1)}) = \begin{bmatrix}
+        -\frac{1}{9} & -\frac{1}{18} \\
+        -\frac{1}{18} & -\frac{1}{9}
+    \end{bmatrix}, \quad \nabla^2 f(x^{(2)}) = \begin{bmatrix}
+        \frac{1}{9} & \frac{1}{18} \\
+        \frac{1}{18} & \frac{1}{9}
+    \end{bmatrix}\]
+    由于 $\nabla^2f(x^{(1)})$ 为负定矩阵，$\nabla^2f(x^{(2)})$ 为正定矩阵，因此 $f(x)$ 的极小点是 $x^{(2)} = (-1, -1)$。
+\end{problem}
+
+\end{document}
