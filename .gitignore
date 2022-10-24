@@ -1,7 +1,9 @@
 *.aux
+*.bcf
 *.log
 *.out
 *.synctex.gz
 *.synctex(busy)
+*.run.xml
 *.DS_Store
 tp.py
