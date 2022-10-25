@@ -3,7 +3,14 @@
 
 \newcommand\Title{智能计算数学基础笔记}
 \renewcommand\due{due: November 6, 2022}
-\newcommand\tr{\operatorname{tr}}
+\newcommand\tr{\operatorname{tr}} % 迹
+\newcommand\dom{\operatorname{dom}} % 定义域
+\newcommand\diag{\operatorname{diag}} % 对角矩阵
+\newcommand\epi{\operatorname{epi}} % 上镜图
+\newcommand\minimize{\operatorname{minimize}} % 最小化
+\newcommand\maximize{\operatorname{maximize}} % 最大化
+\newcommand\subject{\operatorname{subject\ to}}
+\newcommand\rank{\operatorname{rank}} % 秩
 
 
 \begin{document}
@@ -12,10 +19,43 @@
 
 \section{微积分}
 \begin{remark}
-	$\|A\| = \tr{(AA^t)}$
+    给定集合 $A \subset \mathbb{R}^n$\begin{itemize}
+        \item 开集：对于任何$x \in A$都存在以 $x$ 为中心的开球 $B(x, r) = \left\{y \in \mathbb{R}^n: \|y - x\| < r\right\}$ 使得 $B(x, r) \subset A$\begin{itemize}
+            \item 任意个开集之并是开集，有限个开集之交是开集
+        \end{itemize}
+        \item 闭集：补集 $(\mathbb{R}^n - A)$ 是开集\begin{itemize}
+            \item 任意个闭集之交是闭集，有限个闭集之并是闭集
+            \item $A = \bar{A}$，即：如果 $\left\{x_k\right\}_{k \ge 1} \subset A,\underset{k \to \inf}{\lim}x_k = x$，则 $x \in A$
+        \end{itemize}
+        \item  紧集：$A$ 是一个有界闭集，即 $A$ 是闭集并且存在开球 $B(x, r)$ 使得 $A \subset B(x, r)$
+    \end{itemize}
 \end{remark}
+
 \begin{remark}
-	对于无约束优化问题 $minimize\ f(x)$：
+    $f: D \mapsto \mathbb{R}, D \subset \mathbb{R}^n$ 开集，$a \in D$\begin{itemize}
+        \item 偏导（方向导数的特例）：$\partial_if(a) = \underset{t \to 0}{\lim}\frac{f(a + te_i) - f(a)}{t}$
+        \item 梯度：$\nabla f(a) = (\partial_1f(a), \dots, \partial_nf(a))^t$
+        \item 可微：如果存在向量 $v \in \mathbb{R}^n$ 使得\[\lim_{x \to a}\frac{|f(x) - f(a) - v^t(x - a)|}{\|x - a\|} = 0\]此时，$v^t$ 称为 $a$ 点的微分，记作 $Df(Aa)$ 或者 $\frac{\partial f(a)}{\partial a}$
+        \item $f$ 在 $a$ 点可微 $\Longleftrightarrow f(x) = f(a) + Df(a)(x - a) + o(\|x - a\|)$
+        \item $f$ 在 $a$ 点可微 $\Longrightarrow f$ 在 $a$ 点连续、各个方向上存在偏导，$Df(a) = \nabla f(a)^t$\begin{itemize}
+            \item $f(x) = f(a) + \nabla f(a)^t(x - a) + o(\|x - a\|)$
+        \end{itemize} 
+    \end{itemize}
+\end{remark}
+
+\begin{remark}
+	$\|A\|^2 = \tr(AA^t)$
+\end{remark}
+
+\begin{remark}
+    $f: \mathbb{R}^{m \times n} \mapsto \mathbb{R}$，变量为 $m \times n$ 的矩阵 $A = (a_{i, j})$\begin{itemize}
+        \item 按照上述定义，$Df(A) = (\partial_{a_{i, j}}f(A))$ 是一个长度为 $m \times n$ 的行向量
+        \item 但是为了方便起见，通常将 $Df(A)$ 写成一个 $m \times n$ 的矩阵，其 $(i, j)$ 位置的元素 $\partial_{a_{i, j}}f(A)$，即 $(Df(A))_{i, j} = \partial_{a_{i, j}}f(A)$
+    \end{itemize}
+\end{remark}
+
+\begin{remark}
+	对于无约束优化问题 $\minimize\ f(x)$：
 	\begin{itemize}
 		\item $x^*$ 是局部极小值点的必要条件为 $\nabla f(x^*) = 0, \nabla^2f(x^*)\succeq 0$；
 		\item $x^*$ 是局部极小值点的充分条件为 $\nabla f(x^*) = 0, \nabla^2f(x^*)\succ 0$；
@@ -25,7 +65,7 @@
 \end{remark}
 
 \begin{remark}
-	对于等式约束（$Ax=b, A\in \mathbb{R}^{p\times n}$）优化问题 $minimize\ f(x)$：
+	对于等式约束（$Ax=b, A\in \mathbb{R}^{p\times n}$）优化问题 $\minimize\ f(x)$：
 	\begin{itemize}
 		\item $x^*$ 是局部极小值点的必要条件为 $Ax^*=b, B^t\nabla f(x^*) = 0, B^t\nabla^2f(x^*)B \succeq 0$；
 		\item $x^*$ 是局部极小值点的充分条件为 $Ax^*=b, B^t\nabla f(x^*) = 0, B^t\nabla^2f(x^*)B \succ 0$;
@@ -512,7 +552,6 @@
 \end{remark}
 
 \section{组合优化}
-
 \section{博弈论}
 
 \end{document}
