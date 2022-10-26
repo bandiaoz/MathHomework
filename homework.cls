@@ -28,6 +28,7 @@
 \usepackage{makeidx}
 \usepackage{siunitx}
 \usepackage{xcolor}
+\usepackage{physics}
 
 %%%%%%%%% 版面设置 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage{geometry}
