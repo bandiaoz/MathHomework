@@ -1,14 +1,14 @@
 \input{../../homework.cls}
 
 \usepackage{tikz}
+\usepackage{array,tabularx}
 
 \newcommand{\Title}{CVX HW}
 \renewcommand{\due}{due: 11 weeks}
-\newcommand{\tr}{\operatorname{tr}} % 迹
 \newcommand{\dom}{\operatorname{dom}} % 定义域
-\newcommand{\rank}{\operatorname{rank}} % 秩
 \newcommand{\diag}{\operatorname{diag}} % 创建对角阵
 \newcommand{\minimize}{\operatorname{minimize}} % 最小化
+\newcommand{\maximize}{\operatorname{maximize}} % 最大化
 \newcommand{\subject}{\operatorname{subject\ to}}
 
 \newcommand{\todo}{{\color{red} to do}} % to do
@@ -235,10 +235,6 @@
         \item We can express $g$ as \[g(x) = \inf_{t > 0} tf(x / t) = \inf_{t > 0} h(x, t)\] where $h$ is the perspective function of $f$. We know $h$ is convex, so $g$ is convex.
     \end{enumerate}
 \end{problem}
-
-\myline
-
-\todo
 
 \begin{problem}[3.36]
     (\todo)
@@ -468,7 +464,18 @@
             \minimize \quad &c^tA^{-1 / 2}y + c^tx_c\\
             \subject\quad &y^ty \le 1
         \end{cases}\] The solution is \[y^{\star}=-\left(1 /\left\|A^{-1 / 2} c\right\|_{2}\right) A^{-1 / 2} c, \quad x^{\star}=x_{c}-\left(1 /\left\|A^{-1 / 2} c\right\|_{2}\right) A^{-1} c .\]
-        \item 
+        \item If $B \succ 0$, then the optimal value is zero.
+        
+        The smallest eigenvalue of $B \in \mathbb{S}^n$, can be characterized as\[\lambda_{\min}(B) = \inf_{x^tx = 1}x^tBx\]
+        which equals to the problem \[\begin{cases}
+            \minimize \quad &y^tA^{-1/2}BA^{-1/2}y\\
+            \subject \quad &y^ty \le 1
+        \end{cases}\] the optimal value is $\lambda_{\min}(A^{-1/2}BA^{-1/2})$
+        
+        To summarize, the optimal value is \[p^{\star}=\begin{cases}
+            \lambda_{\min }\left(A^{-1 / 2} B A^{-1 / 2}\right) & \lambda_{\min }\left(A^{-1 / 2} B A^{-1 / 2}\right) \leq 0 \\
+            0 & \qotherwise 
+        \end{cases}\]
     \end{enumerate}
 \end{problem}
 
@@ -478,6 +485,7 @@
         \subject \quad &x^tx \le 1
     \end{cases}\]
     with $P \in \mathbb{S}_{++}^n$. Show that $x^* = -(P + \lambda I)^{-1}q$ where $\lambda = \max\left\{0, \bar{\lambda}\right\}$ and $\bar{\lambda}$ is the largest solution of the nonlinear equation \[q^t(P + \lambda I)^{-2}q = 1\]
+    \Answer $x$ is optimal if and only if $x^tx < 1, Px + q = 0 \qor x^tx = 1, Px + q = -\lambda x$ for some $\lambda \ge 0$. If $\norm{P^{-1}q}_2 \le 1$, it is optimal. Otherwise, $\norm{x}_2 = 1 \qand (P + \lambda)x = -q$ for some $\lambda \ge 0$. $f(\lambda) = \norm{(P + \lambda)^{-1}q}_2^2 = \sum_{i = 1}^n \frac{q_i^2}{(\lambda + \lambda_i)^2}$ where $\lambda_i > 0$ are the eigenvalues of $P$. The nonlinear equation $f(\lambda) = 1$ has exactly one nonnegative solution $\bar{\lambda}$. The optimal solution is $x^* = -(P + \bar{\lambda}I)^{-1}q$.
 \end{problem}
 
 \section{Duality}
@@ -486,6 +494,10 @@
         \minimize \quad &c^tx \\
         \subject \quad &f(x) \le 0
     \end{cases}\] with $c \neq 0$, in terms of the conjugate $f^*$. Explain why the problem you give is convex. We do not assume $f$ is convex.
+    \Answer For $\lambda = 0, g(\lambda) = \inf c^tx = -\infty$. For $\lambda > 0$, $g(\lambda) = \inf (c^tx + \lambda f(x)) = \lambda \inf ((c / \lambda)^tx + \lambda f(x) = -\lambda f_1^*(-c/\lambda)$. The dual problem is \[\begin{cases}
+        \minimize\quad &-\lambda f_1^*(-c/\lambda)\\
+        \subject\quad &\lambda \ge 0
+    \end{cases}\]
 \end{problem}
 
 \begin{problem}[5.5]
@@ -494,16 +506,264 @@
         \subject \quad &Gx \preceq h\\
         &Ax = b
     \end{cases}\] Give the dual problem, and make the implicit equality constraints explicit.
+    \Answer \text{}\begin{enumerate}
+        \item The Lagrangian is \[L(x, \lambda, \mu) = \left(c^{T}+\lambda^{T} G+\mu^{T} A\right) x-h \lambda^{T}-\mu^{T} b\] which is an affine function of $x$. It follows that the dual function is given by \[g(\lambda, \mu) = \inf_{x} L(x, \lambda, \mu) = \begin{cases}
+            -\lambda^t h-\mu^t b & c+G^t \lambda+A^t \mu=0 \\
+            -\infty & \qotherwise
+        \end{cases}\]
+        \item The dual problem is\[\begin{cases}
+            \maximize \quad &g(\lambda, \mu)\\
+            \subject \quad &\lambda \succeq 0
+        \end{cases}\]After making the implicit constraints explicit, we obtain\[\begin{cases}
+            \maximize \quad &-\lambda^th - \mu^tb\\
+            \subject \quad &c + G^t\lambda + A^t\mu = 0\\
+            &\lambda \ge 0
+        \end{cases}\]
+    \end{enumerate}
 \end{problem}
 
 \begin{problem}[5.11]
     Derive a dual problem for \[\minimize \quad \sum_{i = 1}^N \|A_ix + b_i\|_2 + \frac{1}{2}\|x - x_0\|_2^2\] The problem data are $A_i \in \mathbb{R}^{m_i \times n}$; $b_i \in \mathbb{R}^{m_i}$. and $x_0 \in \mathbb{R}^n$. First introduce new variables $y_i \in \mathbb{R}^{m_i}$ and equality constraints $y_i = A_ix + b_i$.
+    \Answer The Lagrangian is\[L\left(x, z_{1}, \ldots, z_{N}\right)=\sum_{i=1}^{N}\left\|y_{i}\right\|_{2}+\frac{1}{2}\left\|x-x_{0}\right\|_{2}^{2}-\sum_{i=1}^{N} z_{i}^{t}\left(y_{i}-A_{i} x-b_{i}\right)\]We frst minimize over $y_i$.\[\inf _{y_{i}}\left(\left\|y_{i}\right\|_{2}+z_{i}^{T} y_{i}\right)=\left\{\begin{array}{ll}
+        0 & \left\|z_{i}\right\|_{2} \leq 1 \\
+        -\infty & \text { otherwise }
+    \end{array}\right.\]
+    We can minimize over $x$ by setting the gradient with respect to $x$ equal to zero. \[x = x_0 + \sum_{i = 1}^NA_i^tz\]
+    Substituting in the Lagrangian gives the dual function \[g\left(z_{1}, \ldots, z_{N}\right)=\left\{\begin{array}{ll}
+        \sum_{i=1}^{N}\left(A_{i} x_{0}+b_{i}\right)^{t} z_{i}-\frac{1}{2}\left\|\sum_{i=1}^{N} A_{i}^{t} z_{i}\right\|_{2}^{2} & \left\|z_{i}\right\|_{2} \leq 1, \quad i=1, \ldots, N \\
+        \text { otherwise }
+        \end{array}\right.\]
+    The dual problem is\[\begin{cases}
+        \maximize\quad &\sum_{i=1}^{N}\left(A_{i} x_{0}+b_{i}\right)^{t} z_{i} - \frac{1}{2}\norm{\sum_{i=1}^{N} A_{i}^{t} z_{i}}^2\\
+        \subject \quad &\norm{z_i}_2 \le 1, i = 1, \dots, N
+    \end{cases}\]
 \end{problem}
 
 \begin{problem}[5.12]
     Analytic centering. Derive a dual problem for\[\minimize \quad -\sum_{i = 1}^m \log(b_i - a_i^tx)\] with domain $\left\{x\ |\ a_i^tx < b_i, i = 1, \dots, m\right\}$. First introduce new variables $y_i$ and equality constraints $y_i = b_i - a_i^tx$.
 
     (The solution of this problem is called the analytic center of the linear inequalities $a_i^tx \le b_i, i = 1, \dots, m$. Analytic centers have geometric applications (see \S8.5.3), and play an important role in barrier methods (see chapter 11).)
+    \Answer We derive the dual of the problem\[\begin{cases}
+        \minimize \quad &-\sum_{i = 1}^m\log y_i\\
+        \subject \quad &y = b - Ax
+    \end{cases}\]where $A \in \mathbb{R}^{m \times n}$ has $a_i^t$ as its $i$th row. The Lagrangian is\[L(x, y, \mu)=-\sum_{i=1}^{m} \log y_{i}+\mu^{T}(y-b+A x)\] and the dual function is \[g(\mu) = \inf_{x, y}\left(-\sum_{i = 1}^m\log y_i + \mu^t(y - b + Ax)\right)\] The term $\mu^tAx$ is unbounded below as a function of $x$ unless $A^t\mu = 0$. The terms in y are unbounded below if $\mu \nsucc$, and achieve their minimum for $y_i = 1 / \mu_i$ otherwise. We therefore find the dual function\[g(\mu)=\left\{\begin{array}{lll}
+        \sum_{i=1}^{m} \log \nu_{i}+m-b^{T} \mu & A^{T} \mu=0, & \mu \succ 0 \\
+        -\infty & \text { otherwise } &
+        \end{array}\right.\] and the dual problem \[\begin{cases}
+            \maximize \quad &\sum_{i = 1}^m\log \mu_i - b^t\mu + m\\
+            \subject \quad &A^t\mu = 0
+        \end{cases}\]
+\end{problem}
+
+\begin{problem}[5.21]
+    A conven problem in which strong duality fails. Consider the optimization problem\[\begin{cases}
+        \minimize\quad &e^{-x}\\
+        \subject\quad &x^2/y\le 0
+    \end{cases}\]with variables $x$ and $y$, and domain $\mathcal{D} = \left\{(x, y)\mid y > 0\right\}$.
+    \begin{enumerate}
+        \item Verify that this is a convex optimization problem. Find the optimal value.
+        \item Give the Lagrange dual problem, and find the optimal solution $\lambda^*$ and optimal value $d^*$ of the dual problem. What is the optimal duality gap?
+        \item Does Slater's condition hold for this problem?
+        \item What is the optimal value $p^*(u)$ of the perturbed problem\[\begin{cases}
+            \minimize\quad &e^{-x}\\
+            \subject\quad &x^2/y \le u
+        \end{cases}\] as a function of $u$? Verify that the global sensitivity inequality\[p^*(u) \ge p^*(0) - \lambda^*u\] does not hold.
+    \end{enumerate}
+    \Answer \text{}\begin{enumerate}
+        \item $p^* = 1$.
+        \item The Lagrangian is $L(x, y, \lambda) = e^{-x} + \lambda x^2/y$. The dual function if \[g(\lambda)=\inf _{x, y>0}\left(e^{-x}+\lambda x^{2} / y\right)=\left\{\begin{array}{ll}
+            0 & \lambda \geq 0 \\
+            -\infty & \lambda<0
+        \end{array}\right.\] so we can write the dual problem as \[\begin{cases}
+            \minimize\quad &0\\
+            \subject\quad & \lambda \ge 0
+        \end{cases}\] with optimal value $d^* = 0$. The optimal duality gap is $p^* - d^* = 1$.
+        \item Slater's condition is not satisfied.
+        \item $p^*(u) = 1\text{ if } u = 0, p^*(u) = 0\text{ if } u > 0 \text{ and } p^*(u) = \infty \text{ if } u < 0$.
+    \end{enumerate}
+\end{problem}
+
+\begin{problem}[5.26]
+    Consider the QCQP\[\begin{cases}
+        \minimize\quad &x_1^2 + x_2^2\\
+        \subject\quad &(x_1 - 1)^2 + (x_2 - 1)^2 \le 1\\
+        &(x_1 - 1)^2 + (x_2 + 1)^2 \le 1
+    \end{cases}\] with variable $x \in \mathbb{R}^2$.
+    \begin{enumerate}
+        \item Sketch the feasible set and level sets of the objective. Find the optimal point $x^*$ and optimal value $p^*$.
+        \item Give the KKT conditions. Do there exist Lagrange multipliers $\lambda_1^*$ and $\lambda_2^*$ that prove that $x^*$ is optimal?
+        \item Derive and solve the Lagrange dual problem. Does strong duality hold?
+    \end{enumerate}
+    \Answer \text{}\begin{enumerate}
+        \item The figure \ref{fig2} shows the feasible set(the intersection of the two shaded disks) and some contour lines of the objective function. There is only one feasible point $(1,0)$, and we have $p^* = 1$.\begin{figure}[htbp]
+            \centering
+            \includegraphics[width=0.4\textwidth]{./figure/fig2.png}
+            \caption{the feasible set \label{fig2}}
+          \end{figure}
+          \item The KKT conditions are\[\begin{array}{c}
+            \left(x_{1}-1\right)^{2}+\left(x_{2}-1\right)^{2} \leq 1, \quad\left(x_{1}-1\right)^{2}+\left(x_{2}+1\right)^{2} \leq 1, \\
+            \lambda_{1} \geq 0, \quad \lambda_{2} \geq 0 \\
+            2 x_{1}+2 \lambda_{1}\left(x_{1}-1\right)+2 \lambda_{2}\left(x_{1}-1\right)=0 \\
+            2 x_{2}+2 \lambda_{1}\left(x_{2}-1\right)+2 \lambda_{2}\left(x_{2}+1\right)=0 \\
+            \lambda_{1}\left(\left(x_{1}-1\right)^{2}+\left(x_{2}-1\right)^{2}-1\right)=\lambda_{2}\left(\left(x_{1}-1\right)^{2}+\left(x_{2}+1\right)^{2}-1\right)=0 .
+            \end{array}\] At $x = (1,0)$, these conditions reduce to\[\lambda_{1} \geq 0, \quad \lambda_{2} \geq 0, \quad 2=0, \quad-2 \lambda_{1}+2 \lambda_{2}=0\] which have no solution.
+        \item The Lagrange dual function is given by\[g\left(\lambda_{1}, \lambda_{2}\right)=\inf _{x_{1}, x_{2}} L\left(x_{1}, x_{2}, \lambda_{1}, \lambda_{2}\right)\] where \begin{align*}
+            &L\left(x_{1}, x_{2}, \lambda_{1}, \lambda_{2}\right) \\
+            =&x_{1}^{2}+x_{2}^{2}+\lambda_{1}\left(\left(x_{1}-1\right)^{2}+\left(x_{2}-1\right)^{2}-1\right)+\lambda_{2}\left(\left(x_{1}-1\right)^{2}+\left(x_{2}+1\right)^{2}-1\right) \\
+            =&\left(1+\lambda_{1}+\lambda_{2}\right) x_{1}^{2}+\left(1+\lambda_{1}+\lambda_{2}\right) x_{2}^{2}-2\left(\lambda_{1}+\lambda_{2}\right) x_{1}-2\left(\lambda_{1}-\lambda_{2}\right) x_{2}+\lambda_{1}+\lambda_{2}
+        \end{align*}
+        L reaches its minimum for \[x_{1}=\frac{\lambda_{1}+\lambda_{2}}{1+\lambda_{1}+\lambda_{2}}, \quad x_{2}=\frac{\lambda_{1}-\lambda_{2}}{1+\lambda_{1}+\lambda_{2}}\] and we find \[g\left(\lambda_{1}, \lambda_{2}\right)=\left\{\begin{array}{ll}
+            -\frac{\left(\lambda_{1}+\lambda_{2}\right)^{2}+\left(\lambda_{1}-\lambda_{2}\right)^{2}}{1+\lambda_{1}+\lambda_{2}}+\lambda_{1}+\lambda_{2} & 1+\lambda_{1}+\lambda_{2} \geq 0 \\
+            -\infty & \text { otherwise }
+        \end{array}\right.\]
+        Since $g$ is symmetric, the optimum occurs with $\lambda_1 = \lambda_2$. The dual function then simplifies to\[g(\lambda_1, \lambda_2) = \frac{2\lambda_1}{2\lambda_1 + 1}\] 
+        We see that $g(\lambda_1, \lambda_2)$ tends to $1$ as $\lambda_1 \to \infty$. We have $d^* = p^* = 1$, but the dual optimum is not attained.
+
+        In this example, the KKT conditions fail because the dual optimum is not attained.
+    \end{enumerate}
+\end{problem}
+
+\begin{problem}[5.27]
+    Equality constrained least-squares. Consider the equality constrained least-squares problem\[\begin{cases}
+        \minimize\quad &\norm{Ax - b}_2^2\\
+        \subject\quad &Gx = h
+    \end{cases}\] where $A \in \mathbb{R}^{m \times n}$ with $\rank(A) = n$, and $G \in \mathbb{R}^{p\times n}$ with $\rank(G) = p$.
+
+    Give the KKT conditions, and derive expressions for the primal solution $x^*$ and the dual solution $\nu^*$.
+    \Answer \text{}\begin{enumerate}
+        \item The Lagrangian is \[\begin{aligned}
+            L(x, \nu) &=\|A x-b\|_{2}^{2}+\nu^{T}(G x-h) \\
+            &=x^{T} A^{T} A x+\left(G^{T} \nu-2 A^{T} b\right)^{T} x-\nu^{T} h,
+        \end{aligned}\] with minimizer $x = -(1 / 2)(A^tA)^{-1}(G^t\nu - 2A^tb)$. The dual function is\[g(\nu)=-(1 / 4)\left(G^{T} \nu-2 A^{T} b\right)^{T}\left(A^{T} A\right)^{-1}\left(G^{T} \nu-2 A^{T} b\right)-\nu^{T} h\]
+        \item The optimality conditions are\[2A^t(Ax^* - b) + G^t\nu^* = 0, \quad Gx^* = h\]
+        \item From the first equation, \[x^{\star}=\left(A^{t} A\right)^{-1}\left(A^{t} b-(1 / 2) G^{t} \nu^{\star}\right)\] Plugging this expression for $x^*$ into the second equation gives\[G\left(A^{t} A\right)^{-1} A^{t} b-(1 / 2) G\left(A^{t} A\right)^{-1} G^{T} \nu^{\star}=h\] Substituting in the first expression gives an analytical expression for $x^*$.
+    \end{enumerate}
+\end{problem}
+
+\begin{problem}[5.29]
+    The problem\[\begin{cases}
+        \minimize\quad &-3 x_{1}^{2}+x_{2}^{2}+2 x_{3}^{2}+2\left(x_{1}+x_{2}+x_{3}\right)\\
+        \subject\quad &x_{1}^{2}+x_{2}^{2}+x_{3}^{2}=1 
+    \end{cases}\]is a special case of (5.32), so strong duality holds even though the problem is not convex. Derive the KKT conditions. Find all solutions $x, \nu$ that satisfy the KKT conditions. Which pair corresponds to the optimum?
+    \Answer \text{}\begin{enumerate}
+        \item The KKT conditions are\[x_{1}^{2}+x_{2}^{2}+x_{3}^{2}=1, \quad(-3+\nu) x_{1}+1=0, \quad(1+\nu) x_{2}+1=0, \quad(2+\nu) x_{3}+1=0\]
+        \item From the KKT conditions  $\nu \notin \left\{2, -1, 3\right\}$. We can therefore eliminate $x$ and reduce the KKT conditions to a nonlinear equation in $\nu$:\[\frac{1}{(-3 + \nu)} + \frac{1}{(1 + \nu)} + \frac{1}{(2 + \nu)} = 1\] The lefthand side is plotted in the figure. \begin{figure}[htbp]
+            \centering
+            \includegraphics[width=0.5\textwidth]{./figure/fig3.png}
+            \caption{the lefthand side \label{fig3}}
+        \end{figure}
+        There are four solutions:\[\nu=-3.15, \quad \nu=0.22, \quad \nu=1.89, \quad \nu=4.04\] corresponding to \begin{align*}
+            x=(0.16,0.47,-0.87),\quad & x=(0.36,-0.82,0.45) \\
+            x=(0.90,-0.35,0.26),\quad & x=(-0.97,-0.20,0.17)
+        \end{align*}
+        \item $\nu^*$ is the largest of the four values: $\nu^* = 4.0352$. This can be seen several ways. The simplest way is to compare the objective values of the four solutions $x$, which are \[f_{0}(x)=1.17, \quad f_{0}(x)=0.67, \quad f_{0}(x)=-0.56, \quad f_{0}(x)=-4.70\]We can also evaluate the dual objective at the four candidate values for $\nu$. Finally we can note that we must have\[\nabla^{2} f_{0}\left(x^{\star}\right)+\nu^{\star} \nabla^{2} f_{1}^{\star}\left(x^{\star}\right) \succeq 0\] because $x^*$ is a minimizer of $L(x, \nu^*)$. In other words \[\begin{bmatrix}
+            -3 & 0 & 0\\
+            0 & 1 & 0\\
+            0 & 0 & 2
+        \end{bmatrix} + \nu^*\begin{bmatrix}
+            1 & 0 & 0\\
+            0 & 1 & 0\\
+            0 & 0 & 1
+        \end{bmatrix} \succeq 0\] and therefore $\nu^* \ge 3$.
+    \end{enumerate}
+\end{problem}
+
+\begin{problem}[9.1]
+    Minimiing a quadratic function. Consider the problem of minimizing a quadratic function:\[\minimize \quad f(x) = \frac{1}{2}x^tPx + q^tx + r\] where $P \in \mathbb{S}^n$(but we do not assume $P \succeq 0$).
+    \begin{enumerate}
+        \item Show that if $P \nsucceq 0$, i.e., the objective function $f$ is not convex, then the problem is unbounded below.
+        \item Now suppose that $P \succeq 0$ (so the objective function is convex), but the optimality condition $Px^* = -q$ does not have a solution. Show that the problem is unbounded below.
+    \end{enumerate}
+    \Answer\text{}\begin{enumerate}
+        \item If $P \nsucceq 0$, we can find $v$ such that $v^tPv < 0$. With $x = tv$ we have \[f(x) = \frac{1}{2}t^2(v^tPv) + t(q^tv) + r\] which converges to $-\infty$ as $t$ becomes large.
+        \item This means $q \notin \mathcal{R}(P)$. Express $q$ as $q = \tilde{q} + v$, where $\tilde{q}$ is the Euclidean projection of $q$ onto $\mathcal{R}(P)$, and take $v = q - \tilde{q}$. This vector is nonzero and orthogonal to $\mathcal{R}(P)$, i.e., $v^tPv = 0$. It follows that for $x = tv$, we have \[f(x) = tq^tv + r = t(\tilde{q} + v)^tv + r = t(v^tv) + r\] which is unbounded below.
+    \end{enumerate}
+\end{problem}
+
+\begin{problem}[9.2]
+    Minimizing a quadratic-over-linear fra tional function. Consider the problem of minimizing the function $f: \mathbb{R}^n \to \mathbb{R}$, defined as \[f(x)=\frac{\norm{Ax - b}_{2}^{2}}{c^{t} x+d}, \quad \dom(f)=\left\{x \mid c^{T} x+d>0\right\}\] We assume $\rank(A) = n$ and $b \notin \mathcal{R}(A)$.
+    \begin{enumerate}
+        \item Show that $f$ is closed.
+        \item Show that the minimizer $x^*$ of $f$ is given by\[x^* = x_1 + tx_2\] where $x_1 = (A^tA)^{-1}A^tb, x_2 = (A^tA)^{-1}c$, and $t \in \mathbb{R}$ can be calculated by solving a quadratic equation.
+    \end{enumerate}
+    \Answer \text{}\begin{enumerate}
+        \item Since $b \notin \mathcal{R}(A)$, the numerator is bounded below by a positive number $(\norm{Ax_{ls} - b}_2^2)$. Therefore $f(x) \to \infty$ as $x$ approaches the boundary of $\dom(f)$.
+        \item The optimality conditions are \begin{align*}
+            \nabla f(x) &=\frac{2}{c^{T} x-d} A^{T}(A x-b)-\frac{\|A x-b\|_{2}^{2}}{\left(c^{T} x-d\right)^{2}} c \\
+            &=\frac{2}{c^{T} x-d}\left(x-x_{1}\right)-\frac{\|A x-b\|_{2}^{2}}{\left(c^{T} x-d\right)^{2}} x_{2} \\
+            &=0
+        \end{align*}and $x = x_1 + tx_2$, \[t=\frac{\|A x-b\|_{2}^{2}}{2\left(c^{T} x-d\right)}=\frac{\left\|A x_{1}+t A x_{2}-b\right\|_{2}^{2}}{2\left(c^{T} x_{1}+t c^{T} x_{2}-d\right)}\]
+        In other words t must satisfy \begin{align*}
+            2 t^{2} c^{T} x_{2}+2 t\left(c^{T} x_{1}-d\right) &=t^{2}\left\|A x_{2}\right\|_{2}^{2}+2 t\left(A x_{1}-b\right)^{T} A x_{2}+\left\|A x_{1}-b\right\|_{2}^{2} \\
+            &=t^{2} c^{T} x_{2}+\left\|A x_{1}-b\right\|_{2}^{2}
+        \end{align*} which reduces to a. quadratic equation \[t^{2} c^{T} x_{2}+2 t\left(c^{T} x_{1}-d\right)-\left\|A x_{1}-b\right\|_{2}^{2}=0\] So that \begin{align*}
+            c^{T}\left(x_{1}+t x_{2}\right)-d &=c^{T} x_{1}-d-\left(c^{T} x_{1}-d\right)+\sqrt{\left(c^{T} x_{1}-d\right)^{2}+\left(c^{T} x_{2}\right)\left\|A x_{1}-b\right\|_{2}^{2}} \\
+            &=\sqrt{\left(c^{T} x_{1}-d\right)^{2}+\left(c^{T} x_{2}\right)\left\|A x_{1}-b\right\|_{2}^{2}} \\
+            &>0 .
+        \end{align*}
+    \end{enumerate}
+\end{problem}
+
+\begin{problem}[9.3]
+    Initial point and sublevel set condition. Consider the function $f(x) = x_1^2 + x_2^2$ with domain $\dom(f) = \left\{(x_1, x_2) \mid x_1 > 1\right\}$.
+    \begin{enumerate}
+        \item What is $p^*$?
+        \item Draw the sublevel set $S = \left\{x \mid f(x) \le f(x^{(0)})\right\}$ for $x^{(0)} = (2, 2)$. Is the sublevel set $S$ closed? Is $f$ strongly convex on $S$?
+        \item What happens if we apply the gradient method with backtracking line search, starting at $x^{(0)}$? Does $f(x^{(k)})$ converge to $p^*$?
+    \end{enumerate}
+    \Answer \text{}\begin{enumerate}
+        \item $p^* = \underset{x \to (x, 0)}{\lim}f(x_1, x_2) = 1$
+        \item No, the sublevel set is not closed. The points $(1+1/k, 1)$ are in the sublevel set for $k=1,2,\dots$, but the limit, $(1, 1)$ is not.
+        \item The algorithm gets stuck at $(1, 1)$.
+    \end{enumerate}
+\end{problem}
+
+\begin{problem}[9.5]
+    Backtracking line search. Suppose $f$ is strongly convex with $mI \preceq \nabla^2 f(x)\preceq MI$. Let $\Delta x$ be a descent direction at $x$. Show that the backtracking stopping condition holds for\[0 < t \le -\frac{\nabla f(x)^t\Delta x}{M\norm{\Delta x}_2^2}\]. Use this to give an upper bound on the number of backtracking iterations.
+    \Answer The upper bound $\nabla^2 f(x)\preceq MI$ implies \[f(x+t \Delta x) \leq f(x)+t \nabla f(x)^{T} \Delta x+(M / 2) t^{2} \Delta x^{T} \Delta x\] hence $f(x + t\Delta x) \le f(x) + \alpha t\nabla f(x)^t\Delta x$ if \[t(1-\alpha) \nabla f(x)^{T} \Delta x+(M / 2) t^{2} \Delta x^{T} \Delta x \leq 0\] ie., the exit condition certainly holds if $0 \le t \le t_0$ with\[t_{0}=-2(1-\alpha) \frac{\nabla f(x)^{T} \Delta x}{M \Delta x^{T} \Delta x} \geq-\frac{\nabla f(x)^{T} \Delta x}{M \Delta x^{T} \Delta x} .\] Assume $t_0 \le 1$. Then $\beta^kt\le t_0$ for $k \ge \log(1 / t_0) / \log(1 / \beta)$.
+\end{problem}
+
+\begin{problem}[9.9]
+    Newton decrement. Show that the Iewton decrement $\lambda(x)$ satisfies\[\lambda(x)=\sup _{v^{T} \nabla^{2} f(x) v=1}\left(-v^{T} \nabla f(x)\right)=\sup _{v \neq 0} \frac{-v^{T} \nabla f(x)}{\left(v^{T} \nabla^{2} f(x) v\right)^{1 / 2}}\]
+    \Answer The first expression follows from a a change of variables\[w=\nabla^{2} f(x)^{1 / 2} v, \quad v=\nabla^{2} f(x)^{-1 / 2} w\] and from \[\sup _{\|w\|_{2}=1}-w^{T} \nabla^{2} f(x)^{-1 / 2} \nabla f(x)=\left\|\nabla f(x)^{-1 / 2} \nabla f(x)\right\|_{2}=\lambda(x) \text {. }\] The second expression follows immediately from the first.
+\end{problem}
+
+\begin{problem}[9.10]
+    The pure Neuton method. Newton's method with fixed step size $t = 1$ can diverge if the initial point is not close to $x^*$. In this problem we consider two examples.
+    \begin{enumerate}
+        \item $f(x) = \log(e^x + e^{-x})$ has a unique minimizer $x^* = 0$. Run Newton's method with fixed step size $t = 1$, starting at $x^{(0)}$ and at $x^{(0)} = 1.1$.
+        \item $f(x) = -\log x + x$ has a unique minimizer $x^* = 1$. Run Newton's method with fixed step size $t = 1$, starting at $x^{(0)} = 3$.
+    \end{enumerate}
+    Plot $f$ and $f^\prime$, and show the first few iterates.
+    \Answer \text{}\begin{enumerate}
+        \item $f(x) = \log(e^x + e^{-x})$ is a smooth convex function, with a unique minimum at the origin. The pure Newton method started at $x^{(0)} = 1$ produces the following sequence.
+        \begin{center}
+            \begin{tabularx}{24em}%
+                {|*{3}{>{\centering\arraybackslash}X|}}
+                \hline
+                $k$ & $x^{(k)}$ & $f(x^{(k)}) - p^*$ \\ \hline
+                1 & $-8.134\cdot 10^{-1}$ & $4.338\cdot 10^{-1}$ \\ \hline
+                2 & $ 4.094\cdot 10^{-1}$ & $2.997\cdot 10^{-1}$ \\ \hline
+                3 & $-4.730\cdot 10^{-2}$ & $8.156\cdot 10^{-2}$ \\ \hline
+                4 & $ 7.060\cdot 10^{-5}$ & $1.118\cdot 10^{-3}$ \\ \hline
+                5 & $-2.346\cdot 10^{-13}$ & $2.492\cdot 10^{-9}$ \\ \hline
+            \end{tabularx}
+        \end{center}
+        Started at $x^{(0)} = 1.1$, the method diverges.
+        \begin{center}
+            \begin{tabularx}{24em}%
+                {|*{3}{>{\centering\arraybackslash}X|}}
+                \hline
+                $k$ & $x^{(k)}$ & $f(x^{(k)}) - p^*$ \\ \hline
+                1 & $-1.129\cdot 10^{0}$ & $5.120\cdot 10^{-1}$ \\ \hline
+                2 & $ 1.234\cdot 10^{0}$ & $5.349\cdot 10^{-1}$ \\ \hline
+                3 & $-1.695\cdot 10^{0}$ & $6.223\cdot 10^{-1}$ \\ \hline
+                4 & $ 5.715\cdot 10^{0}$ & $1.035\cdot 10^{0}$ \\ \hline
+                5 & $-2.302\cdot 10^{4}$ & $2.302\cdot 10^{4}$ \\ \hline
+            \end{tabularx}
+        \end{center}
+        \item $f(x) = -\log x + x$ is smooth and convex on $\dom(f) = \left\{x \mid x > 0\right\}$, with a unique minimizer at $x = 1$. The pure Newton method started at $x^{(0)} = 3$ gives as frst iterate\[x^{(1)} = 3 - f^\prime(3) / f^{\prime\prime}(3) = -3\] which lies outside $\dom(f)$.
+    \end{enumerate}
 \end{problem}
 
 \end{document}
