@@ -2,7 +2,6 @@
 
 \newcommand\Title{2021智能计算数学基础试卷}
 \renewcommand\due{due: November 6, 2022}
-\newcommand\tr{\operatorname{tr}}
 \newcommand\minimize{\operatorname{minimize}} % 最小化
 \newcommand\maximize{\operatorname{maximize}} % 最大化
 \newcommand\subject{\operatorname{subject\ to}}
@@ -73,24 +72,9 @@
 \end{problem}
 
 
-\begin{problem}[\todo]
+\begin{problem}
 	给定$P\in\mathbb{S}_{++}^n$以及约束条件$\|x\|\le 1$，二次函数$f(x)=x^tPx$的极大值是多少?
-	\solution \begin{align*}
-		f(x) &= x^tPx \\
-		&=u^tPu \|x\|^2
-	\end{align*}
-
-	其中 $u$ 是单位向量，求 $\|x\| \ge 1$ 下的最大值，可得 $\|x\|^2=1$。即 $f_{max} = g(u)$，其中 $g(u) = u^tPu$。
-
-	$$\begin{cases}
-		\maximize\quad &g(u) = u^tPu\\
-		\subject \quad &\|u\| = 1
-	\end{cases}$$
-
-	$$\begin{array}{c}
-		L(u, \lambda) = u^tPu + \lambda(u^tu - 1)\\
-		\partial_uL = 2(P + \lambda I)u = 0
-	\end{array}$$
+	\solution $P = U^tVU$，则 $f(x) = x^tU^tVUx$，$y = Ux$，则原问题变为 $f(y) = y^tVy = \sum y_i^2v_i$，约束条件 $\norm{y}^2 \le 1$，即 $\sum y_i^2 \le 1$。所以 $f(x)$ 最大值为矩阵 $A$ 的最大特征值 $\max(v_i)$，其中 $v_i$ 表示矩阵 $A$ 的第 $i$ 个特征值。
 \end{problem}
 
 \begin{problem}
@@ -132,103 +116,69 @@
 
 \begin{problem}
 	设$f(A)=\|X-AY\|^2$，其中$A,X$和$Y$分别是维度为$n\times m,n\times k,m\times k$的矩阵，计算$Df(A)$。
-\end{problem}
-\begin{solution}
-	$$\begin{aligned}
+	\solution \begin{align*}
 		f(A) =& \|X - AY\|^2 \\
 		=& \tr\left((X - AY)(X - AY)^t\right) \\
 		=& \tr\left(XX^t - XY^tA^t - AYX^t + AYY^tA^t\right)
-	\end{aligned}$$
-
-	由 $f(A) = \tr(ABA^t) \Longrightarrow Df(A) = A(B + B^t), f(A) = \tr(AB) \Longrightarrow Df(A) = B^t$，可得 
-	
-	$$Df(A) = 2AYY^t - 2XY^t$$
-\end{solution}
-
+	\end{align*}
+	由 $f(A) = \tr(ABA^t) \Longrightarrow Df(A) = A(B + B^t), f(A) = \tr(AB) \Longrightarrow Df(A) = B^t$，可得 \[Df(A) = 2AYY^t - 2XY^t\]
+\end{problem}
 
 \begin{problem}
-	判断题：$\operatorname{rank}(A^tA)=\operatorname{rank}(A)$。
-\end{problem}
-\begin{solution}
-	是。
-
-	\begin{itemize}
-		\item $\boldsymbol{x} \in \mathcal{N}(A) \Leftrightarrow A \boldsymbol{x}=0 \Rightarrow A^{T} A \boldsymbol{x}=0$
-		\item $ A^{T} A \boldsymbol{x}=0 \Rightarrow A \boldsymbol{x} \in \mathcal{N}\left(A^{T}\right) \Rightarrow A \boldsymbol{x} \in \mathcal{N}\left(A^{T}\right) \bigcap C(A)=\{0\}$
+	判断题：$\rank(A^tA)=\rank(A)$。
+	\solution 是。\begin{itemize}
+		\item $x \in \mathcal{N}(A) \Longleftrightarrow A x=0 \Longrightarrow A^{T} A x=0 \Longleftrightarrow x \in \mathcal{N}(A^TA)$
+		\item $x \in \mathcal{N}(A^TA) \Longleftrightarrow A^{T} A x=0 \Longrightarrow A x \in \mathcal{N}\left(A^{T}\right) \Longrightarrow A x \in \mathcal{N}\left(A^{T}\right) \bigcap C(A)=\{0\} \Longleftrightarrow x \in \mathcal{N}(A)$
 	\end{itemize}
-	
-	所以$\mathcal{N}(A) = \mathcal{N}(A^tA) = n - r$，$\operatorname{rank}(A^tA) = \operatorname{rank}(A) = r$。
-\end{solution}
-
+	所以 $\mathcal{N}(A) = \mathcal{N}(A^tA) = n - r$，$\rank(A^tA) = \rank(A) = r$。
+\end{problem}
 
 \begin{problem}
-	判断题：设$A,B$为列数相同的矩阵，$C=\begin{pmatrix}A\\B\end{pmatrix}$，则他们的零空间满足：$N(C)=N(A)\cup N(B)$。
+	判断题：设$A,B$为列数相同的矩阵，$C=\begin{pmatrix}A\\B\end{pmatrix}$，则他们的零空间满足：$\mathcal{N}(C)=\mathcal{N}(A)\cup \mathcal{N}(B)$。
+	\solution 否。矩阵的秩可能变大，那么零空间维度可能变小。$\mathcal{N}(C) = \mathcal{N}(A)\cap \mathcal{N}(B)$.
 \end{problem}
-\begin{solution}
-	否。矩阵的秩可能变大，那么零空间维度可能变小。
-\end{solution}
-
 
 \begin{problem}
 	判断题：如果$u,v$是单位向量，则$u+v$和$u-v$是正交的。
+	\solution 是。$(u + v)^t(u - v) = u^tu - u^tv + v^tu - v^tv = 0$。
 \end{problem}
-\begin{solution}
-	是。$(u + v)^t(u - v) = u^tu - u^tv + v^tu - v^tv = 0$。
-\end{solution}
-
 
 \begin{problem}
 	判断题：设$A,B$是$n$阶方阵，则$AB$和$BA$具有相同的特征值。
+	\solution 是。若 $ABx = \lambda x(\lambda \neq 0)$，则有 $Bx \neq x$，且 $BA(Bx) = B\lambda x = \lambda (Bx)$，都有相同的特征值 $\lambda$。特征向量分别是 $x$ 和 $Bx$.
 \end{problem}
-\begin{solution}
-	是。若 $AB\boldsymbol{x} = \lambda \boldsymbol{x}(\lambda \neq 0)$，则有 $B\boldsymbol{x} \neq \boldsymbol{x}$，且 $BAB\boldsymbol{x} = B\lambda\boldsymbol{x} = \lambda B\boldsymbol{x}$，都有相同的特征值 $\lambda$。
-\end{solution}
-
 
 \begin{problem}
 	判断题：设$x$是$A^tA$的特征值不为$0$的特征向量，则$Ax$是$AA^t$的特征向量。
+	\solution 是。$A^tAx = \lambda\boldsymbol{x} \Longrightarrow AA^t(A\boldsymbol{x}) = \lambda (A\boldsymbol{x})$，$A\boldsymbol{x}$是$AA^t$的特征向量。
 \end{problem}
-\begin{solution}
-	是。$A^tAx = \lambda\boldsymbol{x} \Longrightarrow AA^tA\boldsymbol{x} = \lambda A\boldsymbol{x}$，$A\boldsymbol{x}$是$AA^t$的特征向量。
-\end{solution}
-
 
 \begin{problem}
 	将向量$(2,1)$以向量$(1,2)$为轴做对称，得到的向量是什么?
-\end{problem}
-\begin{solution}
-	$$\begin{aligned}
+	\solution 两倍的投影向量减原向量
+	\begin{align*}
 		u &= (2, 1)^t\\
 		v &= (1, 2)^t\\
 		v^\prime &= \frac{2uu^tv}{\|u\|^2} - v\\
 		&=\left(-\frac{2}{5}, \frac{11}{5}\right)^t
-	\end{aligned}$$
-\end{solution}
-
+	\end{align*}
+\end{problem}
 
 \begin{problem}
 	计算矩阵$\begin{pmatrix}2&3\\1&2\end{pmatrix}$的奇异值。
-\end{problem}
-\begin{remark}
-	$\sigma_i^2$ 既是 $A^TA$ 的第 $i$ 个非零特征值，也是 $AA^T$ 的第 $i$ 个非零特征值。$\sigma_1 \ge \sigma_2 \ge \cdots \ge \sigma_r > 0$。
-\end{remark}
-\begin{solution}
-	\[A^TA = \begin{bmatrix}
+	\solution \[A^TA = \begin{bmatrix}
 		5 & 8 \\
 		8 & 13
 	\end{bmatrix}\]
-	求特征值：
-	\begin{align*}
+	求特征值：\begin{align*}
 		|\lambda I - A^TA| &= 0\\
 		\begin{vmatrix}
 			\lambda - 5 & -8 \\
 			-8 & \lambda - 13
 		\end{vmatrix} &= 0
 	\end{align*}
-
 	解得 $\lambda_1 = 9 + 4\sqrt{5}, \lambda_2 = 9 - 4\sqrt{5}$。即 $\sigma_1 = \sqrt{9 + 4\sqrt{5}}, \sigma_2 = \sqrt{9 - 4\sqrt{5}}$。化简得 $\sigma_1 = \sqrt{5} + 2, \sigma_2 = \sqrt{5} - 2$。
-\end{solution}
-
+\end{problem}
 
 \begin{problem}
 	假设$n$阶方阵$A$有$n$个线性无关的特征向量，则随着$k\to \infty,A^k\to 0$的充分必要条件是什么?

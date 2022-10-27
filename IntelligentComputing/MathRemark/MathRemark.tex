@@ -3,14 +3,12 @@
 
 \newcommand\Title{智能计算数学基础笔记}
 \renewcommand\due{due: November 6, 2022}
-\newcommand\tr{\operatorname{tr}} % 迹
 \newcommand\dom{\operatorname{dom}} % 定义域
 \newcommand\diag{\operatorname{diag}} % 对角矩阵
 \newcommand\epi{\operatorname{epi}} % 上镜图
 \newcommand\minimize{\operatorname{minimize}} % 最小化
 \newcommand\maximize{\operatorname{maximize}} % 最大化
 \newcommand\subject{\operatorname{subject\ to}}
-\newcommand\rank{\operatorname{rank}} % 秩
 
 
 \begin{document}
@@ -77,11 +75,32 @@
 
 \section{线性代数}
 \begin{remark}
-	$n = \dim \mathcal{N}(A) + \operatorname{rank}(A), A\in \mathbb{R}^{m\times n}$。
+    对于 $\mathbb{R}$ 上矩阵 $A_{m \times n}$
+    \begin{itemize}
+        \item 行向量构成 $\mathbb{R}^n$ 中的子空间
+        \item 列向量构成 $\mathbb{R}^m$ 中的子空间
+        \item $A$ 的列空间 $C(A) := \left\{Ax \mid x \in \mathbb{R}^n\right\}$，是所有列向量的线性组合\begin{itemize}
+            \item 对 $A$ 列分块，$Ax$ 是 $A$ 的列向量的线性组合
+            \item $A=\begin{bmatrix}
+                \beta_{1} & \beta_{2} & \cdots & \beta_{n}
+            \end{bmatrix}, C(A)=\left\{x_{1} \beta_{1}+\cdots + x_{n} \beta_{n} \mid x_{i} \in \mathbb{R}, \beta_i \in \mathbb{R}^m\right\}$
+            \item 等于 $A$ 的映射的像 $\operatorname{Im}(A)$
+            \item 是 $\mathbb{R}^m$ 的子空间
+            \item $\dim C(A) = \rank A = r$
+        \end{itemize}
+        \item $A$ 的行空间\begin{itemize}
+            \item 对 $A$ 行分块，$A = (\alpha_1^t\ \cdots\  \alpha_m^t)^t$
+            \item 定义行空间 $\left\{y_1\alpha_1 + \cdots + y_m\alpha_m \mid y_i \in \mathbb{R}, \alpha_i \in \mathbb{R}^n\right\}$
+            \item 等于 $A^T$ 的映射的像 $\operatorname{Im}(A^T)$
+            \item 是 $\mathbb{R}^n$ 的子空间
+            \item $\dim C(A^T) = \rank A^T = r$
+        \end{itemize}
+        \item $n = \dim \mathcal{N}(A) + \rank(A)$
+    \end{itemize}
 \end{remark}
 
 \begin{remark}
-    行空间：$Ax = 0$
+    观察 $Ax = 0$
     \begin{itemize}
         \item 零空间 $\mathcal{N}(A)$ 中的元素 $x$ 与 $A$ 的每一行正交
         \item 零空间 $\mathcal{N}(A)$ 中的元素 $x$ 与 $A$ 的行空间正交 $x \perp C(A^T)$
@@ -107,7 +126,7 @@
 \end{remark}
 
 \begin{remark}
-    满足 $Q^TQ$ 的方阵 $Q$ 是一个正交方阵。
+    满足 $Q^TQ = I$ 的方阵 $Q$ 是一个正交方阵。
     \begin{itemize}
         \item 等距：$\|Qx\|^2 = x^TQ^TQx = x^Tx = \|x\|^2$
         \item 特征值的模长为 $1$：$Qx = \lambda x, \|Qx\|^2 = \|x\|^2\Rightarrow |\lambda|^2 = 1$
@@ -136,57 +155,68 @@
 \end{remark}
 
 \begin{remark}
-    $\boldsymbol{y}$ 在 $\boldsymbol{x}$ 上的投影向量为 \[\frac{\boldsymbol{x}^{T} \boldsymbol{y}}{\|\boldsymbol{x}\|} \cdot \frac{\boldsymbol{x}}{\|\boldsymbol{x}\|}=\frac{\boldsymbol{x}^{T} \boldsymbol{y}}{\boldsymbol{x}^{T} \boldsymbol{x}} \boldsymbol{x}=\boldsymbol{x} \frac{\boldsymbol{x}^{T} \boldsymbol{y}}{\boldsymbol{x}^{T} \boldsymbol{x}}=\frac{\boldsymbol{x} \boldsymbol{x}^{T}}{\boldsymbol{x}^{T} \boldsymbol{x}} \boldsymbol{y}\]
-    
-    $P = \frac{\boldsymbol{x} \boldsymbol{x}^{T}}{\boldsymbol{x}^{T} \boldsymbol{x}}$ 称为投影矩阵。
+    $y$ 在 $x$ 上的投影向量为 \[\frac{x^{T} y}{\|x\|} \cdot \frac{x}{\|x\|}=\frac{x^{T} y}{x^{T} x} x=x \frac{x^{T} y}{x^{T} x}=\frac{x x^{T}}{x^{T} x} y\]
+    \begin{itemize}
+        \item $P = \frac{x x^{T}}{x^{T} x}$ 称为 $x$ 的投影矩阵
+        \item 对任意 $\alpha$，$P\alpha$ 是 $\alpha$ 在 $x$ 上的投影
+        \item $P$ 是对称的，$\rank(P) = 1, P^2 = P$
+    \end{itemize}
 \end{remark}
 
 \begin{remark}
-    $\left\{v_1, \dots, v_n\right\}$ 是 $V$ 的一组基，$S_{i, j} = \left\langle v_{i}, v_{j}\right\rangle$。则 $V$ 空间下的任意两个向量 $\boldsymbol{x}, \boldsymbol{y}$ 的内积 $\left\langle\boldsymbol{x}, \boldsymbol{y}\right\rangle=\boldsymbol{x}^T\boldsymbol{S}\boldsymbol{y}$。当 $\left\langle v_{i}, v_{i}\right\rangle = 1, \left\langle v_{i}, v_{j}\right\rangle = 0$ 时，$S$ 为单位阵，内积变为 \[\boldsymbol{x}^T\boldsymbol{S}\boldsymbol{y} = x_1y_1 + \cdots + x_ny_n\]
+    $\left\{v_1, \dots, v_n\right\}$ 是 $V$ 的一组基，$S_{i, j} = \left\langle v_{i}, v_{j}\right\rangle$。则 $V$ 空间下的任意两个向量 $x, y$ 的内积 $\left\langle x, y\right\rangle=x^TSy$。当 $\left\langle v_{i}, v_{i}\right\rangle = 1, \left\langle v_{i}, v_{j}\right\rangle = 0$ 时，$S$ 为单位阵，内积变为 \[x^TSy = x_1y_1 + \cdots + x_ny_n\]
     此时 $\left\{v_i\right\}$ 是一组标准正交基。
 \end{remark}
 
 \begin{remark}
-    Gram-Schmidt 正交化：
-    线性无关向量 $a_1, \dots, a_n$ 通过 Gram-Schmidt 正交化生成标准正交向量 $q_1, \dots, q_n$：
+    Gram-Schmidt 正交化：\textbf{线性无关向量} $a_1, \dots, a_n$ 通过 Gram-Schmidt 正交化生成标准正交向量 $q_1, \dots, q_n$：
     \begin{align*}
-        \boldsymbol{q}_{1}= & \boldsymbol{a}_{1} /\left\|\boldsymbol{a}_{1}\right\| & & \\
-        \boldsymbol{a}_{2}^{\prime}= &\boldsymbol{a}_{2}-\boldsymbol{q}_{1} \boldsymbol{q}_{1}^{T} \boldsymbol{a}_{2}, & \boldsymbol{q}_{2}=&\boldsymbol{a}_{2}^{\prime} /\left\|\boldsymbol{a}_{2}^{\prime}\right\| \\
-        \boldsymbol{a}_{3}^{\prime}= & \boldsymbol{a}_{3}-\boldsymbol{q}_{1} \boldsymbol{q}_{1}^{T} \boldsymbol{a}_{3}-\boldsymbol{q}_{2} \boldsymbol{q}_{2}^{T} \boldsymbol{a}_{3}, & \boldsymbol{q}_{3}=&\boldsymbol{a}_{3}^{\prime} /\left\|\boldsymbol{a}_{3}^{\prime}\right\| \\
+        q_{1}= & a_{1} /|a_{1}| & & \\
+        a_{2}^{\prime}= &a_{2}-q_{1} q_{1}^{T} a_{2}, & q_{2}=&a_{2}^{\prime} /|a_{2}^{\prime}| \\
+        a_{3}^{\prime}= & a_{3}-q_{1} q_{1}^{T} a_{3}-q_{2} q_{2}^{T} a_{3}, & q_{3}=&a_{3}^{\prime} /|a_{3}^{\prime}| \\
         & \vdots & \vdots &
     \end{align*}
 
     \[\begin{bmatrix}
-        \boldsymbol{a}_{1} & \cdots & \boldsymbol{a}_{n}
+        a_{1} & \cdots & a_{n}
     \end{bmatrix}\begin{bmatrix}
         b_{11} & b_{12} & \cdots & b_{1 n} \\
         & b_{22} & \cdots & b_{2 n} \\
         & & \ddots & \vdots \\
         & & & b_{n n}
     \end{bmatrix}=\begin{bmatrix}
-        \boldsymbol{q}_{1} & \cdots & \boldsymbol{q}_{n}
+        q_{1} & \cdots & q_{n}
     \end{bmatrix}\]
 
     $A_{m\times n}$ 的列向量线性无关，通过 Gram-Schmidt 正交化：
     \[A_{m\times n}T_{n\times n} = Q_{m\times n}\]
     $T$ 为可逆上三角矩阵，$Q$ 的列向量标准正交。当 $m=n$ 时，$Q$ 是正交方阵。两边同时乘以 $T$ 的逆矩阵（上三角的逆矩阵还是上三角）
     \[A_{m \times n}=Q_{m \times n} R_{n \times n}=\begin{bmatrix}
-        \boldsymbol{q}_{1} & \boldsymbol{q}_{n}
+        q_{1} & q_{n}
     \end{bmatrix}\begin{bmatrix}  
-        &  &  \\  
-      \vdots  & \ddots &  \\  
-      0  & \cdots &   
+        &  & r_{ij} \\  
+        & \ddots &  \\  
+        0  &  &   
     \end{bmatrix} \]
     可以验证：
     \[\begin{bmatrix}
-        \boldsymbol{a}_1 & \boldsymbol{a}_2 & \boldsymbol{a}_3
+        a_1 & a_2 & a_3
     \end{bmatrix} = \begin{bmatrix}
-        \boldsymbol{q}_1 & \boldsymbol{q}_2 & \boldsymbol{q}_3
+        q_1 & q_2 & q_3
     \end{bmatrix}\begin{bmatrix}
-        \boldsymbol{q}_{1}^{T} \boldsymbol{a}_{1} & \boldsymbol{q}_{1}^{T} \boldsymbol{a}_{2} & \boldsymbol{q}_{1}^{T} \boldsymbol{a}_{3} \\
-        & \boldsymbol{q}_{2}^{T} \boldsymbol{a}_{2} & \boldsymbol{q}_{2}^{T} \boldsymbol{a}_{3} \\
-        & & \boldsymbol{q}_{3}^{T} \boldsymbol{a}_{3}
+        q_{1}^{T} a_{1} & q_{1}^{T} a_{2} & q_{1}^{T} a_{3} \\
+        & q_{2}^{T} a_{2} & q_{2}^{T} a_{3} \\
+        & & q_{3}^{T} a_{3}
     \end{bmatrix}\]
+\end{remark}
+
+\begin{remark}
+    对于方阵 $A$，若 $Ax = \lambda x(x \neq 0)$，称 $x$ 是 $A$ 的一个特征向量，$\lambda$ 为特征值\begin{itemize}
+        \item $x$ 与 $Ax$ 方向一致，仅做了一个拉伸
+        \item $x$ 是特征向量，则 $cx(c \neq 0)$ 亦然
+        \item 以 $\lambda$ 为特征值的特征向量属于 $\mathcal{N}(\lambda I - A) = \ker(\lambda I - A)$
+        \item 不同特征值的特征子空间相互正交
+    \end{itemize}
 \end{remark}
 
 \begin{remark}
@@ -194,6 +224,16 @@
     \begin{itemize}
         \item $A$ 的所有特征值（允许重复）的和等于 $A$ 的迹 \[\sum_{i = 1}^n \lambda_i = \tr(A) = a_{11} + \cdots + a_{nn}\]
         \item $A$ 的所有特征值（允许重复）的积等于 $A$ 的行列式 \[\prod_{i = 1}^n\lambda_i = \det(A)\]
+    \end{itemize}
+\end{remark}
+
+\begin{remark}
+    若 $Ax = \lambda x$\begin{itemize}
+        \item $A^mx = \lambda^m x, m \in \mathbb{N}$
+        \item 若 $A$ 可逆，$A^{-1}x = \frac{1}{\lambda}x,\ \lambda \neq 0$
+        \item 若 $A$ 有 $n$ 个线性无关的特征向量 $x_1, \dots, x_n$，对应特征值分别为 $\lambda_1, \dots, \lambda_n$，有\begin{itemize}
+            \item 对于任一向量 $v = c_1x_1 + \cdots + c_nx_n$，$v_k = A^kv = c_1\lambda_1^kx_1 + \cdots + c_n\lambda_n^kx_n$
+        \end{itemize}
     \end{itemize}
 \end{remark}
 
@@ -230,7 +270,7 @@
     \end{bmatrix}\]
     
     因此有 EVD 分解 \[AX = X\Lambda, A = X\Lambda X^{-1}\]
-    其中 $X$ 为 $x_1, \dots, x_n$（列向量）构成的矩阵，$\Lambda = \operatorname{diag}(\lambda_1, \dots, \lambda_n)$。
+    其中 $X$ 为 $x_1, \dots, x_n$（列向量）构成的矩阵，$\Lambda = \diag(\lambda_1, \dots, \lambda_n)$。
     \begin{itemize}
         \item 即使固定 $\Lambda$，$X$ 也不唯一
     \end{itemize} 
@@ -240,14 +280,17 @@
     若 $S$ 是实对称方阵，则 
     \begin{itemize}
         \item $S$ 的特征值 $\lambda$ 是实数
-        \item $S$ 有一组线性无关的特征向量
-        \item $S$ 有一组正交的特征向量
+        \item $S$ 有一组线性无关且正交的特征向量
     \end{itemize}
 
     由谱定理可得 \[SQ = Q\Lambda, S = Q\Lambda Q^T\]
-    其中 $Q$ 为 $q_1, \dots, q_n$（列向量）构成的正交方阵，$\Lambda = \operatorname{diag}(\lambda_1, \dots, \lambda_n)$。
+    其中 $Q$ 为 $q_1, \dots, q_n$（列向量）构成的正交方阵，$\Lambda = \diag(\lambda_1, \dots, \lambda_n)$。
     \[S = Q\Lambda Q^T = \lambda_1q_1q_1^T + \cdots + \lambda_nq_nq_n^T\]
     此时 $S$ 作为线性变换的效果是：每个投影都放大 $\lambda_i$ 倍。
+\end{remark}
+
+\begin{remark}
+    $\sigma_i^2$ 既是 $A^TA$ 的第 $i$ 个非零特征值，也是 $AA^T$ 的第 $i$ 个非零特征值。其中 $\sigma_i$ 是 $A$ 的第 $i$ 个奇异值。$\sigma_1 \ge \sigma_2 \ge \cdots \ge \sigma_r > 0$。
 \end{remark}
 
 \section{概率统计}
