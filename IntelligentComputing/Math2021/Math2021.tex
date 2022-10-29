@@ -182,9 +182,7 @@
 
 \begin{problem}
 	假设$n$阶方阵$A$有$n$个线性无关的特征向量，则随着$k\to \infty,A^k\to 0$的充分必要条件是什么?
-\end{problem}
-\begin{solution}
-	$n$阶方阵$A$有$n$个线性无关的特征向量，则 $$\begin{aligned}
+	\solution $n$阶方阵$A$有$n$个线性无关的特征向量，则 $$\begin{aligned}
 		A &= X\Lambda X^{-1} \\	
 		A^k &= X \Lambda^k X^{-1}\\
 		A^k &= X \begin{pmatrix}  
@@ -194,263 +192,168 @@
 		\end{pmatrix} X^{-1} 
 	\end{aligned}$$
 	则随着$k\to \infty,A^k\to 0$的充分必要条件是 $\lambda_i < 1,\forall i\in [1, n]$。
-\end{solution}
-
+\end{problem}
 
 \begin{problem}
 	假设$x_1\sim \mathcal{N}(0,\sigma^2),x_2\sim\mathcal{N}(0,\sigma^2)$，并且$x_1$和$x_2$独立，则$y=x_1^2+x_2^2$服从何种分布?
+	\solution Chi-Squared 分布。
 \end{problem}
-\begin{solution}
-	Chi-Squared 分布。
-\end{solution}
-
 
 \begin{problem}
 	中心极限定理的“中心”是指什么?“极限”是指什么?
+	\solution 中心指高斯分布是所有分布的中心。极限指足够多的独立同分布之和趋近于高斯分布。
 \end{problem}
-\begin{solution}
-	中心指高斯分布是所有分布的中心。极限指足够多的独立同分布之和趋近于高斯分布。
-\end{solution}
-
 
 \begin{problem}
 	高斯白噪声中的“白”是什么意思?
+	\solution 不同时刻的噪声正交。此时如果 $E(w(1)) = 0$ 或 $E(w(2)) = 0$，则 $w(1),w(2)$ 不相关，不相关的高斯噪声就是独立的高斯噪声。如果均值为 0 则不同时刻噪声相互独立。
 \end{problem}
-\begin{solution}
-	不同时刻的噪声正交。此时如果 $E(w(1)) = 0$ 或 $E(w(2)) = 0$，则 $w(1),w(2)$ 不相关，不相关的高斯噪声就是独立的高斯噪声。如果均值为 0 则不同时刻噪声相互独立。
-\end{solution}
-
 
 \begin{problem}
 	假设随机变量$x$和$y$的联合概率密度为$f(x,y)=1/4$，其中$0\le x\le 2,1\le y\le 3$。请问$x$和$y$是否正交?是否独立？是否相关？
+	\solution 不正交，独立，不相关。$f_X(x) = f_Y(y) = \frac{1}{2},f(x, y) = f_X(x)f_Y(y),0 \le x \le 2, 1 \le y \le 3$。
 \end{problem}
-\begin{solution}
-	不正交，独立，不相关。$f_X(x) = f_Y(y) = \frac{1}{2},f(x, y) = f_X(x)f_Y(y),0 \le x \le 2, 1 \le y \le 3$。
-\end{solution}
-
 
 \begin{problem}
 	已知随机变量 $w=\sum_{i=1}^{500}z_i$ ，其中 $z_i$ 是相互独立的均匀分布随机变量，$z_i\sim\mathcal{U}(-\frac{\sqrt{3}}{10},\frac{\sqrt{3}}{10})$。 已知某一个测量数据 $y$ 和要估计的参数 $A$ 以及随机变量 $w$ 有线性关系：$y=4A+w$。请写出随机变量 $w$ 的近似概率密度函数。
+	\solution $E(z_i) = 0, D(z_i) = \frac{1}{100}$。随机变量 $w$ 服从高斯分布 $\mathcal{N}(n\mu, n\sigma^2) = \mathcal{N}(0, 5)$。
 \end{problem}
-\begin{solution}
-	$E(z_i) = 0, D(z_i) = \frac{1}{100}$。随机变量 $w$ 服从高斯分布 $\mathcal{N}(n\mu, n\sigma^2) = \mathcal{N}(0, 5)$。
-\end{solution}
-
 
 \begin{problem}
 	条件如$23$题，写出似然函数$p(y|A)$的表达式，根据最大似然准则(ML)来获取$A$的估计值。
+	\solution $p(y|A) \sim \mathcal{N}(4A, 5), p(y|A) = \frac{1}{\sqrt{10\pi}}e^{-\frac{(y - 4A)^2}{10}}$。
 \end{problem}
-\begin{solution}
-	$p(y|A) \sim \mathcal{N}(4A, 5), p(y|A) = \frac{1}{\sqrt{10\pi}}e^{-\frac{(y - 4A)^2}{10}}$。
 
-
-\end{solution}
-
-
-\begin{problem}
+\begin{problem}[\todo]
 	条件如23题，利用最小二乘法(LS)来估计$A$，请给出表达式。
+	\solution 
 \end{problem}
-\begin{solution}
 
-\end{solution}
-
-
-\begin{problem}
+\begin{problem}[\todo]
 	条件如23题，假设$A$是高斯随机变量，$A\sim\mathcal{N}(0，1)$，且$A$和$w$相互独立。利用线性最小均方误差(LMMSE)准则来估计$A$，请给出表达式。
+	\solution 
 \end{problem}
-\begin{solution}
-
-\end{solution}
-
 
 \begin{problem}
 	按照信息的性质，可以把信息分为哪三种基本类型?
+	\solution 语法信息，语用信息，语义信息。
 \end{problem}
-\begin{solution}
-	语法信息，语用信息，语义信息。
-\end{solution}
-
 
 \begin{problem}
 	若一随机事件的概率为$p(x)$，写出它的自信息$I(x)$的数学定义。
+	\solution $I(x) = -\log p(x)$ 
 \end{problem}
-\begin{solution}
-	
-\end{solution}
-
 
 \begin{problem}
 	对于任意三个离散随机事件$x,y$与$z$，有$I(x;yz)=I(x;z)+I(x;y|z)$，这表明信息有何种性质?
+	\solution 可加性.
 \end{problem}
-\begin{solution}
-
-\end{solution}
-
 
 \begin{problem}
-	已知两个信源分别为$\begin{pmatrix}X\\P\end{pmatrix}=\begin{pmatrix}a_1&a_2\\0.8&0.2\end{pmatrix}$和$\begin{pmatrix}Y\\Q\end{pmatrix}=\begin{pmatrix}b_1&b_2\\0.5&0.5\end{pmatrix}$则在信源熵$H(X)$和$H(Y)$中，较 大的是哪一个，其值为多少bit/符号?
+	已知两个信源分别为$\begin{pmatrix}X\\P\end{pmatrix}=\begin{pmatrix}a_1&a_2\\0.8&0.2\end{pmatrix}$和$\begin{pmatrix}Y\\Q\end{pmatrix}=\begin{pmatrix}b_1&b_2\\0.5&0.5\end{pmatrix}$则在信源熵$H(X)$和$H(Y)$中，较大的是哪一个，其值为多少bit/符号?
+	\solution $H(Y) > H(X)$，等概分布信息熵最大\begin{itemize}
+		\item $H(X) = -0.8\log_2 0.8 - 0.2\log_2 0.2 = \SI{0.702}{bit/\text{符号}}$
+		\item $H(Y) = -0.5\log_2 0.5 - 0.5\log_2 0.5 = \SI{1}{bit/\text{符号}}$
+	\end{itemize}
 \end{problem}
-\begin{solution}
-
-\end{solution}
-
 
 \begin{problem}
-	判断题：两个离散随机变量$X$与$Y$之间的平均互信息为$I(X;Y)=H(X)-H(Y|X)$。
+	判断题：两个离散随机变量$X$与$Y$之间的平均互信息为$I(X;Y)=H(X)-H(Y\mid X)$。
+	\solution 否。$I(X;Y)=H(X)-H(X\mid Y)$
 \end{problem}
-\begin{solution}
-
-\end{solution}
-
 
 \begin{problem}
-	判断题：对于固定的信源，平均互信息$I(X;Y)$具有凸状性，$I(X;Y)$是信道传递概率分布$P(Y|X)$的上凸函数。
+	判断题：对于固定的信源，平均互信息$I(X;Y)$具有凸状性，$I(X;Y)$是信道传递概率分布$P(Y/X)$的上凸函数。
+	\solution 否。凸状性，$I(X; Y)$是二元函数：$P(X)$ 的上凸函数，$P(Y/X)$ 的下凸函数。
 \end{problem}
-\begin{solution}
-
-\end{solution}
-
 
 \begin{problem}
 	判断题：假设$p(x)$和$q(x)$是定义在同一概率空间上的两种概率测度，则$p$相对于$q$的信息散度定义为$D(p\|q)=\sum_xp(x)\log\frac{p(x)}{q(x)}$。
+	\solution 是。
 \end{problem}
-\begin{solution}
 
-\end{solution}
-
-
-\begin{problem}
+\begin{problem}[\todo]
 	遍历性马尔柯夫序列的极限熵为$H_\infty(X)=-\sum_{i,j}p_ip_{j,i}\log p_{j,i}$，其中序列间的相关性由公式中的哪个变量描述?
+	\solution 
 \end{problem}
-\begin{solution}
-
-\end{solution}
-
 
 \begin{problem}
 	判断题：博弈问题中，一个纳什均衡解也是一个帕雷托最优解。
+	\solution 否。纳什均衡解不一定是帕累托最优解，帕累托最优解不一定是纳什均衡解。
 \end{problem}
-\begin{solution}
-	否。纳什均衡解不一定是帕累托最优解，帕累托最优解不一定是纳什均衡解。
-\end{solution}
-
 
 \begin{problem}
 	判断题：一个有限决策者且有限策略的博弈问题始终能找到至少一个纯策略纳什均衡解。
+	\solution 否。比如猜拳游戏。
 \end{problem}
-\begin{solution}
-	否。比如猜拳游戏。
-\end{solution}
-
 
 \begin{problem}
 	判断题：一个正则型博弈可以等价转化为一个不完美信息的扩展型博弈。
+	\solution 是。两个人轮流操作，但是不知道对方怎么操作。
 \end{problem}
-\begin{solution}
-	是。两个人轮流操作，但是不知道对方怎么操作。
-\end{solution}
 
-
-\begin{problem}
+\begin{problem}[\todo]
 	判断题：扩展型博弈问题中，一个纳什均衡解也是一个子博弈精炼均衡解，而一个子博弈精炼均衡解未必是一个纳什均衡解。
+	\solution 
 \end{problem}
-\begin{solution}
-
-\end{solution}
-
 
 \begin{problem}
 	判断题：不完全信息博弈中的不确定性比不完美信息博弈中的不确定性要高。
+	\solution 是。不完全博弈不知道自己在进行什么博弈游戏，不完美博弈不知道自己处于哪个状态（博弈树的节点）。
 \end{problem}
-\begin{solution}
-	是。不完全博弈不知道自己在进行什么博弈游戏，不完美博弈不知道自己处于哪个状态（博弈树的节点）。
-\end{solution}
 
-
-\begin{problem}
+\begin{problem}[\todo]
 	简要阐述需要利用逆向归纳法求解扩展型博弈（博弈树）的原因。
 \end{problem}
-\begin{solution}
-
-\end{solution}
 
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=1\textwidth]{./figure/fig1.png}
-  \end{figure}
+\end{figure}
 
 \begin{problem}
 	从图1左的博弈矩阵中，找出所有纯策略纳什均衡解，并简述判断理由。
+	\solution $BB$，两个决策者在对方不改变策略的情况下，都已经处于最优解。
 \end{problem}
-\begin{solution}
-	$BB$，两个决策者在对方不改变策略的情况下，都已经处于最优解。
-\end{solution}
-
 
 \begin{problem}
 	从图1右的博弈树中（MAX和MIN的minimax值己给出），找出可进行$\alpha-\beta$剪枝操作的三个位置。
+	\solution $C-H,C-I,D-K,E-M$
 \end{problem}
-\begin{solution}
-	$C-H,C-I,D-K,E-M$
-\end{solution}
-
 
 \begin{problem}
 	判断题：NP-Complete问题的多项式时间复杂度算法都是近似算法。
+	\solution 是.
 \end{problem}
-\begin{solution}
-	是。
-\end{solution}
-
 
 \begin{problem}
 	设$X$是由有限元素构成的集合，$F$是由$X$的非空子集构成的集合且对于任意$X$中的元素$e$，都存在一个$F$中的元素$S$使得$e$是$S$中的元素，即$X=\cup_{S\in F}S$。考虑“集合覆盖问题”：求$F$中的一个子集$C\subseteq F$，使得$X=\cup_{S\in C}S$，且$C$的大小$|C|$最小。下面是证明“集合覆盖问题”是NP-complete的过程，请补充完善。首先请将“集合覆盖问题”转化为语言描述。
+	\solution 集合覆盖问题：$\left\{\right.$ 存在由$X$的非空子集构成的集合 $F$ 的子集 $C$，$C \subseteq F$，子集 $C$ 的大小为 $|C|=k$，使得 $X=\cup_{S \in C} S$$\left.\right\}$。
 \end{problem}
-\begin{solution}
-	集合覆盖问题：$\left\{\right.$ 存在由$X$的非空子集构成的集合 $F$ 的子集 $C$，$C \subseteq F$，子集 $C$ 的大小为 $|C|=k$，使得 $X=\cup_{S \in C} S$$\left.\right\}$。
-\end{solution}
-
 
 \begin{problem}
 	接上题，请说明“验证集合覆盖问题”的时间复杂度是多项式时间复杂度。
+	\solution 给定了集合 $C$，求集合 $C$ 的所有元素的并集，是多项式时间复杂度可解的。如果这个并集等于集合 $X$，那么这个问题为真。
 \end{problem}
-\begin{solution}
-	给定了集合 $C$，求集合 $C$ 的所有元素的并集，是多项式时间复杂度可解的。如果这个并集等于集合 $X$，那么这个问题为真。
-\end{solution}
-
 
 \begin{problem}
 	顶点覆盖问题：$G=(V，E)$是无向图，$V$和$E$分别是顶点和边的集合，求$V$的子集$V^\prime$使得对于任意边$(u,v)\in E$都有$u\in V^\prime$或$v\in V^\prime$，且$V^\prime$的大小$|V^\prime|$最小。请将顶点覆盖问题转化为语言描述。
+	\solution $\left\{<G, u, v, k>\right. : G = (V, E)$ 是一个无向图，存在一个大小为 $k$ 的顶点覆盖 $V^\prime$，使得 $E$ 中每一条边，都至少有一个点在 $V^\prime$ 中。 $\left.\right\}$
 \end{problem}
-\begin{solution}
-	$\left\{<G, u, v, k>\right. : G = (V, E)$ 是一个无向图，存在一个大小为 $k$ 的顶点覆盖 $V^\prime$，使得 $E$ 中每一条边，都至少有一个点在 $V^\prime$ 中。 $\
-	\left.\right\}$
-\end{solution}
 
-
-\begin{problem}
+\begin{problem}[\todo]
 	已知顶点覆盖问题是NP-complete，请将该问题的实例转化为“集合覆盖问题”的实例。
+	\solution
 \end{problem}
-\begin{solution}
 
-\end{solution}
-
-
-\begin{problem}
+\begin{problem}[\todo]
 	接上题，说明转化过程是多项式时间复杂度的。
+	\solution 
 \end{problem}
-\begin{solution}
 
-\end{solution}
-
-
-\begin{problem}
+\begin{problem}[\todo]
 	利用上题结果，试证明：图$G=<V,E>$中存在大小为$k$的顶点覆盖当且仅当$<X,F>$中存在大小为$k$的集合覆盖。
+	\solution 
 \end{problem}
-\begin{solution}
-
-\end{solution}
-
-
 
 \end{document}

@@ -9,16 +9,18 @@
 \newcommand\minimize{\operatorname{minimize}} % 最小化
 \newcommand\maximize{\operatorname{maximize}} % 最大化
 \newcommand\subject{\operatorname{subject\ to}}
+\newcommand\vc{\overrightarrow} % 向量符号
 
 
 \begin{document}
 
 % \maketitle
+考核方式：出勤(10\%)+ 大作业(20\%) + 笔试(70\%)
 
 \section{微积分}
 \begin{remark}
     给定集合 $A \subset \mathbb{R}^n$\begin{itemize}
-        \item 开集：对于任何$x \in A$都存在以 $x$ 为中心的开球 $B(x, r) = \left\{y \in \mathbb{R}^n: \|y - x\| < r\right\}$ 使得 $B(x, r) \subset A$\begin{itemize}
+        \item 开集：对于任何$x \in A$都存在以 $x$ 为中心的开球 $B(x, r) = \left\{y \in \mathbb{R}^n: \norm{y - x} < r\right\}$ 使得 $B(x, r) \subset A$\begin{itemize}
             \item 任意个开集之并是开集，有限个开集之交是开集
         \end{itemize}
         \item 闭集：补集 $(\mathbb{R}^n - A)$ 是开集\begin{itemize}
@@ -33,16 +35,16 @@
     $f: D \mapsto \mathbb{R}, D \subset \mathbb{R}^n$ 开集，$a \in D$\begin{itemize}
         \item 偏导（方向导数的特例）：$\partial_if(a) = \underset{t \to 0}{\lim}\frac{f(a + te_i) - f(a)}{t}$
         \item 梯度：$\nabla f(a) = (\partial_1f(a), \dots, \partial_nf(a))^t$
-        \item 可微：如果存在向量 $v \in \mathbb{R}^n$ 使得\[\lim_{x \to a}\frac{|f(x) - f(a) - v^t(x - a)|}{\|x - a\|} = 0\]此时，$v^t$ 称为 $a$ 点的微分，记作 $Df(Aa)$ 或者 $\frac{\partial f(a)}{\partial a}$
-        \item $f$ 在 $a$ 点可微 $\Longleftrightarrow f(x) = f(a) + Df(a)(x - a) + o(\|x - a\|)$
+        \item 可微：如果存在向量 $v \in \mathbb{R}^n$ 使得\[\lim_{x \to a}\frac{|f(x) - f(a) - v^t(x - a)|}{\norm{x - a}} = 0\]此时，$v^t$ 称为 $a$ 点的微分，记作 $Df(Aa)$ 或者 $\frac{\partial f(a)}{\partial a}$
+        \item $f$ 在 $a$ 点可微 $\Longleftrightarrow f(x) = f(a) + Df(a)(x - a) + o(\norm{x - a})$
         \item $f$ 在 $a$ 点可微 $\Longrightarrow f$ 在 $a$ 点连续、各个方向上存在偏导，$Df(a) = \nabla f(a)^t$\begin{itemize}
-            \item $f(x) = f(a) + \nabla f(a)^t(x - a) + o(\|x - a\|)$
+            \item $f(x) = f(a) + \nabla f(a)^t(x - a) + o(\norm{x - a})$
         \end{itemize} 
     \end{itemize}
 \end{remark}
 
 \begin{remark}
-	$\|A\|^2 = \tr(AA^t)$
+	$\norm{A}^2 = \tr(AA^t)$
 \end{remark}
 
 \begin{remark}
@@ -128,8 +130,8 @@
 \begin{remark}
     满足 $Q^TQ = I$ 的方阵 $Q$ 是一个正交方阵。
     \begin{itemize}
-        \item 等距：$\|Qx\|^2 = x^TQ^TQx = x^Tx = \|x\|^2$
-        \item 特征值的模长为 $1$：$Qx = \lambda x, \|Qx\|^2 = \|x\|^2\Rightarrow |\lambda|^2 = 1$
+        \item 等距：$\norm{Qx}^2 = x^TQ^TQx = x^Tx = \norm{x}^2$
+        \item 特征值的模长为 $1$：$Qx = \lambda x, \norm{Qx}^2 = \norm{x}^2\Rightarrow |\lambda|^2 = 1$
     \end{itemize}
 \end{remark}
 
@@ -155,7 +157,7 @@
 \end{remark}
 
 \begin{remark}
-    $y$ 在 $x$ 上的投影向量为 \[\frac{x^{T} y}{\|x\|} \cdot \frac{x}{\|x\|}=\frac{x^{T} y}{x^{T} x} x=x \frac{x^{T} y}{x^{T} x}=\frac{x x^{T}}{x^{T} x} y\]
+    $y$ 在 $x$ 上的投影向量为 \[\frac{x^{T} y}{\norm{x}} \cdot \frac{x}{\norm{x}}=\frac{x^{T} y}{x^{T} x} x=x \frac{x^{T} y}{x^{T} x}=\frac{x x^{T}}{x^{T} x} y\]
     \begin{itemize}
         \item $P = \frac{x x^{T}}{x^{T} x}$ 称为 $x$ 的投影矩阵
         \item 对任意 $\alpha$，$P\alpha$ 是 $\alpha$ 在 $x$ 上的投影
@@ -377,7 +379,7 @@
 
     \begin{itemize}
         \item 异常球存在于 13 个球中，这是一个等概率事件，并且还要判断轻重，需要增加一个二元判断，所以不确定度为 $\log_2 13 + \log_2 2 = \log 26$
-        \item 由于天平有三个状态，每次可以解除的不确定度为 $\log_3 3 = 1\operatorname{Tet}$，根据 $\log _{3} 9<\log _{3} 26<\log _{3} 27$ 可得，需要三次可以完全解除不确定度。
+        \item 由于天平有三个状态，每次可以解除的不确定度为 $\log_3 3 = \SI{1}{Tet}$，根据 $\log _{3} 9<\log _{3} 26<\log _{3} 27$ 可得，需要三次可以完全解除不确定度。
     \end{itemize}
 \end{remark}
 
@@ -385,26 +387,28 @@
     自信息：若一随机事件的概率为 $p(x_i)$，它的自信息的数学定义为：\[I(x_i) = f(p(x_i)) = -\log p(x_i)\]
     \begin{itemize}
         \item 性质：非负，单调递减，当 $p(x_i) = 0$ 时，$I(x_i) \to \infty$，不可能事件，当 $p(x_i) = 1$ 时，$I(x_i) = 0$，确定事件。
-        \item 当事件 $x_i$ 发生以前，表示事件 $x_i$ 发生的不确定性。
-        \item 当事件 $x_i$ 发生以后，表示事件 $x_i$ 所提供的信息量。
+        \item 当事件 $x_i$ 发生以前，表示事件 $x_i$ 发生的不确定性；当事件 $x_i$ 发生以后，表示事件 $x_i$ 所提供的信息量。
         \item 自信息的单位取决于对数的底，当底为 2 时，单位是 bit，底为 $e$ 时，单位是 nat，底为 10，单位是 hat。
     \end{itemize}
 \end{remark}
 
 \begin{remark}
-    从 26 个英文字母中，随机选取一个字母，该事件的自信息量为 $I=-\log _{2}(1 / 26) \approx 4.7 \mathrm{bit}$
+    \text{}\begin{itemize}
+        \item 从 26 个英文字母中，随机选取一个字母，该事件的自信息量为 $I=-\log _{2}(1 / 26) \approx \SI{4.7}{bit}$.
+        \item 设天气预报有两种消息，晴天和雨天，出现的概率分别为 $1/4$ 和 $3/4$，当预报明天是晴天时，该事件的自信息量为 $I = -\log(1 / 4) = \SI{2}{bit}$，事件发生概率越小，信息量越大。
+    \end{itemize}
 \end{remark}
 
 \begin{remark}
     联合自信息和条件自信息：
     \begin{itemize}
         \item 联合自信息：$I(x_i y_j) = -\log p(x_iy_j)$
-        \item 条件自信息：$I(x_i|y_j) = -\log p(x_i|y_j)$
+        \item 条件自信息：$I(x_i \mid y_j) = -\log p(x_i \mid y_j)$
         \item 关系：\begin{align*}
-            I\left(x_{i} y_{j}\right)&=-\log _{2} p\left(x_{i}\right) p\left(y_{j} | x_{i}\right)=I\left(x_{i}\right)+I\left(y_{j} | x_{i}\right) \\
-            &=-\log _{2} p\left(y_{j}\right) p\left(x_{i} | y_{j}\right)=I\left(y_{j}\right)+I\left(x_{i} | y_{j}\right)
+            I(x_{i} y_{j})&=-\log _{2} p(x_{i}) p(y_{j} \mid x_{i})=I(x_{i})+I(y_{j} \mid x_{i}) \\
+            &=-\log _{2} p(y_{j}) p(x_{i} \mid y_{j})=I(y_{j})+I(x_{i} \mid y_{j})
         \end{align*}
-        当 $X$ 和 $Y$ 独立时，$I\left(x_{i} y_{j}\right)=-\log _{2} p\left(x_{i}\right)-\log _{2} p\left(y_{j}\right)=I\left(x_{i}\right)+I\left(y_{j}\right)$
+        当 $X$ 和 $Y$ 独立时，$I(x_{i} y_{j})=-\log _{2} (p(x_{i})p(y_{j}))=I(x_{i})+I(y_{j})$
     \end{itemize}
 \end{remark}
 
@@ -417,33 +421,24 @@
 \end{remark}
 
 \begin{remark}
-    互信息：
+    互信息：$x_i$ 的后验概率与先验概率比值的对数为 $y_j$ 对 $x_i$ 的互信息，用 $I(x_i;y_j)$ 表示，即 \[I\left(x_{i} ; y_{j}\right)=\log _{2} \frac{p\left(x_{i} \mid  y_{j}\right)}{p\left(x_{i}\right)} \]
     \begin{itemize}
-        \item 信源发出消息 $x_i$ 的概率 $p(x_i)$ 称为先验概率，信宿收到 $y_j$ 后推测信源发出 $x_i$ 的概率 $p(x_i|y_j)$ 称为后验概率。
-        \item 由于有信道噪声的存在，一般情况下，$p(x_i|y_j) \neq p(x_i)$。
-        \item $x_i$ 的后验概率与先验概率比值的对数为 $y_j$ 对 $x_i$ 的互信息，用 $I(x_i;y_j)$ 表示，即 \[I\left(x_{i} ; y_{j}\right)=\log _{2} \frac{p\left(x_{i} | y_{j}\right)}{p\left(x_{i}\right)} \]
-        \item 互信息量等于自信息量减去条件自信息：\[I\left(x_{i} ; y_{j}\right)=-\log _{2} p\left(x_{i}\right)+\log _{2} p\left(x_{i} | y_{j}\right)=I\left(x_{i}\right)-I\left(x_{i} | y_{j}\right)\]
-        \item 第三种表达方式：$I(x_i;y_j) = I(x_i) + I(y_j) - I(x_iy_j)$
-    \end{itemize}
-\end{remark}
-
-\begin{remark}
-    互信息的物理意义：
-    \begin{itemize}
-        \item $I(x_i;y_j) = I(x_i) - I(x_i|y_j)$
-        \item 自信息 $I(x_i)$：信宿收到 $y_j$ 之前，对信源发 $x_i$ 的不确定度
-        \item 条件自信息 $I(x_i|y_j)$：信宿收到 $y_j$ 之后，对信源发 $x_i$ 的不确定度
-        \item 互信息 $I(x_i; y_j)$：收到 $y_j$ 而得到关于 $x_i$ 的互信息，为不确定度的减少量
-    \end{itemize}    
-\end{remark}
-
-\begin{remark}
-    互信息的性质：
-    \begin{itemize}
-        \item 互易性：$I(x_i; y_j) = I(y_j; x_i)$
-        \item 当事件 $x_i$ 与 $y_j$ 统计独立时，互信息为零，即 $I(x_i; y_j) = 0$
-        \item 互信息可正可负
-        \item 任何两事件之间的互信息不可能大于其中任一事件的自信息：$I(x_i; y_j) \le I(x_i)$，\begin{sloppypar}$I(x_i;y_j) \le I(y_j)$\end{sloppypar}
+        \item 信源发出消息 $x_i$ 的概率 $p(x_i)$ 称为先验概率，信宿收到 $y_j$ 后推测信源发出 $x_i$ 的概率 $p(x_i\mid y_j)$ 称为后验概率。
+        \item 由于有信道噪声的存在，一般情况下，$p(x_i\mid y_j) \neq p(x_i)$。
+        \item 互信息量等于自信息量减去条件自信息：$I\left(x_{i} ; y_{j}\right) = I\left(x_{i}\right)-I\left(x_{i} \mid  y_{j}\right)$
+        \item 第三种表达方式：$I(x_i; y_j) = I(x_i) + I(y_j) - I(x_iy_j)$
+        \item 互信息的物理意义：$I(x_i;y_j) = I(x_i) - I(x_i|y_j)$ \begin{itemize}
+            \item 自信息 $I(x_i)$：信宿收到 $y_j$ 之前，对信源发 $x_i$ 的不确定度
+            \item 条件自信息 $I(x_i|y_j)$：信宿收到 $y_j$ 之后，对信源发 $x_i$ 的不确定度
+            \item 互信息 $I(x_i; y_j)$：收到 $y_j$ 而得到关于 $x_i$ 的互信息，为不确定度的减少量
+        \end{itemize}
+        \item 互信息的性质：
+        \begin{itemize}
+            \item 互易性：$I(x_i; y_j) = I(y_j; x_i)$
+            \item 当事件 $x_i$ 与 $y_j$ 统计独立时，互信息为零，即 $I(x_i; y_j) = 0$
+            \item 互信息可正可负
+            \item 任何两事件之间的互信息不可能大于其中任一事件的自信息：$I(x_i; y_j) \le I(x_i)$，\begin{sloppypar}$I(x_i;y_j) \le I(y_j)$\end{sloppypar}
+        \end{itemize}
     \end{itemize}
 \end{remark}
 
@@ -473,13 +468,13 @@
 \end{remark}
 
 \begin{remark}
-    实际信道模型有噪声存在，一个\textbf{等概率}信源有八种消息符号，用四比特码字序列编码，码字中每一个二进制符号经信道输出可得二元符号 $y$，已知条件概率（信道特性） 为：$P_{00} = P_{11} = 1 - \varepsilon$，$P_{01} = P_{10} = \varepsilon$，这里，$P_{00}$ 定义为信道转移概率$P(y = 0 | x = 0)$，以此类推。当实验结果得了 $\vec{y} = 0000$ 时，求：
+    实际信道模型有噪声存在，一个\textbf{等概率}信源有八种消息符号，用四比特码字序列编码，码字中每一个二进制符号经信道输出可得二元符号 $y$，已知条件概率（信道特性） 为：$P_{00} = P_{11} = 1 - \varepsilon$，$P_{01} = P_{10} = \varepsilon$，这里，$P_{00}$ 定义为信道转移概率$P(y = 0 | x = 0)$，以此类推。当实验结果得了 $\vc{y} = 0000$ 时，求：
 
     \begin{minipage}{0.5\linewidth}
         \begin{enumerate}
-            \item 第一位码测定后所得的关于 $\vec{x_1}$ 的自信息
-            \item 第二第三第四位码测定后各得多少关于 $\vec{x_1}$ 的自信息
-            \item 全部结果 $\vec{y} = 0000$ 关于 $\vec{x_1}$ 的自信息
+            \item 第一位码测定后所得的关于 $\vc{x_1}$ 的自信息
+            \item 第二第三第四位码测定后各得多少关于 $\vc{x_1}$ 的自信息
+            \item 全部结果 $\vc{y} = 0000$ 关于 $\vc{x_1}$ 的自信息
             \item 讨论 $\varepsilon = 0$ 和 $\varepsilon = \frac{1}{2}$ 时上述各自信息的情况
         \end{enumerate}
     \end{minipage}
@@ -502,50 +497,52 @@
     \begin{solution}
         由己知，编码端码字序列为：
         \begin{gather*}
-            \overrightarrow{x_{1}}=0000, \overrightarrow{x_{2}}=0011, \overrightarrow{x_{3}}=0101, \overrightarrow{x_{4}}=0110,\\
-            \overrightarrow{x_{5}}=1001, \overrightarrow{x_{6}}=1010, \overrightarrow{x_{7}}=1100, \overrightarrow{x_{8}}=1111\\
-            p(\overrightarrow{x_i}) = \frac{1}{n}, p(x = 0) = p(x = 1) = \frac{1}{2} \\I(\overrightarrow{x_i}) = \log_2 8 = \SI{3}{\mathrm{bit}}
+            \vc{x_{1}}=0000, \vc{x_{2}}=0011, \vc{x_{3}}=0101, \vc{x_{4}}=0110,\\
+            \vc{x_{5}}=1001, \vc{x_{6}}=1010, \vc{x_{7}}=1100, \vc{x_{8}}=1111\\
+            p(\vc{x_i}) = \frac{1}{n}, p(x = 0) = p(x = 1) = \frac{1}{2} \\I(\vc{x_i}) = \log_2 8 = \SI{3}{bit}
         \end{gather*}
         利用四比特码字表示三比特信息，有纠错功能。
+
+        \textbf{注意 $P(y_1 = 0), P(y_1 = y_2 = 0), P(y_1 = y_2 = y_3 = 0), P(\vc{y} = 0000)$ 的计算方式。}
         \begin{enumerate}
-            \item 第一位码测定后所得的关于 $\vec{x_1}$ 的自信息 
+            \item 第一位码测定后所得的关于 $\vc{x_1}$ 的自信息 
             \begin{align*}
-                &P(\overrightarrow{x_1}) = \frac{1}{8}\\
-                &P(\overrightarrow{x_1} | y_1 = 0) = \frac{P(\overrightarrow{x_1})P(y_1 = 0 | \overrightarrow{x_1})}{P(y_1 = 0)} = \frac{\frac{1}{8} \cdot (1 - \varepsilon)}{\frac{1}{2}} = \frac{1}{4}(1 - \varepsilon) \\
-                &I(\overrightarrow{x_1}; y_1 = 0) = I(\overrightarrow{x_1}) - I(\overrightarrow{x_1} | y_1 = 0) = \log(2(1 - \varepsilon))
+                &P(\vc{x_1}) = \frac{1}{8}\\
+                &P(\vc{x_1} \mid y_1 = 0) = \frac{P(\vc{x_1})P(y_1 = 0 \mid \vc{x_1})}{P(y_1 = 0)} = \frac{\frac{1}{8} \cdot (1 - \varepsilon)}{\frac{1}{2}} = \frac{1}{4}(1 - \varepsilon) \\
+                &I(\vc{x_1}; y_1 = 0) = I(\vc{x_1}) - I(\vc{x_1} \mid y_1 = 0) = \log(2(1 - \varepsilon))
             \end{align*}
-            \item 第二位码测定后所得的关于 $\vec{x_1}$ 的自信息
+            \item 第二位码测定后所得的关于 $\vc{x_1}$ 的自信息
             \begin{align*}
-                &P(\overrightarrow{x_1} | y_1 = 0) = \frac{1}{4}(1 - \varepsilon) \\
-                &P(\overrightarrow{x_1} | y_1 = y_2 = 0) = \frac{P(\overrightarrow{x_1}) P(y_1 = y_2 = 0|\overrightarrow{x_1})}{P(y_1 = y_2 = 0)} = \frac{\frac{1}{8} (1 - \varepsilon)^2}{\frac{1}{4}} = \frac{1}{2} (1 - \varepsilon)^2\\
-                &I(\overrightarrow{x_1}; y_2 = 0 | y_1 = 0) = I(\overrightarrow{x_1} | y_1 = 0) - I(\overrightarrow{x_1} | y_1 = y_2 = 0) = \log(2(1 - \varepsilon))
+                &P(\vc{x_1} \mid y_1 = 0) = \frac{1}{4}(1 - \varepsilon) \\
+                &P(\vc{x_1} \mid y_1 = y_2 = 0) = \frac{P(\vc{x_1}) P(y_1 = y_2 = 0\mid\vc{x_1})}{P(y_1 = y_2 = 0)} = \frac{\frac{1}{8} (1 - \varepsilon)^2}{\frac{1}{4}} = \frac{1}{2} (1 - \varepsilon)^2\\
+                &I(\vc{x_1}; y_2 = 0 \mid y_1 = 0) = I(\vc{x_1} \mid y_1 = 0) - I(\vc{x_1} \mid y_1 = y_2 = 0) = \log(2(1 - \varepsilon))
             \end{align*}
-            第三位码测定后所得的关于 $\vec{x_1}$ 的自信息
+            第三位码测定后所得的关于 $\vc{x_1}$ 的自信息
             \begin{align*}
-                &P(\overrightarrow{x_1} | y_1 = y_2 = 0) = \frac{1}{2} (1 - \varepsilon)^2\\
-                &P(\overrightarrow{x_1} | y_1 = y_2 = y_3 = 0) = \frac{P(\overrightarrow{x_1})P(y_1 = y_2 = y_3 = 0 | \overrightarrow{x_1})}{P(y_1 = y_2 = y_3 = 0)} = \frac{\frac{1}{8} (1 - \varepsilon)^3}{\frac{1}{8}} = (1 - \varepsilon)^3\\
-                &I(\overrightarrow{x_1}; y_3 = 0 | y_1 = y_2 = 0) = I(\overrightarrow{x_1} | y_1 = y_2 = 0) - I(\overrightarrow{x_1} | y_1 = y_2 = y_3 = 0) = \log(2(1 - \varepsilon))
+                &P(\vc{x_1} \mid y_1 = y_2 = 0) = \frac{1}{2} (1 - \varepsilon)^2\\
+                &P(\vc{x_1} \mid y_1 = y_2 = y_3 = 0) = \frac{P(\vc{x_1})P(y_1 = y_2 = y_3 = 0 \mid \vc{x_1})}{P(y_1 = y_2 = y_3 = 0)} = \frac{\frac{1}{8} (1 - \varepsilon)^3}{\frac{1}{8}} = (1 - \varepsilon)^3\\
+                &I(\vc{x_1}; y_3 = 0 | y_1 = y_2 = 0) = I(\vc{x_1} | y_1 = y_2 = 0) - I(\vc{x_1} | y_1 = y_2 = y_3 = 0) = \log(2(1 - \varepsilon))
             \end{align*}
-            第四位码测定后所得的关于 $\vec{x_1}$ 的自信息
+            第四位码测定后所得的关于 $\vc{x_1}$ 的自信息
             \begin{align*}
-                &P(\overrightarrow{x_1} | y_1 = y_2 = y_3 = 0) = (1 - \varepsilon)^3\\
-                &P(\overrightarrow{x_1} | y = 0000) = \frac{P(\overrightarrow{x_1}) P(y = 0000 | \overrightarrow{x_1})}{P(y = 0000)} = \frac{\frac{1}{8} (1 - \varepsilon)^4}{\frac{1}{8}((1 - \varepsilon)^4 + 6\varepsilon^2 (1 - \varepsilon)^2 + \varepsilon^4)}\\
-                &I(\overrightarrow{x_1} ; y_4 = 0 | y_1 = y_2 = y_3 = 0) = I(\overrightarrow{x_1} | y_1 = y_2 = y_3 = 0) - I(\overrightarrow{x_1} | y = 0000)\\
-                &I(\overrightarrow{x_1} ; y_4 = 0 | y_1 = y_2 = y_3 = 0) = \log\frac{1 - \varepsilon}{((1 - \varepsilon)^4 + 6(1 - \varepsilon)^2\varepsilon^2 + \varepsilon^4)}
+                &P(\vc{x_1} \mid y_1 = y_2 = y_3 = 0) = (1 - \varepsilon)^3\\
+                &P(\vc{x_1} \mid y = 0000) = \frac{P(\vc{x_1}) P(y = 0000 \mid \vc{x_1})}{P(y = 0000)} = \frac{\frac{1}{8} (1 - \varepsilon)^4}{\frac{1}{8}((1 - \varepsilon)^4 + 6\varepsilon^2 (1 - \varepsilon)^2 + \varepsilon^4)}\\
+                &I(\vc{x_1} ; y_4 = 0 \mid y_1 = y_2 = y_3 = 0) = I(\vc{x_1} \mid y_1 = y_2 = y_3 = 0) - I(\vc{x_1} \mid y = 0000)\\
+                &I(\vc{x_1} ; y_4 = 0 \mid y_1 = y_2 = y_3 = 0) = \log\frac{1 - \varepsilon}{((1 - \varepsilon)^4 + 6(1 - \varepsilon)^2\varepsilon^2 + \varepsilon^4)}
             \end{align*}
-            \item 全部结果 $\vec{y} = 0000$ 关于 $\vec{x_1}$ 的自信息
+            \item 全部结果 $\vc{y} = 0000$ 关于 $\vc{x_1}$ 的自信息
             \begin{align*}
-                I(\overrightarrow{x_1};\overrightarrow{y} = 0000) =& I\left(x_{1} ; y_{1}=0\right)+I\left(x_{1} ; y_{2}=0 / y_{1}=0\right) \\
-                &+I\left(\vec{x}_{1} ; y_{3}=0 / y_{1}=y_{2}=0\right)+I\left(\overrightarrow{x_{1}} ; y_{4}=0 / y_{1}=y_{2}=y_{3}=0\right)\\
+                I(\vc{x_1};\vc{y} = 0000) =& I\left(x_{1} ; y_{1}=0\right)+I\left(x_{1} ; y_{2}=0 / y_{1}=0\right) \\
+                &+I\left(\vc{x}_{1} ; y_{3}=0 / y_{1}=y_{2}=0\right)+I\left(\vc{x_{1}} ; y_{4}=0 / y_{1}=y_{2}=y_{3}=0\right)\\
                 =& 3\log(2(1 - \varepsilon)) + \log\frac{1 - \varepsilon}{((1 - \varepsilon)^4 + 6(1 - \varepsilon)^2\varepsilon^2 + \varepsilon^4)}
             \end{align*}
             \item 当 $\varepsilon = 0$ 时
             \begin{align*}
-                &I(\overrightarrow{x_1}; y_1 = 0) = \SI{1}{\mathrm{bit}}\\
-                &I(\overrightarrow{x_1}; y_2 = 0 | y_1 = 0) = \SI{1}{\mathrm{bit}}\\
-                &I(\overrightarrow{x_1}; y_3 = 0 | y_1 = y_2 = 0) = \SI{1}{\mathrm{bit}}\\
-                &I(\overrightarrow{x_1} ; y_4 = 0 | y_1 = y_2 = y_3 = 0) = \SI{0}{\mathrm{bit}}\\
-                &I(\overrightarrow{x_1} ; \overrightarrow{y} = 0000) = \SI{3}{\mathrm{bit}}
+                &I(\vc{x_1}; y_1 = 0) = \SI{1}{\mathrm{bit}}\\
+                &I(\vc{x_1}; y_2 = 0 \mid y_1 = 0) = \SI{1}{\mathrm{bit}}\\
+                &I(\vc{x_1}; y_3 = 0 \mid y_1 = y_2 = 0) = \SI{1}{\mathrm{bit}}\\
+                &I(\vc{x_1} ; y_4 = 0 \mid y_1 = y_2 = y_3 = 0) = \SI{0}{\mathrm{bit}}\\
+                &I(\vc{x_1} ; \vc{y} = 0000) = \SI{3}{\mathrm{bit}}
             \end{align*}
             当 $\varepsilon = \frac{1}{2}$ 时，上述互信息全部为 0。
         \end{enumerate}
@@ -553,7 +550,7 @@
 \end{remark}
 
 \begin{remark}
-    信源熵：为了研究整个事件集合或符号序列(如信源)的平均的信息量(总体特征)，定义自信息的数学期望为信源的平均信息量，称为信源的平均自信息量（信源熵）：\[H(X)=E\left[I\left(a_{i}\right)\right]=\sum_{i=1}^{n} p_{i} I\left(a_{i}\right)=-\sum_{i=1}^{n} p_{i} \log p\left(a_{i}\right)\]
+    信源熵(平均自信息量)：\[H(X)=E[I(a_{i})]=\sum_{i=1}^{n} p_{i} I(a_{i})=-\sum_{i=1}^{n} p_{i} \log p(a_{i})\]
 
     信息熵具有以下三种物理含义：
     \begin{itemize}
@@ -564,33 +561,113 @@
 \end{remark}
 
 \begin{remark}
+    信息熵的例子：\begin{itemize}
+        \item 天气预报，有两个信源，求 $H(X)$ 和 $H(Y)$\[\left[\begin{array}{l}
+            X \\
+            P
+            \end{array}\right]=\left\{\begin{array}{cc}
+            a_{1} & a_{2} \\
+            0.8 & 0.2
+            \end{array}\right\}, \quad\left[\begin{array}{l}
+            Y \\
+            Q
+            \end{array}\right]=\left\{\begin{array}{cc}
+            b_{1} & b_{2} \\
+            0.5 & 0.5
+        \end{array}\right\}\]
+        \begin{itemize}
+            \item $H(X) = -0.8\log_2 0.8 - 0.2\log_2 0.2 = \SI{0.702}{bit/\text{符号}}$
+            \item $H(Y) = -0.5\log_2 0.5 - 0.5\log_2 0.5 = \SI{1}{bit/\text{符号}}$
+            \item $H(Y) > H(X)$，说明信源 $Y$ 比信源 $X$ 的平均不确定性要大，信源 $Y$ 提供信息发送能力比信源 $X$ 大，\textbf{对于离散信源来说，等概率分布是发送信息能力最大的必要条件}
+        \end{itemize}
+        \item 电视屏上约有 $500 \times 600 = 3 \times 10^5$ 个格点，按每点有 $10$ 个不同的灰 度等级考虑，则共能组成 $n = 10^{3 \times 10^5}$ 个不同的画面。按等概率 $1/10^{3 \times 10^5}$ 计算， 平均每个画面可提供的信息量为：\begin{align*}
+            H(X) &=-\sum_{i=1}^{n} p(x_{i}) \log_2 p(x_{i})=-\log _{2} 10^{-3 \times 10^{5}} \\
+            &=3 \times 10^{5} \times \SI{3.32}{bit / \text{画面}}
+        \end{align*}
+    \end{itemize}
+\end{remark}
+
+\begin{remark}
     联合熵和条件熵：
     \begin{itemize}
         \item 联合熵表示每个元素对 $x_iy_j$ 的联合自信息量的数学期望，表示 $X$ 和 $Y$ 同时发生的不确定度：\[H(XY) = \sum_{i = 1}^n\sum_{j = 1}^m p(x_iy_j)I(x_iy_j) = -\sum_{i = 1}^n\sum_{j = 1}^m p(x_iy_j)\log_2 p(x_iy_j)\]
         \item 条件熵是在联合符号集合 $XY$ 上的条件自信息量的数学期望。在已知随机变量 $X$ 的条件下，随机变量 $Y$ 的条件熵定义为：\begin{align*}
-            H(Y | X) = E[I(y_j | x_i)] &= \sum_{i = 1}^n\sum_{j = 1}^m p(x_iy_j)I(y_j | x_i)\\
-            &= -\sum_{i = 1}^n\sum_{j = 1}^m p(x_iy_j) \log_2 p(y_j | x_i)
+            H(Y \mid X) = E[I(y_j \mid x_i)] &= \sum_{i = 1}^n\sum_{j = 1}^m p(x_iy_j)I(y_j \mid x_i)\\
+            &= -\sum_{i = 1}^n\sum_{j = 1}^m p(x_iy_j) \log_2 p(y_j \mid x_i)
         \end{align*}
-        \item 扩展性：\[\operatorname{Lim}_{\varepsilon \rightarrow 0} H_{n+1}\left(p_{1}, p_{2}, \ldots, p_{n}-\varepsilon, \varepsilon\right)=H_{n}\left(p_{1}, p_{2}, \ldots, p_{n}\right)\]
+        \item 熵函数：$H(X) = H(p_1, p_2, \dots, p_n) = -\sum_{i = 1}^np_i\log p_i, \quad \sum_{i = 1}^np_i = 1, p_i \ge 0$
+        \item 对称性：\[H(p_1, p_2, \dots, p_n) = H(p_n, p_1, \dots, p_{n - 1})\] 信源的熵只与概率空间的总体结构有关，而与个概率分量对应的状态顺序无关。
+        \item 非负性：$H(X) \ge 0$（离散信源）
+        \item 扩展性：\[\lim_{\varepsilon \to 0} H_{n+1}(p_{1}, p_{2}, \ldots, p_{n}-\varepsilon, \varepsilon)=H_{n}(p_{1}, p_{2}, \ldots, p_{n})\]
         信源空间中增加某些概率很小的符号，虽然当发出这些符号时，提供很大的信息量，但由于其概率接近于 0，在信源熵中占极小的比重，并不影响信源的总体特征。
-        \item 非负性：$H(X)\ge 0$（离散信源）
-        \item 可加性：$H(XY) = H(X) + H(Y | X) = H(Y) + H(X | Y)$
-            \begin{itemize}
-                \item 可加性是熵函数的性质中最重要的一条性质，此性质的物理含义为知识的可积累性。
-                \item 可加性表明任何复杂问题，都可以分步解决。即对于某一事物存在的不确定度，如果无法一步完全解除，则可分步解除。
-            \end{itemize}
-        \item 极值性：$H_{n}(p_{1}, p_{2}, \dots, p_{n}) \leq \log n$，上式表明，对于具有 $n$ 个符号的离散信源，只有在 $n$ 个信源符号等可能出现的情况下，信源熵才能达到最大值，这也表明\textbf{等概分布}的信源的平均不确定性最大，这是一个很重要得结论，称为最大离散熵定理。
-        \item 任何概率分布下的信息熵一定不会大于它对其它概率分布下自信息的数学期望（交叉熵有极小值）\begin{gather*}
-            H_n(p_1, \dots, p_n) = -\sum_{i = 1}^n p_i\log p_i \le -\sum_{i = 1}^n p_i\log q_i \\
-            \forall p_i, q_i \ge 0, \sum_{i = 1}^n p_i = \sum_{i = 1}^n q_i = 1
-        \end{gather*}
-        \item 条件熵一定不会大于无条件熵，即 $H(Y) \ge H(Y | X)$
+        \item 确定性：\[H(1, 0) = H(0, 1) = H(1, 0, \dots, 0) = 0\] 当信源 $X$ 的信源空间 $[X, P]$，任一个概率分量等于1，根据完备空间特性， 其它概率分量必为0，这时信源为一个确知信源，其熵为0。此时，这个信源没有不确定性，信源输出符号后不提供任何信息量。
+        \item 可加性：$H(XY) = H(X) + H(Y | X) = H(Y) + H(X | Y)$ \begin{itemize}
+            \item 可加性是熵函数的性质中最重要的一条性质，此性质的物理含义为知识的可积累性。
+            \item 可加性表明任何复杂问题，都可以分步解决。即对于某一事物存在的不确定度，如果无法一步完全解除，则可分步解除。
+            \item $H(X_1, \cdots, X_N) = H(X_1) + \cdots + H(X_N / X_1\cdots X_{N - 1}) = \sum_{i = 1}^NH(X_i / X_1\cdots X_{i - 1})$
+            \item $H(X_1, \cdots, X_N) \le H(X_1) + \cdots + H(X_N)$
+        \end{itemize}
+        \item 极值性：$H_{n}(p_{1}, p_{2}, \dots, p_{n}) \leq \log n$，上式表明，对于具有 $n$ 个符号的离散信源，只有在 $n$ 个信源符号等可能出现的情况下，信源熵才能达到最大值，这也表明\textbf{等概分布}的信源的平均不确定性最大，这是一个很重要得结论，称为\textbf{最大离散熵定理}。\begin{itemize}
+            \item 任何概率分布下的信息熵一定不会大于它对其它概率分布下自信息的数学期望\textbf{（交叉熵有极小值）}\begin{gather*}
+                H_n(p_1, \dots, p_n) = -\sum_{i = 1}^n p_i\log p_i \le -\sum_{i = 1}^n p_i\log q_i \\
+                \forall p_i, q_i \ge 0, \sum_{i = 1}^n p_i = \sum_{i = 1}^n q_i = 1
+            \end{gather*}
+            \item 条件熵一定不会大于无条件熵，即 $H(Y) \ge H(Y | X)$
+        \end{itemize}
         \item 熵函数具有上凸性：$H[\alpha P + (1 - \alpha)Q] \ge \alpha H(P) + (1 - \alpha)H(Q)$，由于熵函数具有上凸性，熵函数必有最大值。
         \item 联合熵与信息熵、条件熵的关系，等号成立的条件是 $X,Y$ 相互独立。\begin{align*}
-            H(X Y)&=H(X)+H(Y \mid X)=H(Y)+H(X | Y) \\
-            H(X Y) &\leq H(X)+H(Y) \\
-            H(X | Y) &\leq H(X), H(Y | X) \leq H(Y)
+            H(X Y)&=H(X)+H(Y \mid X)=H(Y)+H(X \mid Y) \\
+            H(X \mid Y) &\leq H(X) \\ 
+            H(Y \mid X) &\leq H(Y) \\
+            H(X Y) &\leq H(X)+H(Y) 
         \end{align*}
+    \end{itemize}
+\end{remark}
+
+\begin{remark}
+    从信息传输系统角度看熵的意义\begin{itemize}
+        \item $H(X)$: 表示信源边每个符号的平均信息量(\textbf{信源熵});
+        \item $H(Y)$: 表示信宿边每个符号的平均信息量(\textbf{信宿熵});
+        \item $H(X \mid Y)$: 条件熵 $H(X \mid Y)$ 表示在信宿接收到 $Y$ 后，信源 $X$ 尚存的平均不确定性。这个对 $X$ 尚存的不确定性是由于信道干扰引起的。有时称 $H(X\mid Y)$ 为\textbf{信道疑义度}，也称\textbf{损失熵}。
+        \item $H(Y \mid X)$: \textbf{噪声熵}，表示在已知信源发出 $X$ 后，对于信宿 $Y$ 尚存的平均不确定性；这是由于噪声引起的。也称为噪声熵。
+        \item $H(XY)$: 表示整个信息传输系统的平均不确定性；
+    \end{itemize}
+    
+\end{remark}
+
+\begin{remark}
+    平均互信息：在联合概率空间 $P(XY)$中，统计平均值为 $Y$ 对 $X$ 的平均互信息量为：\[I(X; Y) = \sum_j\sum_ip(x_iy_j)I(x_i; y_j) = \sum_j\sum_ip(x_iy_i)\log\frac{p(x_i/y_j)}{p(x_i)}\]
+    与其他熵的关系：\begin{itemize}
+        \item $I(X; Y) = H(X) - H(X / Y)$，$H(X)$ 表示传输前信源的不确定性，而 $H(X/Y)$ 表示收到符号集合 $Y$ 后，对信源 $X$ 尚存的不确定性，所以二者之差为信道传递的平均信息量。
+        \item $I(X; Y) = H(Y) - H(Y/X)$，$I(X;Y)$ 也表示输出端 $H(Y)$ 的不确定性和已知 $X$ 的条件下关于 $Y$ 的不确定性之差，也等于发送前后关于 $Y$ 的不确定性之差。
+        \item $I(X; Y) = H(X) + H(Y) - H(XY)$
+        \item $I(X; Y)$ 确定通过信道的信息量的多少，因此称它为信道传输率或传信率。
+    \end{itemize}
+    \begin{figure}[htbp]
+        \centering
+        \includegraphics[width=0.9\textwidth]{./figure/fig1.png}
+    \end{figure}
+    性质：\begin{itemize}
+        \item 非负性，即 $I(X; Y)\ge 0$。该性质表明，通过一个信道总能传递一些信息， 最差的条件下，输入输出完全独立，不传递任何信息，平均互信息等于 $0$， 但决不会失去己知的信息
+        \item 对称性，即$I(X; Y)=I(Y; X)$。$I(Y; X)$表示从 $X$ 中提取关于的 $Y$ 的信息量，实际上 $I(X; Y)$ 和 $I(Y; X)$只是观察者的立足点不同，对信道的输入 $X$ 和输出 $Y$ 的总体测度的两种表达形式
+        \item 极值性，即 $I(X; Y)\le H(X)$。一般来说，平均互信息总是小于信源的熵，只有当信道是无损信道时，平均互信息才等于信源的熵率。
+        \item 凸状性，$I(X; Y)$是二元函数：$P(X)$ 的上凸函数，$P(Y/X)$ 的下凸函数。\[I(X ; Y)=\sum_{i} \sum_{j} p(x_{i} y_{j}) \log \frac{p(y_{j} / x_{i})}{p(y_{j})}, p(x_{i} y_{j})=p(x_{i}) p(y_{j} / x_{i}), p(y_{j})=\sum_{i} p(x_{i} y_{j})\]
+        \item 对于固定的信道，平均互信息 $I(X; Y)$ 是信源概率分布 $P(X)$ 的上凸函数
+        \item 对于固定的信源，平均互信息 $I(X; Y)$ 信道传递概率分布 $P(Y / X)$ 的下凸
+        函数
+    \end{itemize}
+    \begin{figure}[htbp]
+        \centering
+        \includegraphics[width=0.5\textwidth]{./figure/fig2.png}
+        \caption{平均互信息与熵之间的关系}
+    \end{figure}
+\end{remark}
+
+\begin{remark}
+    互信息的应用：
+    \begin{itemize}
+        \item 信息不可增性原理：$X$ 经过处理得到 $Y$，$Y$ 经过处理得到 $Z$，有 $I(X; Z) \le I(X; Y)$。不触及源端的处理，每经一次处理，总会丢失信息，最多保持原有的信息不变。
+        \item 测试系统中的互信息：$I(X; Y_1) \le I(X; Y_1Y_2) \le \cdots \le I(X; Y_1\cdots Y_m)$。若想通过测试系统来获取源端信息，即从测量的结果 $Y$ 中获得关于 $X$ 的信息，要想多得信息，必须多付出代价，如采用多次测量法。
     \end{itemize}
 \end{remark}
 
