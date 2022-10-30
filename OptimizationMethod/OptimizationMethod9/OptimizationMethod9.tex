@@ -1,0 +1,43 @@
+\input{../../homework.cls}
+
+\newcommand\Title{最优化方法第9次作业}
+
+\newcommand\subject{\operatorname{subject\ to}}
+
+\begin{document}
+\begin{problem}
+    设 $S \subseteq \mathbb{R}^n$，函数 $f: S \to \mathbb{R}$ 二阶连续可微。考虑约束优化问题(P2)：\[\begin{cases}
+        \min\quad &f(x)\\
+        \subject \quad &x \in S
+    \end{cases}\]
+    \begin{enumerate}
+        \item 约束优化问题(P2)在什么条件下是凸规划？对于凸规划你知道有什么好的性质？
+        \item 考虑如下优化问题(P3):\[\begin{cases}
+            \min\quad &x_2^2 + 4x_1 - 7x_2\\
+            \subject \quad &x_1 - x_2 \le 4\\
+            &x_2 \le 3\\
+            & 6x_1 - x_1^2 + x_2 \ge 9
+        \end{cases}\]
+        (P3)是否是凸规划？说明理由。根据最优性条件求(P3)最优解。
+    \end{enumerate}
+    \Answer\text{}\begin{enumerate}
+        \item 如果满足函数$f$是凸函数，并且 $S$ 是凸集，则约束优化问题(P2)是凸规划。
+        
+        凸规划下，极小值点就是最小值点，并且如果在 $\bar{x}$ 点处KKT条件成立，则这个点就是整体极小值点。
+        \item 目标函数是凸函数，不等约束 $f_i(x) \le 0$ 也都是凸函数，所以是凸规划。\[L(x_1, x_2, \lambda) = x_2^2 + 4x_1 - 7x_2 + \lambda_1(x_1 - x_2 - 4) + \lambda_2(x_2 - 3) + \lambda_3(-6x_1 + x_1^2 - x_2 + 9)\]
+        由KKT条件可得\[\begin{cases}
+            x_1 - x_2 &\le 4\\
+            x_2 &\le 3\\
+            6x_1 - x_1^2 + x_2 &\ge 9\\
+            \lambda_1, \lambda_2, \lambda_3 \ge 0\\
+            (x_1 - x_2 - 4)\lambda_1 &= 0\\
+            (x_2 - 3)\lambda_2 &= 0\\
+            (-6x_1 + x_1^2 - x_2 + 9)\lambda_3 &= 0\\
+            4 + \lambda_1 - 6\lambda_3 + 2\lambda_3x_1 &= 0\\
+            2x_2 - 7 - \lambda_1 + \lambda_2 - \lambda_3 &= 0
+        \end{cases}\]
+        解得当 $\lambda_1 = 0, \lambda_2 > 0, \lambda_3 > 0$ 时，取到全局极小值点 $x^* = (x_1, x_2) = (3 - \sqrt{3}, 3)$， $f^* = -4\sqrt{3}$. 
+    \end{enumerate}
+\end{problem}
+
+\end{document}
