@@ -671,7 +671,83 @@
     \end{itemize}
 \end{remark}
 
+\begin{remark}
+    如果把 $p(x)$ 和 $q(x)$ 定义在同一概率空间上的两种概率测度，则定义 $p$ 相对于 $q$ 的信息散度为：\[D(p//q) = \sum_Xp(x)\log\frac{p(x)}{q(x)}\]其中$\underset{X}{\sum}p(x) = 1, \underset{X}{\sum}q(x) = 1$
+    \begin{itemize}
+        \item 信息散度又称为相对熵、鉴别信息、方向散度、KL距离等，它是两个概率分布函数 $p$ 和 $q$ 之间“差别”的一种度量。
+        \item 不满足对称性，不满足三角不等式，所以叫散度。\[D(p//q) \neq D(q//p), \quad D(p//q) \nleq D(r//p) + D(q//r)\]
+    \end{itemize}
+\end{remark}
+
 \section{组合优化}
+\begin{remark}
+    给定一个图 $G(V, E)$\begin{itemize}
+        \item 欧拉回路：找一个每条边只走一次的回路，多项式时间复杂度可解
+        \item 哈密顿回路：找一个每个点只走一次的回路，多项式时间复杂度不可解
+        \item 找一个最小的边集覆盖每个点，最大二分匹配，多项式时间复杂度可解
+        \item 找一个最小的点集覆盖每条边，多项式时间复杂度不可解
+    \end{itemize}
+\end{remark}
+
+\begin{remark}
+    优化问题描述转换为决策问题描述：
+    \begin{itemize}
+        \item 优化问题：$\langle I = \left\{G=(V, E), u \to v \text{最短路是什么}\right\},S = \{G=(V, E), u \to v \text{最短路}\}\rangle$
+        \item 决策问题：$\langle I^\prime = \left\{G=(V, E) \text{是否存在一条从} u \text{到} v \text{长度最少为} k \text{的最短路}\right\} \rangle$
+    \end{itemize}
+\end{remark}
+
+\begin{remark}
+    \text{}
+    \begin{itemize}
+		\item P问题：多项式时间复杂度可解。
+		\item NP问题：多项式时间复杂度可验证。
+		\item NP-Complete：没有找到多项式时间复杂度解决算法，可以在多项式时间复杂度内验证。
+		\item NP-Hard：没有找到多项式时间复杂度解决算法，并且不可在多项式时间复杂度内验证。
+        \item 如果有一个NPC问题在多项式时间复杂度内可解，则P=NP。
+        \item 如果存在NP不是多项式时间可解的问题，则没有NPC问题是多项式时间可解的。
+    \end{itemize}
+\end{remark}
+
+\begin{remark}
+    \textbf{证明问题L是NP完全问题}\begin{enumerate}
+        \item $L \in NP$
+        \item 找到一个 NPC 问题 $L^\prime$
+        \item 把 $L^\prime$ 问题规约到 $L$ 问题($L^\prime \le L$),需要 $L$ 问题为真推 $L^\prime$ 问题为真，$L^\prime$ 为真推 $L$ 问题为真。
+        \item 说明转换 $f$ 是多项式时间的
+    \end{enumerate}
+\end{remark}
+
+\begin{remark}
+    NPC 问题\begin{itemize}
+        \item 第一个NPC问题：电路可满足性问题，给定一个电路，电路由输入节点、与输入节点在同一层的常数节点、与或非节点构成的电路。 是否存在一个输入，使得输出为 $1$。\begin{itemize}
+            \item CIRCUIT-SAT = $\left\{<C>:C\text{是一个可满足的电路}\right\}$
+        \end{itemize}
+        \begin{figure}[htbp]
+            \centering
+            \includegraphics[width=0.5\textwidth]{./figure/fig3.png}
+        \end{figure}
+        \item SAT = $\left\{<f>, f\text{是一个可满足的布尔表达式}\right\}$
+        \begin{figure}[htbp]
+            \centering
+            \includegraphics[width=0.5\textwidth]{./figure/fig4.png}
+        \end{figure}
+        \item 旅行商问题：$\left\{<G, c, k>: G=(V, E)\text{是一个完全图，}c\text{是边权}\right.$，存在一个哈密顿回路使得边权总和不大于 $k\left.\right\}$
+    \end{itemize}
+\end{remark}
+
+\begin{remark}
+    使用近似算法得到计算结果 $C$，最佳结果 $C^\prime$，近似度等于 $\max(\frac{C}{C^\prime}, \frac{C^\prime}{C}) \ge 1$。
+\end{remark}
+
+
 \section{博弈论}
+\begin{remark}
+    概念理解：
+    \begin{itemize}
+        \item 帕累托最优：没有办法在不让某一参与资源分配的一方利益受损的情况下，令另一方获得更大利益的。
+        \item 纳什均衡：没有参与者可以透过改变自身策略使自身受益时的一个概念解。
+    \end{itemize}
+\end{remark}
 
 \end{document}
