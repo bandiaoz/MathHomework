@@ -745,9 +745,41 @@
 \begin{remark}
     概念理解：
     \begin{itemize}
-        \item 帕累托最优：没有办法在不让某一参与资源分配的一方利益受损的情况下，令另一方获得更大利益的。
-        \item 纳什均衡：没有参与者可以透过改变自身策略使自身受益时的一个概念解。
+        \item 马尔可夫博弈（或随机博弈）是机器学习中多智能体强化学习的理论基础。
+        \item 常和博弈：两个博弈者的每轮收益和是常数。
+        \item 零和博弈：纯竞争博弈。零和博弈表示所有博弈方的利益之和为零或一个常数，即一方有收入，其他方必有所失，如猜拳游戏。
+        \item 帕累托最优：没有办法在不让某一参与资源分配的一方利益受损的情况下，令另一方获得更大利益的。例如囚徒困境：图中绿色圈的是帕累托最优（数值越小越好），$(1, 1)$ 严格比 $(5, 5)$ 更优。
+        \begin{figure}[htbp]
+            \centering
+            \includegraphics[width=0.4\textwidth]{./figure/fig5.png}
+        \end{figure}
+        \item 纳什均衡：没有参与者可以透过改变自身策略使自身受益时的一个概念解。例如猎鹿赛局：途中红色圈都是纳什均衡解，绿色圈是稳定的纳什均衡解。
+        \begin{figure}[htbp]
+            \centering
+            \includegraphics[width=0.4\textwidth]{./figure/fig6.png}
+        \end{figure}
     \end{itemize}
+\end{remark}
+
+\begin{remark}
+    性别之战：夫妻看电影
+    \begin{figure}[htbp]
+        \centering
+        \includegraphics[width=0.4\textwidth]{./figure/fig7.png}
+    \end{figure}
+    \begin{enumerate}
+        \item 两个纯策略纳什均衡解
+        \item 混合策略纳什均衡\begin{itemize}
+            \item 假设丈夫的策略是以概率 $p$ 选LW，以概率 $1-p$ 选WL
+            \item 妻子不知道丈夫的两个行动\begin{align*}
+                U_{\text{wife}}(LW) &= U(\text{wife})(WL)\\
+                2\cdot p + 0 \cdot (1 - p) &= 0 \cdot p + 1 \cdot (1 - p)
+            \end{align*}
+            \item 可得丈夫的策略：1 / 3选LW， 2 / 3 选WL。
+            \item 同理妻子的策略：2 / 3 选LW， 1 / 3 选WL。
+            \item 如果混合策略是最好的，那么混合中涉及的每一种纯策略本身就一定是最佳。也就是，每一项都必须产生相同的预期回报。
+        \end{itemize}
+    \end{enumerate}
 \end{remark}
 
 \end{document}
