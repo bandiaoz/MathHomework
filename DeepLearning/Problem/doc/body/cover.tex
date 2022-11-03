@@ -1,0 +1,21 @@
+% !TeX root = ../exam-zh-doc.tex
+
+\begin{abstract}
+  本项目提供了一个中国高考试卷样式的 \LaTeX 模板，旨在帮助中小学教师更方便地使用 \LaTeX。模板具有以下特性：
+  
+  \begin{enumerate}
+    \item 样式与内容尽可能分离；
+    \item 选择题选项可以自动排版成合适的列数；
+    \item 通过用户接口可以方便更改密封线样式；
+    \item 在 Windows, macOS 和 Linux 跨平台编译。
+  \end{enumerate}
+\end{abstract}
+
+
+\begin{tikzpicture}[remember picture, overlay]
+  \node[opacity = 0.1,rotate = 30] at ([shift={(0,0)}]current page text area.center){
+    \includegraphics[width=23cm]{firstpage.pdf}
+  };
+\end{tikzpicture}
+\thispagestyle{plain}
+\clearpage

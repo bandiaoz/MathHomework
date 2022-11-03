@@ -1,0 +1,72 @@
+\usepackage{xeCJKfntef, xpinyin}
+\usepackage{graphicx}
+\usepackage{zhlipsum}
+\usepackage{tabularray}
+\usepackage{../exam-zh-choices}
+\usepackage{../exam-zh-question}
+\usepackage{../exam-zh-symbols}
+\usepackage{../exam-zh-chinese-english}
+\usepackage{../exam-zh-textfigure}
+
+\ExplSyntaxOn
+\NewDocumentCommand \examsetup { m }
+  { \keys_set:nn { exam-zh } {#1} }
+\ExplSyntaxOff
+% \usepackage[
+%   backend = biber,
+%   style = gb7714-2015
+% ]{biblatex}
+% \addbibresource{exam-zh.bib}
+\graphicspath{{figures}}
+
+\hypersetup{
+  pdftitle  = {exam-zh: 高考试卷 LaTeX 模板},
+  pdfauthor = {夏康玮}
+}
+% 全角标点放在引号中，需要改成半角式，否则间距过大，不好看
+\def\FSID{“{\xeCJKsetup{PunctStyle=banjiao}。}”} % U+3002
+\def\FSFW{“{\xeCJKsetup{PunctStyle=banjiao}．}”} % U+FF0E
+\def\COFW{“{\xeCJKsetup{PunctStyle=banjiao}：}”} % U+FF1A
+\def\SCFW{“{\xeCJKsetup{PunctStyle=banjiao}；}”} % U+FF1B
+
+
+\title{\textcolor{MaterialIndigo800}{%
+  \textbf{exam-zh: 高考试卷 \LaTeX \xpinyin[font=\sffamily,format=\color{MaterialIndigo800}]{模}{mu2}板}}}
+\author{李泽平，夏康玮，郭李军}
+\date{\DocDate\quad \DocVersion%
+  \thanks{%
+    \url{https://gitee.com/xkwxdyy/exam-zh}
+  }
+}
+
+\ExplSyntaxOn
+\NewDocumentCommand { \scoringbox } { s }
+  {
+    \IfBooleanTF {#1}
+      { \__examzh_scoringbox_onecolumn: }
+      { \__examzh_scoringbox_twocolumn: }
+  }
+\cs_new_protected:Nn \__examzh_scoringbox_twocolumn:
+  {
+    \begin{tabular}{|c|c|}
+      \hline 
+      得分 & \rule{3em}{0pt}\rule[-0.7em]{0pt}{2em} \\\hline
+      阅卷人 & \rule{3em}{0pt}\rule[-0.7em]{0pt}{2em} \\\hline
+    \end{tabular}
+  }
+\cs_new_protected:Nn \__examzh_scoringbox_onecolumn:
+  {
+    \begin{tabular}{|c|}
+      \hline 
+      得分\rule[-0.7em]{0pt}{2em} \\\hline
+      \rule[-0.7em]{0pt}{2em} \\\hline
+    \end{tabular}
+  }
+\ExplSyntaxOff
+
+\AddToHook{env/latexexample/after}
+  {%
+    \examsetup{
+      question/index=1
+    }
+  }

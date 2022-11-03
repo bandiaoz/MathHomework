@@ -1,0 +1,90 @@
+\documentclass{xdyydoc}
+
+\newcommand{\DocDate}{2022-9-18}
+\newcommand{\DocVersion}{v0.1.20}
+\input{exam-zh-doc-setup.tex}
+\usepackage{amssymb}
+
+\begin{document}
+
+% 封面的页边距
+
+\newgeometry{
+  left   = 2.2 in,
+  right  = 1.25 in,
+  top    = 1.25 in,
+  bottom = 1.00 in
+}
+
+\maketitle
+
+\input{./body/cover.tex}
+
+
+% 用户手册的页边距
+
+\newgeometry{
+  left   = 1.75 in,
+  right  = 0.80 in,
+  top    = 1.25 in,
+  bottom = 1.00 in
+}
+
+\tableofcontents
+
+
+% 介绍
+\input{./body/introduction.tex}
+% 安装
+\input{./body/installation.tex}
+
+% \clearpage
+% 使用
+\input{./body/usage.tex}
+
+
+% 宏包依赖情况
+\input{./back/package.tex}
+% 主要更新
+\input{./back/main-changelog.tex}
+
+% 参与开发
+\input{./back/development.tex}
+
+
+% 关于作者
+\input{./back/about-author.tex}
+
+
+
+\section{\cls{exam-zh}：TODO}
+
+\begin{itemize}
+  \item 增加试卷范例（语文，英语）
+  \item 答案控制
+    \begin{itemize}
+      \item 选择题
+        \begin{itemize}
+          \item 题目下方
+          \item 括号内
+          \item 最后：列表形式、表格形式
+        \end{itemize}
+      \item 填空题
+        \begin{itemize}
+          \item 题目下方
+          \item 划线内
+          \item 最后
+        \end{itemize}
+      \item 解答题
+        \begin{itemize}
+          \item 题目下方
+          \item 移动到最后
+        \end{itemize}
+    \end{itemize}
+  \item 选择题答案标记
+  \item 图文排版（参考 xkwxdyy 的 \pkg{text-figure} 宏包和 qinglee 的 \pkg{wrapstuff} 宏包）
+  \item 测试兼容性
+\end{itemize}
+
+
+\end{document}

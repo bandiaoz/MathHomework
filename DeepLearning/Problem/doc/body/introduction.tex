@@ -1,0 +1,21 @@
+% !TeX root = ../exam-zh-doc.tex
+
+\section{介绍}
+
+试卷排版是中小学教师经常遇到的需求，目前在网上可以找到的试卷排版相关文类或宏包有：
+\begin{itemize}
+  \item Philip Hirschhorn：\href{https://www.ctan.org/pkg/exam}{exam}
+  \item 吕荐瑞：\href{https://www.ctan.org/pkg/jnuexam}{jnuexam}
+  \item 胡振震：\href{https://github.com/hushidong/simplexam}{simplexam}
+  \item 鲍宏昌：\href{https://github.com/mathedu4all/bhcexam}{BHCexam}
+  \item htharoldht：\href{https://github.com/htharoldht/USTBExam}{USTBExam}
+  \item 唐绍东：\href{https://github.com/shaodongtang/gaokao_exam}{GEEexam}
+  \item 唐绍东：\href{https://github.com/shaodongtang/CMC}{CMC}
+  \item sd44：\href{https://github.com/sd44/DANexam}{DANexam}
+\end{itemize}
+
+但是大部分没有经过系统设计以及后续进一步的维护，\href{https://www.ctan.org/pkg/exam}{exam} 大部分设置与国内习惯不同，调试配置起来增加用户的使用成本 \href{https://www.ctan.org/pkg/jnuexam}{jnuexam}、\href{https://github.com/shaodongtang/CMC}{CMC} 是比较“定制化”的，也无法顺利地进行迁移使用。
+
+但是上述前人所做的工作值得参考，比如 \cls{exam-zh} 的 A4 和 A3 页面切换就参考了 \href{https://www.ctan.org/pkg/jnuexam}{jnuexam} 项目。
+
+本模板将借鉴前辈经验，重新设计，并使用 \LaTeX3 编写，以适应 \TeX 技术发展潮流; 同时还将构建一套简洁的接口，方便用户使用。

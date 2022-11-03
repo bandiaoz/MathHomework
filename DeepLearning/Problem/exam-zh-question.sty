@@ -1,0 +1,1666 @@
+%
+% Copyright (c) 2022 Zeping Lee
+% Released under the LaTeX Project Public License v1.3c License.
+% Repository: https://gitee.com/xkwxdyy/exam-zh
+%
+
+\NeedsTeXFormat{LaTeX2e}
+
+\RequirePackage{expl3}
+\RequirePackage{xparse}
+
+\ProvidesExplPackage {exam-zh-question} {2022-9-18} {v0.1.20}
+  {exam-zh question module}
+
+
+\RequirePackage { amsthm }
+\@ifpackageloaded { tcolorbox }
+  { \tcbuselibrary { breakable } }
+  { \RequirePackage [ most ] { tcolorbox } }
+% \RequirePackage { zref-savepos }
+\RequirePackage { xeCJKfntef }
+
+% https://github.com/CTeX-org/forum/issues/264#issuecomment-1200087776
+\disable@package@load { etex }
+  {
+    \cs_set_eq:NN \globcount \newcount
+    \cs_set_eq:NN \globdimen \newdimen
+  }
+\RequirePackage { linegoal }
+
+
+\ExplSyntaxOff
+
+\usetikzlibrary{shapes.misc}
+\ExplSyntaxOn
+
+
+
+
+\NewDocumentCommand \questionsetup { m }
+  { \keys_set:nn { exam-zh / question } { #1 } }
+\NewDocumentCommand \fillinsetup { m }
+  { \keys_set:nn { exam-zh / fillin } { #1 } }
+
+% ulem 宏包重定义了 \emph，使用 \normalem 恢复
+\normalem
+
+
+% question 环境相关变量
+
+% 计数器
+\int_new:N \g__examzh_question_index_int
+% 答案颜色
+\tl_new:N \l__examzh_question_answer_color_tl
+% 题目分数
+\int_new:N \l__examzh_question_points_int
+% 是否显示题目分数
+\bool_new:N \l__examzh_question_show_points_bool
+\bool_new:N \l__examzh_question_show_points_auto_bool
+% 题目分数是否单独成段，解答题需要单独成段
+\bool_new:N \l__examzh_question_points_separate_par_bool
+% 是否显示括号
+\bool_new:N \l__examzh_question_show_paren_bool
+% 是否显示答案
+\bool_new:N \l__examzh_question_show_answer_bool
+\bool_new:N \l__examzh_question_show_fillin_answer_bool
+\bool_new:N \l__examzh_question_show_paren_answer_bool
+% 上下的间距
+\skip_new:N \l__examzh_question_top_sep_skip
+\skip_new:N \l__examzh_question_bottom_sep_skip
+% label 的对齐
+\tl_new:N \l__examzh_question_label_align_tl
+
+
+\keys_define:nn { exam-zh }
+  { question .meta:nn = { exam-zh / question } {#1} }
+\keys_define:nn { exam-zh }
+  { problem .meta:nn = { exam-zh / problem } {#1} }
+
+
+\keys_define:nn { exam-zh / question }
+  {
+    % 手动调整 question 环境的计数器
+    index               .int_gset:N = \g__examzh_question_index_int ,
+    % 分数
+    points              .int_set:N = \l__examzh_question_points_int ,
+    % 分数显示控制
+    show-points         .choice: ,
+    show-points / auto  .code:n =
+      { \bool_set_true:N \l__examzh_question_show_points_auto_bool } ,
+    show-points / true  .code:n =
+      {
+        \bool_set_true:N  \l__examzh_question_show_points_bool
+        \bool_set_false:N \l__examzh_question_show_points_auto_bool
+      } ,
+    show-points / false .code:n =
+      {
+        \bool_set_false:N \l__examzh_question_show_points_bool
+        \bool_set_false:N \l__examzh_question_show_points_auto_bool
+      } ,
+    % 分数是否单独成段
+    points-separate-par .bool_set:N = \l__examzh_question_points_separate_par_bool ,
+    % 是否显示答案
+    % show-answer         .bool_set:N = \l__examzh_question_show_answer_bool ,
+    show-answer         .choice: ,
+    show-answer / true .code:n = 
+      {
+        \bool_set_true:N \l__examzh_question_show_fillin_answer_bool
+        \bool_set_true:N \l__examzh_question_show_paren_answer_bool
+      },
+    show-answer / false .code:n = 
+      {
+        \bool_set_false:N \l__examzh_question_show_fillin_answer_bool
+        \bool_set_false:N \l__examzh_question_show_paren_answer_bool
+      },
+    % 上方间距
+    top-sep             .skip_set:N = \l__examzh_question_top_sep_skip ,
+    % 下方间距
+    bottom-sep          .skip_set:N = \l__examzh_question_bottom_sep_skip ,
+    label .tl_set:N = \l__examzh_question_label_tl,
+    combine-fillin .bool_set:N = \l__examzh_question_combine_fillin_bool,
+    combine-fillin-args .tl_set:N = \l__examzh_question_combine_fillin_args_tl,
+    label-align .choices:nn =
+      { left, center, right }
+      { \tl_set_eq:NN \l__examzh_question_label_align_tl \l_keys_choice_tl },
+    hang .bool_set:N = \l__examzh_question_hang_bool,
+    points-prelabel .tl_set:N = \l__examzh_question_points_prelabel_tl,
+    points-postlabel .tl_set:N = \l__examzh_question_points_postlabel_tl,
+  }
+
+
+\keys_set:nn { exam-zh / question }
+  {
+    index               = 1,
+    points              = 0 ,
+    show-points         = auto ,
+    points-separate-par = false ,
+    show-answer         = false ,
+    top-sep             = .25em plus .25em minus .1em ,
+    bottom-sep          = .25em plus .25em minus .1em ,
+    label               = \arabic*.,
+    combine-fillin      = false,
+    label-align         = right,
+    hang                = true,
+    points-prelabel     = {（},
+    points-postlabel    = {分）}
+  }
+
+\keys_define:nn { exam-zh / problem }
+  {
+    % 手动调整 question 环境的计数器
+    index               .int_gset:N = \g__examzh_question_index_int ,
+    % 分数
+    points              .int_set:N = \l__examzh_question_points_int ,
+    % 分数显示控制
+    show-points         .choice: ,
+    show-points / auto  .code:n =
+      { \bool_set_true:N \l__examzh_question_show_points_auto_bool } ,
+    show-points / true  .code:n =
+      {
+        \bool_set_true:N  \l__examzh_question_show_points_bool
+        \bool_set_false:N \l__examzh_question_show_points_auto_bool
+      } ,
+    show-points / false .code:n =
+      {
+        \bool_set_false:N \l__examzh_question_show_points_bool
+        \bool_set_false:N \l__examzh_question_show_points_auto_bool
+      } ,
+    % 分数是否单独成段
+    points-separate-par .bool_set:N = \l__examzh_problem_points_separate_par_bool,
+    % 是否显示答案
+    % show-answer         .bool_set:N = \l__examzh_question_show_answer_bool ,
+    show-answer         .choice: ,
+    show-answer / true .code:n = 
+      {
+        \bool_set_true:N \l__examzh_question_show_fillin_answer_bool
+        \bool_set_true:N \l__examzh_question_show_paren_answer_bool
+      },
+    show-answer / false .code:n = 
+      {
+        \bool_set_false:N \l__examzh_question_show_fillin_answer_bool
+        \bool_set_false:N \l__examzh_question_show_paren_answer_bool
+      },
+    % 上方间距
+    top-sep             .skip_set:N = \l__examzh_problem_top_sep_skip ,
+    % 下方间距
+    bottom-sep          .skip_set:N = \l__examzh_problem_bottom_sep_skip ,
+    label .tl_set:N = \l__examzh_question_label_tl,
+    label-align .choices:nn =
+      { left, center, right }
+      { \tl_set_eq:NN \l__examzh_question_label_align_tl \l_keys_choice_tl },
+    points-prelabel .tl_set:N = \l__examzh_problem_points_prelabel_tl,
+    points-postlabel .tl_set:N = \l__examzh_problem_points_postlabel_tl,
+  }
+
+\keys_set:nn { exam-zh / problem }
+  {
+    index               = 1,
+    points              = 0 ,
+    show-points         = auto ,
+    points-separate-par = true ,
+    show-answer         = false ,
+    top-sep             = .25em plus .25em minus .1em ,
+    bottom-sep          = .25em plus .25em minus .1em ,
+    label               = \arabic*.,
+    label-align         = right,
+    points-prelabel     = {（},
+    points-postlabel    = {分）}
+  }
+
+% 是否按照解答题的格式排版
+\bool_new:N \l__examzh_question_problem_style_bool
+
+
+% 选择题和填空题的题干
+\NewDocumentEnvironment { question } { O { } +b }
+  {
+    \bool_set_false:N \l__examzh_question_problem_style_bool
+    \__examzh_question_begin:nn {#1}{#2}
+  }
+  { \__examzh_question_end:nn {#1}{#2}  }
+
+% 解答题
+\NewDocumentEnvironment { problem } { O { } +b }
+  {
+    \bool_set_true:N \l__examzh_question_problem_style_bool
+    \__examzh_problem_begin:nn {#1}{#2}
+  }
+  { \__examzh_problem_end:nn {#1}{#2} }
+
+\prg_generate_conditional_variant:Nnn \int_compare:nNn { xNn } { T }
+\cs_new:Npn \__examzh_question_begin:nn #1#2
+  {
+    \par
+    % \bool_if:NTF \l__examzh_question_combine_fillin_bool
+    %   { \keys_set:nn { exam-zh / question } { label-align = left } }
+    %   { \keys_set:nn { exam-zh / question } { label-align = right } }
+    % 设置键值
+    \keys_set:nn { exam-zh / question } { #1 }
+    % 题干计数器的值加一
+    \int_gincr:N \g__examzh_question_index_int
+    % 设置上方间距
+    % \addvspace { \l__examzh_question_top_sep_skip }
+    \vspace { \l__examzh_question_top_sep_skip }
+    % 严格禁止孤行和寡行
+    \int_set:Nn \clubpenalty { 10000 }
+    \int_set:Nn \widowpenalty { 10000 }
+    % 尽量避免在题目中间换行
+    \int_set:Nn \interlinepenalty { 301 }
+    % 这部分是仿照 source2e 中 enumerate 的定义写的
+    % \@enumdepth 主要控制 enumerate 不同层级的编号
+    % 这样设置后，在 question 中使用 enumerate 会调用 level 2 的编号
+    % 也就是 question 中的 enumerate 环境直接从第二层开始
+    \int_incr:N \@enumdepth
+    % 如果 show-points = auto 那么解答题显示分数，选择题和填空题不显示分数
+    % 这样设置考虑到选择题和填空题都是每道题一样的分数，在最开始的地方说明即可
+    % 而解答题不太一样
+    \bool_if:NT \l__examzh_question_show_points_auto_bool
+      {
+        \bool_set_false:N \l__examzh_question_show_points_bool
+      }
+    % 使用列表环境输出
+    \list 
+      {
+        % \int_use:N \g__examzh_question_index_int . 
+        \__examzh_question_make_label:n
+          {
+            \bool_if:NT \l__examzh_question_combine_fillin_bool
+              {
+                \tl_if_blank:VTF \l__examzh_question_combine_fillin_args_tl
+                  { \fillin }
+                  {
+                    \use:x
+                      {
+                        \exp_not:N \fillin \l__examzh_question_combine_fillin_args_tl
+                      }
+                  }
+              }
+            \int_compare:xNnT { \g__examzh_question_index_int } < { 11 }
+              { \phantom {1} }
+            \__examzh_question_the_label:
+          }
+      }
+      {
+        % 用 group 是为了防止 combine-fillin 的 type 影响了环境里面的 fillin 的type
+        \group_begin:
+          \dim_gset:Nn \topsep       { 0pt }
+          \dim_gset:Nn \partopsep    { 0pt }
+          \dim_gset:Nn \itemsep      { 0pt }
+          \dim_gset:Nn \parsep       { 0pt }
+          % \group_begin:
+            % 上面 \fillin 里面的设置是局部的，这样的问题是 question 的可选参数改 type 的时候不会影响 \l__examzh_fillin_type_str 的值
+            % 所以要把 \l__examzh_question_combine_fillin_args_tl 里关于 type 的选取出来
+            \__examzh_question_begin_fillin_type_set:
+            \__examzh_question_begin_labelsep_labelwidth_set:
+          % \group_end:
+          % \bool_if:NTF \l__examzh_question_problem_style_bool
+          %   {
+          %     % 解答题是正文 + 缩进 2em 的效果
+          %     \bool_if:NTF \l__examzh_question_combine_fillin_bool
+          %       {
+          %         % 如果 combine 的话就和 question 一样的缩进
+          %         \bool_if:NTF \l__examzh_question_hang_bool
+          %           { \dim_gset:Nn \itemindent { 0em } }
+          %           { \dim_gset:Nn \itemindent { 2em } }
+          %         \bool_if:NTF \l__examzh_question_combine_fillin_bool
+          %           {
+          %             \bool_if:NTF \l__examzh_question_hang_bool
+          %               { \dim_gset:Nn \leftmargin { 6em } }
+          %               { \dim_gset:Nn \leftmargin { 4em } }
+          %           }
+          %           {
+          %             \bool_if:NTF \l__examzh_question_hang_bool
+          %               { \dim_gset:Nn \leftmargin { 2em } }
+          %               { \dim_gset:Nn \leftmargin { 0em } }
+          %           }
+          %       }
+          %       {
+          %         \dim_gset:Nn \leftmargin { 0pt }
+          %         \dim_gset:Nn \itemindent { 2em }
+          %       }
+          %   }
+            % {
+              % 选择和填空题是悬挂效果
+              \bool_if:NTF \l__examzh_question_hang_bool
+                { \dim_gset:Nn \itemindent { 0em } }
+                { \dim_gset:Nn \itemindent { 2em } }
+              \bool_if:NTF \l__examzh_question_combine_fillin_bool
+                {
+                  \bool_if:NTF \l__examzh_question_hang_bool
+                    { \dim_gset:Nn \leftmargin { 6em } }
+                    { \dim_gset:Nn \leftmargin { 4em } }
+                }
+                {
+                  \bool_if:NTF \l__examzh_question_hang_bool
+                    { \dim_gset:Nn \leftmargin { 2em } }
+                    { \dim_gset:Nn \leftmargin { 0em } }
+                }
+            % }
+          \dim_gset_eq:NN \listparindent \itemindent
+        \group_end:
+      }
+    \item \relax
+    % 输出题目分数
+    \bool_if:NT \l__examzh_question_show_points_bool
+      {
+        % 如果设置了分数且 show-points 的 bool 是 true 的话就显示
+        \int_compare:nNnT { \l__examzh_question_points_int } > { 0 }
+          { \l__examzh_question_points_prelabel_tl \int_use:N \l__examzh_question_points_int ~ \l__examzh_question_points_postlabel_tl }
+        % 是否分段（解答题需要分段）
+        \bool_if:NT \l__examzh_question_points_separate_par_bool
+          % \par 分段之后使用 \nopagebreak 避免分页导致序号和分数出现在页面最后一行
+          { \par \nopagebreak }   
+      }
+  }
+\int_new:N \l__examzh_question_begin_fillin_args_bracket_num_int
+\cs_generate_variant:Nn \regex_count:nnN { nVN }
+\prg_generate_conditional_variant:Nnn \regex_extract_once:nnN { nxN } { F } 
+\cs_new:Npn \__examzh_question_begin_fillin_type_set:
+  {
+    \regex_count:nVN { \[ } % \]
+      \l__examzh_question_combine_fillin_args_tl
+      \l__examzh_question_begin_fillin_args_bracket_num_int
+    \use_none:n { \] }  % 消去 \[ 的高亮影响
+    % \int_use:N \l__examzh_question_begin_fillin_args_bracket_num_int
+    \int_compare:nNnT { \l__examzh_question_begin_fillin_args_bracket_num_int } = {2}
+      {
+        \regex_extract_once:nxNF { \[ (.*?) \] } { \l__examzh_question_combine_fillin_args_tl } \l_tmpa_seq { \fail }
+        \seq_pop_left:NN \l_tmpa_seq \l_tmpa_tl
+        % \seq_use:Nn \l_tmpa_seq {,}
+        \keys_set:nx { exam-zh / fillin } { \seq_use:Nn \l_tmpa_seq {,} }
+      }
+  }
+\cs_new:Npn \__examzh_question_begin_labelsep_labelwidth_set:
+  {
+    \bool_if:NTF \l__examzh_question_combine_fillin_bool
+      { 
+        \str_case:Vn \l__examzh_question_label_align_tl
+          {
+            { left } 
+              { 
+                \str_case:VnF \l__examzh_fillin_type_str
+                  {
+                    { paren } 
+                      { 
+                        % combin-left-paren
+                        \dim_gset:Nn \labelsep { 2.8em } 
+                        \dim_gset:Nn \labelwidth { 4.2em } 
+                      }
+                    { line }
+                      { 
+                        % combin-left-line
+                        \dim_gset:Nn \labelsep { 2.4em } 
+                        \dim_gset:Nn \labelwidth { 3.8em } 
+                      }
+                  }
+                  { 
+                    % combin-left-paren/line 外的
+                    \dim_gset:Nn \labelsep { 2.8em }
+                    \dim_gset:Nn \labelwidth { 1.3em }
+                  }
+              }
+            { center }
+              { 
+                \str_case:VnF \l__examzh_fillin_type_str
+                  {
+                    { paren } 
+                      { 
+                        % combin-center-paren
+                        \dim_gset:Nn \labelsep { 2em } 
+                        \dim_gset:Nn \labelwidth { 5em } 
+                      }
+                    { line }
+                      { 
+                        % combin-center-line
+                        \dim_gset:Nn \labelsep { 2.8em } 
+                        \dim_gset:Nn \labelwidth { 4em } 
+                      }
+                  }
+                  { 
+                    % combin-center-paren/line 外的
+                    \dim_gset:Nn \labelsep { 2em }
+                    \dim_gset:Nn \labelwidth { 1.3em }
+                  }
+              }
+            { right  }
+              {
+                \dim_gset:Nn \labelsep { .7em } 
+                \dim_gset:Nn \labelwidth { 1.3em }
+              }
+          }
+      }
+      {
+        \str_case:Vn \l__examzh_question_label_align_tl
+          {
+            { left } 
+              { 
+                \dim_gset:Nn \labelsep { .7em }
+                \dim_gset:Nn \labelwidth { 1.8em } 
+              }
+            { center }
+              {
+                \dim_gset:Nn \labelsep { .7em } 
+                \dim_gset:Nn \labelwidth { 1.3em } 
+              }
+            { right  } 
+              {
+                \dim_gset:Nn \labelsep { .7em } 
+                \dim_gset:Nn \labelwidth { 1.3em } 
+              }
+          }
+        
+      }
+  }
+
+\cs_new:Npn \__examzh_question_end:nn #1#2
+  {
+    #2
+    % 结束列表环境
+    \endlist
+    % 增加下方间距
+    % \addvspace { \l__examzh_question_bottom_sep_skip }
+    \vspace { \l__examzh_question_bottom_sep_skip }
+  }
+
+\cs_new:Npn \__examzh_problem_begin:nn #1#2
+  {
+    \par
+    % \bool_if:NTF \l__examzh_question_combine_fillin_bool
+    %   { \keys_set:nn { exam-zh / question } { label-align = left } }
+    %   { \keys_set:nn { exam-zh / question } { label-align = right } }
+    % 设置键值
+    \keys_set:nn { exam-zh / problem } { #1 }
+    % 题干计数器的值加一
+    \int_gincr:N \g__examzh_question_index_int
+    % 设置上方间距
+    % \addvspace { \l__examzh_question_top_sep_skip }
+    \vspace { \l__examzh_problem_top_sep_skip }
+    % 严格禁止孤行和寡行
+    \int_set:Nn \clubpenalty { 10000 }
+    \int_set:Nn \widowpenalty { 10000 }
+    % 尽量避免在题目中间换行
+    \int_set:Nn \interlinepenalty { 301 }
+    % 这部分是仿照 source2e 中 enumerate 的定义写的
+    % \@enumdepth 主要控制 enumerate 不同层级的编号
+    % 这样设置后，在 problem 中使用 enumerate 会调用 level 2 的编号
+    % 也就是 question 中的 enumerate 环境直接从第二层开始
+    \int_incr:N \@enumdepth
+    % 如果 show-points = auto 那么解答题显示分数，选择题和填空题不显示分数
+    % 这样设置考虑到选择题和填空题都是每道题一样的分数，在最开始的地方说明即可
+    % 而解答题不太一样
+    \bool_if:NT \l__examzh_question_show_points_auto_bool
+      {
+        \bool_set_true:N  \l__examzh_question_show_points_bool
+      }
+    % 使用列表环境输出
+    \list 
+      {
+        % \int_use:N \g__examzh_question_index_int . 
+        \__examzh_question_make_label:n
+          {
+            \__examzh_question_the_label:
+          }
+      }
+      {
+        % 用 group 是为了防止 combine-fillin 的 type 影响了环境里面的 fillin 的type
+        \group_begin:
+          \dim_gset:Nn \topsep       { 0pt }
+          \dim_gset:Nn \partopsep    { 0pt }
+          \dim_gset:Nn \itemsep      { 0pt }
+          \dim_gset:Nn \parsep       { 0pt }
+          % \group_begin:
+            % 上面 \fillin 里面的设置是局部的，这样的问题是 question 的可选参数改 type 的时候不会影响 \l__examzh_fillin_type_str 的值
+            % 所以要把 \l__examzh_question_combine_fillin_args_tl 里关于 type 的选取出来
+            \__examzh_question_begin_fillin_type_set:
+            \__examzh_question_begin_labelsep_labelwidth_set:
+          % \group_end:
+          \dim_gset:Nn \leftmargin { 0pt }
+          \dim_gset:Nn \itemindent { 2em }
+          \dim_gset_eq:NN \listparindent \itemindent
+        \group_end:
+      }
+    \item \relax
+    % 输出题目分数
+    \bool_if:NT \l__examzh_question_show_points_bool
+      {
+        % 如果设置了分数且 show-points 的 bool 是 true 的话就显示
+        \int_compare:nNnT { \l__examzh_question_points_int } > { 0 }
+          { \l__examzh_problem_points_prelabel_tl \int_use:N \l__examzh_question_points_int ~ \l__examzh_problem_points_postlabel_tl }
+        % 是否分段（解答题需要分段）
+        \bool_if:NT \l__examzh_problem_points_separate_par_bool
+          % \par 分段之后使用 \nopagebreak 避免分页导致序号和分数出现在页面最后一行
+          { \par \nopagebreak }   
+      }
+  }
+
+\cs_new:Npn \__examzh_problem_end:nn #1#2
+  {
+    #2
+    % 结束列表环境
+    \endlist
+    % 增加下方间距
+    % \addvspace { \l__examzh_question_bottom_sep_skip }
+    \vspace { \l__examzh_problem_bottom_sep_skip }
+  }
+
+% 处理 question / problem 的 label
+\tl_new:N \l__examzh_question_counters_commands_set_tl
+
+\cs_new:Npn \__examzh_question_the_label:
+  {
+    \group_begin:
+      % 定义计数器相关的命令函数
+      \l__examzh_question_counters_commands_set_tl
+      % 输出处理后的 label
+      \l__examzh_question_label_tl
+    \group_end:
+  }
+\cs_new:Npn \__examzh_question_make_label:n #1
+  {
+    \str_case:Vn \l__examzh_question_label_align_tl
+      {
+        { left   } { \rlap { #1 } \hss }
+        { center } { \hss \clap { #1 } \hss }
+        { right  } { \hss \llap { #1 } }
+      }
+  }
+\NewDocumentCommand \AddQuestionCounter { m m }
+  {
+    % 生成用户层命令
+    \tl_put_right:Nn \l__examzh_question_counters_commands_set_tl
+      { \__examzh_process_counter:NNn #1 #2 { question } }
+    % 把核心函数存起来
+    \cs_set_eq:cN { __examzh_question_save_ \cs_to_str:N #1 : } #2
+    \cs_set_eq:cN { __examzh_question_save_ \cs_to_str:N #2 : } #2
+  }
+
+\AddQuestionCounter \arabic \@arabic
+\AddQuestionCounter \alph   \@alph
+\AddQuestionCounter \Alph   \@Alph
+\AddQuestionCounter \roman  \@roman
+\AddQuestionCounter \Roman  \@Roman
+
+\cs_new:Npn \__examzh_process_counter:NNn #1#2#3
+  % #1: \Alph
+  % #2: \@Alph
+  % #3: question / fillin
+  {
+    \cs_set:Npn #1 { \use:c { __examzh_ #3 _process_counter_aux:Nn } #2 }
+    \cs_set:Npn #2 { \use:c { __examzh_ #3 _process_counter_aux:Nn } #2 }
+  }
+
+\cs_new:Npn \__examzh_question_process_counter_aux:Nn #1#2
+  {
+    \tl_if_eq:nnTF {#2} { * }
+      {
+        % \Alph*
+        \use:c { __examzh_question_save_ \cs_to_str:N #1 : }
+          { \int_eval:n { \g__examzh_question_index_int - 1 } }
+      }
+      {
+        % \Alph{...}
+        \use:c { __examzh_question_save_ \cs_to_str:N #1 : }
+          {#2}
+      }
+  }
+
+
+% 处理 fillin/no-answer-type = counter 的 label
+\tl_new:N \l__examzh_fillin_counters_commands_set_tl
+
+
+\cs_new:Npn \__examzh_fillin_the_label:
+  {
+    \group_begin:
+      % 定义计数器相关的命令函数
+      \l__examzh_fillin_counters_commands_set_tl
+      % 输出处理后的 label
+      \l__examzh_fillin_label_tl
+    \group_end:
+  }
+
+\NewDocumentCommand \AddFillinCounter { m m }
+  {
+    % 生成用户层命令
+    \tl_put_right:Nn \l__examzh_fillin_counters_commands_set_tl
+      { \__examzh_process_counter:NNn #1 #2 { fillin } }
+    % 把核心函数存起来
+    \cs_set_eq:cN { __examzh_fillin_save_ \cs_to_str:N #1 : } #2
+    \cs_set_eq:cN { __examzh_fillin_save_ \cs_to_str:N #2 : } #2
+  }
+
+\AddFillinCounter \arabic \@arabic
+\AddFillinCounter \alph   \@alph
+\AddFillinCounter \Alph   \@Alph
+\AddFillinCounter \roman  \@roman
+\AddFillinCounter \Roman  \@Roman
+
+\cs_new:Npn \__examzh_fillin_process_counter_aux:Nn #1#2
+  {
+    \tl_if_eq:nnTF {#2} { * }
+      {
+        % \Alph*
+        \use:c { __examzh_fillin_save_ \cs_to_str:N #1 : }
+          { \int_eval:n { \g__examzh_fillin_no_answer_counter_int - 1 } }
+      }
+      {
+        % \Alph{...}
+        \use:c { __examzh_fillin_save_ \cs_to_str:N #1 : }
+          {#2}
+      }
+  }
+
+% 使用中文字体直接输出 unicode 带圈数字
+% \circlednumber 的参数既可以接受 LaTeX2e 的 <counter>，也可以直接接受 <intexpr>。
+\NewDocumentCommand \circlednumber { s m }
+  {
+    \int_if_exist:cTF { c@ #2 }
+      { \int_set_eq:Nc \l_tmpa_int { c@#2 } }
+      { \int_set:Nn \l_tmpa_int { #2 } }
+    \IfBooleanTF {#1}
+      {
+        \exp_args:Nx \__examzh_tikz_circled_number:n { \int_use:N \l_tmpa_int }
+      }
+      {
+        \exp_args:Nx \__examzh_question_circled_number:n { \int_use:N \l_tmpa_int }
+      }
+  }
+
+\cs_new:Npn \__examzh_circled_number:nn #1#2
+  {
+    \int_set:Nn \l_tmpa_int {#1}
+    \int_compare:nNnTF { \l_tmpa_int } = { 0 }
+      { \int_set:Nn \l_tmpa_int { "24EA } }
+      {
+        \int_compare:nNnTF { \l_tmpa_int } < { 21 }
+          { \int_add:Nn \l_tmpa_int { "245F } }
+          {
+            \int_compare:nNnTF { \l_tmpa_int } < { 36 }
+              { \int_add:Nn \l_tmpa_int { "3250 } }
+              {
+                \int_compare:nNnTF { \l_tmpa_int } < { 51 }
+                  { \int_add:Nn \l_tmpa_int { "32B0 } }
+                  {
+                    \msg_error:nnn { exam-zh / #2 }
+                      { invalid-circled-number } { \int_use:N \l_tmpa_int }
+                  }
+              }
+          }
+      }
+    \group_begin:
+      \CJKfamily+ { }
+      \symbol { \l_tmpa_int }
+    \group_end:
+  }
+
+\msg_new:nnn { exam-zh / question } { invalid-circled-number }
+{ Invalid~ circled~ number~ #1. }
+
+\msg_new:nnn { exam-zh / fillin } { invalid-circled-number }
+{ Invalid~ circled~ number~ #1. }
+
+\cs_new:Npn \__examzh_question_circled_number:n #1
+  { \__examzh_circled_number:nn {#1} { question } }
+\cs_new:Npn \__examzh_fillin_circled_number:n #1
+  { \__examzh_circled_number:nn {#1} { fillin } }
+
+\AddQuestionCounter \circlednumber \__examzh_question_circled_number:n
+\AddFillinCounter \circlednumber  \__examzh_fillin_circled_number:n
+
+% tikz 绘制带圈数字
+\fp_new:N \l__examzh_tikz_circled_number_xscale_fp   % 水平压缩系数
+\fp_new:N \l__examzh_tikz_circled_number_yscale_fp   % 垂直压缩系数
+\dim_new:N \l__examzh_tikz_circled_number_total_hegiht_dim   % 数字的总高度
+\dim_new:N \l__examzh_tikz_circled_number_radius_dim     % 半径
+
+\cs_new:Npn \__examzh_tikz_circled_number_aux:n #1
+  {
+    % 根据数字大小设置压缩系数
+    \fp_set:Nn \l__examzh_tikz_circled_number_xscale_fp
+      {
+        \int_compare:nNnTF {#1} < { 10 } 
+          { 0.9 }
+          {
+            \int_compare:nNnTF {#1} < { 100 }
+              { 0.7 }
+              { 0.5 }
+          } 
+      }
+    \fp_set:Nn \l__examzh_tikz_circled_number_yscale_fp
+      {
+        \int_compare:nNnTF {#1} < { 10 } 
+          { 0.9 }
+          {
+            \int_compare:nNnTF {#1} < { 100 }
+              { 0.8 }
+              { 0.6 }
+          } 
+      }
+    % 获取数字的高度
+    \hbox_set:Nn \l_tmpa_box {#1}
+    \dim_set:Nn \l__examzh_tikz_circled_number_total_hegiht_dim
+      { \box_ht:N \l_tmpa_box + \box_dp:N \l_tmpa_box  }
+    % 设置圆的半径
+    \dim_set:Nn \l__examzh_tikz_circled_number_radius_dim 
+      { \dim_eval:n { \l__examzh_tikz_circled_number_total_hegiht_dim / 2 + 0.34 ex } }
+    % 绘制
+    \tikz [ baseline ]
+      {
+        \node
+          [ inner~sep = 0pt, outer~sep = 0pt ]
+          at (0, \dim_use:N \l__examzh_tikz_circled_number_total_hegiht_dim / 2 ) 
+          {
+            \hbox_set:Nn \l_tmpa_box
+              {
+                \int_compare:nNnTF {#1} > {9}
+                  { \textbf {#1} }
+                  {#1}
+              }
+            \makebox[0.35em][c]
+              { 
+                % \scalebox { \fp_use:N \l__examzh_tikz_circled_number_xscale_fp } 
+                  % [ \fp_use:N \l__examzh_tikz_circled_number_yscale_fp ] 
+                \box_scale:Nnn \l_tmpa_box
+                  { \fp_use:N \l__examzh_tikz_circled_number_xscale_fp }
+                  { \fp_use:N \l__examzh_tikz_circled_number_yscale_fp } 
+                \box_use_drop:N \l_tmpa_box
+              }
+          };
+        \draw (0, \l__examzh_tikz_circled_number_total_hegiht_dim / 2 )
+          circle ( \l__examzh_tikz_circled_number_radius_dim );
+      }
+  }
+\cs_new:Npn \__examzh_tikz_circled_number:n #1
+  {
+    \__examzh_tikz_circled_number_aux:n { \int_eval:n {#1} }
+  }
+\AddQuestionCounter \tikzcirclednumber \__examzh_tikz_circled_number:n
+\AddFillinCounter \tikzcirclednumber \__examzh_tikz_circled_number:n
+
+% 选择题括号
+% 控制括号是否右对齐
+\bool_new:N \l__examzh_paren_type_hfill_bool
+\keys_define:nn { exam-zh / paren }
+  {
+    show-answer .bool_set:N = \l__examzh_question_show_paren_answer_bool,
+    text-color        .tl_set:N = \l__examzh_paren_text_color_tl ,
+    % 是否显示选择题的括号
+    show-paren          .bool_set:N = \l__examzh_question_show_paren_bool ,
+    type .choice:,
+    type / hfill .code:n =
+      {
+        \bool_set_true:N \l__examzh_paren_type_hfill_bool
+      },
+    type / none .code:n =
+      {
+        \bool_set_false:N \l__examzh_paren_type_hfill_bool
+      },
+  }
+\keys_set:nn { exam-zh / paren }
+  {
+    show-answer = false,
+    text-color  = black,
+    show-paren  = false,
+    type        = hfill
+  }
+\keys_define:nn { exam-zh }
+  { paren .meta:nn = { exam-zh / paren } {#1} }
+\NewDocumentCommand \paren { O { } }
+  {
+    % 如果开了 show answer 就默认 show paren 
+    \bool_if:NT \l__examzh_question_show_paren_answer_bool
+      { \bool_set_true:N \l__examzh_question_show_paren_bool }
+    \bool_if:NT \l__examzh_question_show_paren_bool
+      {
+        % 使括号单独成行时居于右侧
+        % \null -> \hbox{}
+        % 𝖅𝖊𝖕𝖎𝖓𝖌 𝕷𝖊𝖊, [Mar 19, 2022 at 22:47:07]:
+          % 这个写法是为了处理这样的情况：假设括号需要 3em 宽度，但是如果题干末尾只剩下了 2em 的空白，括号就必要另起一行，并且用 \hill 把括号推到最右侧
+          % 所以中间用了两个 \hfill
+          % 至于 \nobreak 和 \allowbreak 大概是为了能够同时处理「括号不换行」和「括号换行」两种情况
+          % 这里参考 source2e 的 \@dottedtocline（目录的格式）
+        % 控制是否 hfill 到行尾
+        \bool_if:NT \l__examzh_paren_type_hfill_bool
+          {
+            \nobreak \hfill \allowbreak
+            \null \nobreak \hfill \nobreak
+          }
+        \hbox:n
+          {
+            （
+            \hbox_to_wd:nn { 3em }
+              {
+                \bool_if:NT \l__examzh_question_show_paren_answer_bool
+                  { \hfill \__examzh_paren_print_answer:n {#1} \hfill }
+              }
+            ） \kern -.4em
+          }
+      }
+  }
+% “打印出”答案内容 因为 show 被用作“显示与否”的含义了，所以此处用 print
+\cs_new:Npn \__examzh_fillin_print_answer:n #1
+  {
+    % \group_begin:
+      \tl_if_eq:NnF \l__examzh_fillin_text_color_tl { black }
+        { \exp_args:NV \color \l__examzh_fillin_text_color_tl }
+      #1
+    % \group_end:
+  }
+\cs_new:Npn \__examzh_paren_print_answer:n #1
+  {
+    \group_begin:
+      \tl_if_eq:NnF \l__examzh_paren_text_color_tl { black }
+        { \exp_args:NV \color \l__examzh_paren_text_color_tl }
+      #1
+    \group_end:
+  }
+
+
+% fillin 的下划线样式控制
+\str_new:N \l__examzh_fillin_type_str
+
+% fillin type = paren 的括号类型
+\bool_new:N \l__examzh_fillin_paren_banjiao_bool
+
+% fillin 的 width 设置断行时是自动铺满行还是严格按照长度来
+\bool_new:N \l__examzh_fillin_width_fill_bool
+
+% 不显示答案时显示的类型
+\str_new:N \l__examzh_fillin_no_answer_type_str
+
+% no-answer-type = counter 的计数器
+\int_new:N \g__examzh_fillin_no_answer_counter_int
+
+\keys_define:nn { exam-zh / fillin }
+  {
+    type .code:n = 
+      {
+        \str_set:Nn \l__examzh_fillin_type_str {#1}
+      },
+    show-answer .bool_set:N = \l__examzh_question_show_fillin_answer_bool,
+    width .dim_set:N = \l__examzh_fillin_F_width_dim,
+    width-type .choice:,
+    width-type / fill .code:n =
+      { \bool_set_true:N \l__examzh_fillin_width_fill_bool },
+    width-type / normal .code:n =
+      { \bool_set_false:N \l__examzh_fillin_width_fill_bool },
+    color .tl_set:N = \l__examzh_fillin_color_tl,
+    text-color .tl_set:N = \l__examzh_fillin_text_color_tl,
+    no-answer-type .choices:nn =
+      { blacktriangle, counter, none }
+      { \str_set:Nx \l__examzh_fillin_no_answer_type_str { \l_keys_choice_tl } },
+    no-answer-counter-index .int_gset:N = \g__examzh_fillin_no_answer_counter_int,
+    no-answer-counter-label .tl_set:N = \l__examzh_fillin_label_tl,
+    paren-type .choice:,
+    paren-type / banjiao .code:n = 
+      { \bool_set_true:N \l__examzh_fillin_paren_banjiao_bool },
+    paren-type / quanjiao .code:n = 
+      { \bool_set_false:N \l__examzh_fillin_paren_banjiao_bool },
+    depth .dim_set:N = \l__examzh_fillin_line_depth_dim
+  }
+\keys_set:nn { exam-zh / fillin }
+  {
+    type                     = line,
+    show-answer              = false,
+    width                    = 3em,
+    color                    = black,
+    text-color               = black,
+    no-answer-type           = blacktriangle,
+    no-answer-counter-index  = 1,
+    no-answer-counter-label  = \arabic*,
+    paren-type               = banjiao,
+    width-type               = normal,
+    depth                    = 0.4em
+  }
+
+\keys_define:nn { exam-zh }
+  { fillin .meta:nn = { exam-zh / fillin } {#1} }
+
+
+\dim_new:N \l__examzh_question_answer_depth_dim
+
+% 填空命令
+% \fillin \fillin[] \fillin[][] 在 show-answer = false 的情况下
+% no-answer-type = blacktriangle 就显示黑色三角形
+% no-answer-type = counter ：计数器（设计来源于完形填空）
+% no-answer-type = none ：不显示
+\NewDocumentCommand \fillin { s O{} o }
+  {
+    \group_begin:
+      \IfNoValueTF {#3}
+        {
+          \bool_if:NTF \l__examzh_question_show_fillin_answer_bool
+            {
+              % 显示答案
+              \IfBooleanTF {#1}
+                {
+                  % \fillin*[]
+                  \__examzh_fillin_breakline:n {#2}
+                }
+                {
+                  % \fillin[]
+                  \__examzh_fillin:n {#2}
+                }
+            }
+            {
+              % 不显示答案
+              \IfBooleanTF {#1}
+                { \__examzh_fillin_no_answer_breakble_typeset: }
+                { \__examzh_fillin_no_answer_unbreakble_typeset: }
+            }
+        }
+        {
+          \keys_set:nn { exam-zh / fillin } {#2}
+          \bool_if:NTF \l__examzh_question_show_fillin_answer_bool
+            {
+              % 显示答案
+              \IfBooleanTF {#1}
+                {
+                  % \fillin*[][]
+                  \__examzh_fillin_breakline:n {#3}
+                }
+                {
+                  % \fillin[][]
+                  \__examzh_fillin:n {#3}
+                }
+            }
+            {
+              % 不显示答案
+              \IfBooleanTF {#1}
+                { \__examzh_fillin_no_answer_breakble_typeset: }
+                { \__examzh_fillin_no_answer_unbreakble_typeset: }
+            }
+        }
+    \group_end:
+    \space \ignorespaces
+  }
+\msg_new:nnn { exam-zh / fillin } { no-such-noanswertype }
+  {
+    There~is~no~such~noanswertype~named~#1!\\
+    Please~read~the~manual~carefully!
+  }
+\cs_new:Npn \__examzh_fillin_no_answer_unbreakble_typeset:
+  {
+    \str_case:VnF \l__examzh_fillin_no_answer_type_str
+      {
+        { blacktriangle } { \__examzh_fillin_no_answer_typeset_blacktriangle: }
+        { counter } { \__examzh_fillin_no_answer_typeset_counter: }
+        { none } { \__examzh_fillin_output_unbreakable_F: }
+      }
+      {
+        \msg_error:nnx { exam-zh / fillin } { no-such-noanswertype }
+          { \l__examzh_fillin_no_answer_type_str }
+      }
+  }
+\cs_new:Npn \__examzh_fillin_no_answer_breakble_typeset:
+  {
+    \str_case:VnF \l__examzh_fillin_no_answer_type_str
+      {
+        { blacktriangle } { \__examzh_fillin_no_answer_typeset_blacktriangle: }
+        { counter } { \__examzh_fillin_no_answer_typeset_counter: }
+        { none } { \__examzh_fillin_output_breakable_F: }
+      }
+      {
+        \msg_error:nnx { exam-zh / fillin } { no-such-noanswertype }
+          { \l__examzh_fillin_no_answer_type_str }
+      }
+  }
+\cs_new:Npn \__examzh_fillin_no_answer_typeset_blacktriangle:
+  {
+    \__examzh_fillin_without_judge:n { \__examzh_fillin_blacktriangle: }
+  }
+\cs_new:Npn \__examzh_fillin_no_answer_typeset_counter:
+  {
+    \int_gincr:N \g__examzh_fillin_no_answer_counter_int
+    \__examzh_fillin_without_judge:n
+      { \__examzh_fillin_the_label: }
+      % { \int_eval:n { \g__examzh_fillin_no_answer_counter_int - 1 } }
+  }
+\cs_new:Npn \__examzh_fillin_without_judge:n #1
+  {
+    % \ULdepth 是 \uline 的下划线的深度
+    \dim_set:Nn \ULdepth { 0.3em }
+    % lazy 版本是指需要判断时才去获取当前用于判断的 bool 值 
+    % 而不是类似于“提前展开”，和项子越在 LaTeX3 的 b站视频里讲到的 lazy evaluation 想法相同
+    \hbox_set:Nn \l_tmpa_box { \__examzh_fillin_print_answer:n {#1} }
+    \dim_set:Nn \l__examzh_question_answer_depth_dim
+      { \box_dp:N \l_tmpa_box }
+    \__examzh_fillin_output_T:
+  }
+\cs_new:Npn \__examzh_fillin:n #1
+  {
+    % \ULdepth 是 \uline 的下划线的深度
+    \dim_set:Nn \ULdepth { 0.3em }
+    % lazy 版本是指需要判断时才去获取当前用于判断的 bool 值 
+    % 而不是类似于“提前展开”，和项子越在 LaTeX3 的 b站视频里讲到的 lazy evaluation 想法相同
+    \bool_lazy_and:nnTF
+      { \bool_if_p:N \l__examzh_question_show_fillin_answer_bool }
+      { \bool_not_p:n { \tl_if_empty_p:n {#1} } }
+      {
+        \hbox_set:Nn \l_tmpa_box { \__examzh_fillin_print_answer:n {#1} }
+        \dim_set:Nn \l__examzh_question_answer_depth_dim
+          { \box_dp:N \l_tmpa_box }
+        \__examzh_fillin_output_T:
+      }
+      { 
+        \__examzh_fillin_output_unbreakable_F:
+      }
+  }
+\cs_new:Npn \__examzh_fillin_breakline:n #1
+  {
+    \bool_lazy_and:nnTF
+      { \bool_if_p:N \l__examzh_question_show_fillin_answer_bool }
+      { \bool_not_p:n { \tl_if_empty_p:n {#1} } }
+      {
+        \tl_set:Nn \l_tmpa_tl { \__examzh_fillin_print_answer:n {#1} }
+        \__examzh_fillin_output_breakline_T:
+      }
+      { 
+        \__examzh_fillin_output_breakable_F:
+      }
+  }
+\msg_new:nnn { exam-zh } { no-fillin-type }
+  {
+    There~is~no~type~of~\fillin~named~#1!\\
+    Please~read~the~manual~for~more~details.
+  }
+\cs_new:Npn \__examzh_fillin_output_T:
+  {
+    \str_case:VnF \l__examzh_fillin_type_str
+      {
+        { line } { \__examzh_fillin_uline_T: }
+        { paren } { \__examzh_fillin_paren_T: }
+        { circle } { \__examzh_fillin_circle_T: }
+        { blank } { \__examzh_fillin_blank_T: }
+        { rectangle } { \__examzh_fillin_rectangle_T: }
+      }
+      {
+        \msg_error:nnx { exam-zh } { no-fillin-type }
+          { \l__examzh_fillin_type_str }
+      }
+  }
+\cs_new:Npn \__examzh_fillin_output_breakline_T:
+  {
+    \str_case:VnF \l__examzh_fillin_type_str
+      {
+        { line } { \__examzh_fillin_uline_breakline_T: }
+        { paren } { \__examzh_fillin_paren_breakline_T: }
+        { blank } { \__examzh_fillin_blank_breakline_T: }
+      }
+      {
+        \msg_error:nnx { exam-zh } { no-breakable-fillin-type }
+          { \l__examzh_fillin_type_str }
+      }
+  }
+\msg_new:nnn { exam-zh } { no-breakable-fillin-type }
+  {
+    The~type~:~#1~ cannot~be~used~in~breakable~fillin~cmd.
+  }
+\cs_new:Npn \__examzh_fillin_output_breakable_F:
+  {
+    \str_case:VnF \l__examzh_fillin_type_str
+      {
+        { line } { \__examzh_fillin_uline_breakable_F: }
+        { paren } { \__examzh_fillin_paren_breakable_F: }
+        { circle } { \__examzh_fillin_circle_F: }
+        { blank } { \__examzh_fillin_blank_breakable_F: }
+        { rectangle } { \__examzh_fillin_rectangle_F: }
+      }
+      {
+        \msg_error:nnx { exam-zh } { no-fillin-type }
+          { \l__examzh_fillin_type_str }
+      }
+  }
+\cs_new:Npn \__examzh_fillin_output_unbreakable_F:
+  {
+    \str_case:VnF \l__examzh_fillin_type_str
+      {
+        { line } { \__examzh_fillin_uline_unbreakable_F: }
+        { paren } { \__examzh_fillin_paren_unbreakable_F: }
+        { circle } { \__examzh_fillin_circle_F: }
+        { blank } { \__examzh_fillin_blank_unbreakable_F: }
+        { rectangle } { \__examzh_fillin_rectangle_F: }
+      }
+      {
+        \msg_error:nnx { exam-zh } { no-fillin-type }
+          { \l__examzh_fillin_type_str }
+      }
+  }
+\cs_new:Npn \__examzh_fillin_uline_T:
+  {
+    % \uline
+    \CJKunderline*
+      [ depth = \l__examzh_fillin_line_depth_dim ]
+      {
+        \hspace* { 0.5em plus .5em minus .5em }
+        \dim_compare:nNnTF { \l__examzh_question_answer_depth_dim } > { 0.2em }
+          {
+            \dim_sub:Nn \l__examzh_question_answer_depth_dim { 0.2em }
+            \raisebox { \l__examzh_question_answer_depth_dim }
+              { \box_use_drop:N \l_tmpa_box }
+          }
+          { \box_use_drop:N \l_tmpa_box }
+        \hspace* { 0.5em plus .5em minus .5em }
+      }
+  }
+\cs_new:Npn \__examzh_fillin_uline_breakable_F:
+  {
+    % \uline { \hspace* { \l__examzh_fillin_F_width_dim } } 
+    \__examzh_fillin_breakable_hspace:NN \CJKunderline \allowbreak
+  }
+\cs_new:Npn \__examzh_fillin_uline_unbreakable_F:
+  {
+    \unskip
+    \hspace* { 0.5em plus .5em minus .5em }
+    \uline { \hspace* { \l__examzh_fillin_F_width_dim } }
+    \ignorespaces
+  }
+% \cs_new:Nn \__examzh_fillin_uline:
+  % {
+    % \bgroup
+    %   \color{ \l__examzh_fillin_text_color_tl } 
+    %   \markoverwith{\textcolor{black}{\rule[-0.7ex]{2pt}{0.4pt}}}
+    %   \ULon
+% xeCJKfntef.sty
+% xeCJK: 修复下划线中数学公式的错误处理
+% https://github.com/CTeX-org/ctex-kit/commit/ad44c6674bb377653544349f23b7c629bc9e4677
+\RenewDocumentCommand \CJKunderline { s t- s o }
+  {
+    \xeCJK_ulem_group_begin:
+      \xeCJK_fntef_boot:nnNNNn { underline } { uline } #1#2#3 {#4}
+      \xeCJK_fntef_initial:nnn
+        { \l__xeCJK_uline_depth_tl }
+        { \l__xeCJK_uline_sep_tl }
+        {
+          \l__xeCJK_uline_format_tl
+          \tex_vrule:D
+            height \dim_eval:n { \l__xeCJK_uline_thickness_tl }
+            depth \c_zero_dim
+            width .2em
+        }
+      % 给 CJKunderline 加了颜色控制
+      \color { \l__examzh_fillin_text_color_tl }
+      \xeCJK_ulem_on:n
+  }
+  % }
+\cs_new:Npn \__examzh_fillin_uline_breakline_T:
+  {
+    \CJKunderline*
+      [ depth = \l__examzh_fillin_line_depth_dim ]
+    % \uline
+    % \__examzh_fillin_uline:
+      {
+        \hspace* { 0.5em plus .5em minus .5em }
+        % \color{ \l__examzh_fillin_text_color_tl } 
+        \l_tmpa_tl
+        % 答案很长时，不能完全显示，答案很长时，不能完全显示
+        \hspace* { 0.5em plus .5em minus .5em }
+      }
+  }
+\cs_new:Npn \__examzh_fillin_paren_T:
+  {
+    \unskip
+    \bool_if:NTF \l__examzh_fillin_paren_banjiao_bool
+      {
+        (
+          \hspace* { 0.5em plus .5em minus .5em }
+          \group_begin:
+            \box_use_drop:N \l_tmpa_box
+          \group_end:
+          \hspace* { 0.5em plus .5em minus .5em }
+        )
+      }
+      {
+        （
+          \hspace* { 0.5em plus .5em minus .5em }
+          \group_begin:
+            \box_use_drop:N \l_tmpa_box
+          \group_end:
+          \hspace* { 0.5em plus .5em minus .5em }
+        ）
+      }
+    \ignorespaces
+  }
+\cs_new:Npn \__examzh_fillin_paren_breakline_T:
+  {
+    \unskip
+    \bool_if:NTF \l__examzh_fillin_paren_banjiao_bool
+      {
+        (
+          \hspace* { 0.5em plus .5em minus .5em }
+          \group_begin:
+            \l_tmpa_tl
+          \group_end:
+          \hspace* { 0.5em plus .5em minus .5em }
+        )
+      }
+      {
+        （
+          \hspace* { 0.5em plus .5em minus .5em }
+          \group_begin:
+            \l_tmpa_tl
+          \group_end:
+          \hspace* { 0.5em plus .5em minus .5em }
+        ）
+      }
+    \ignorespaces
+  }
+\box_new:N \c__examzh_banjiao_right_brace_box
+\box_new:N \c__examzh_quanjiao_right_brace_box
+\hbox_set:Nn \c__examzh_banjiao_right_brace_box { ) }
+\hbox_set:Nn \c__examzh_quanjiao_right_brace_box { ） }
+\dim_const:Nn \c__examzh_banjiao_right_brace_width_dim  % (
+  { \box_wd:N \c__examzh_banjiao_right_brace_box }
+\dim_const:Nn \c__examzh_quanjiao_right_brace_width_dim  % (
+  { \box_wd:N \c__examzh_quanjiao_right_brace_box }
+\cs_new:Npn \__examzh_fillin_paren_breakable_F:
+  {
+    \unskip
+    \hspace* { 0.5em plus .5em minus .5em }
+    \bool_if:NTF \l__examzh_fillin_paren_banjiao_bool
+      {
+        ( \__examzh_fillin_breakable_hspace:NN \use:n \nobreak \kern-\c__examzh_banjiao_right_brace_width_dim ) \allowbreak
+      }
+      {
+        （ \__examzh_fillin_breakable_hspace:NN \use:n \nobreak \kern-\c__examzh_quanjiao_right_brace_width_dim ）\allowbreak
+      }
+    \ignorespaces
+  }
+\cs_new:Npn \__examzh_fillin_paren_unbreakable_F:
+  {
+    \unskip
+    \hspace* { 0.5em plus .5em minus .5em }
+    \bool_if:NTF \l__examzh_fillin_paren_banjiao_bool
+      {
+        ( \hspace* { \l__examzh_fillin_F_width_dim } )
+      }
+      {
+        （ \hspace* { \l__examzh_fillin_F_width_dim } ）
+      }
+    \ignorespaces
+  }
+\cs_new:Npn \__examzh_fillin_blank_T:
+  {
+    \unskip
+    \hspace* { 0.5em plus .5em minus .5em }
+    \group_begin:
+      \box_use_drop:N \l_tmpa_box
+    \group_end: 
+    \ignorespaces
+  }
+\cs_new:Npn \__examzh_fillin_blank_breakline_T:
+  {
+    \unskip
+    \hspace* { 0.5em plus .5em minus .5em }
+    \group_begin:
+      \l_tmpa_tl 
+    \group_end:
+    \ignorespaces
+  }
+\cs_new:Npn \__examzh_fillin_blank_breakble_F:
+  {
+    % \hspace* { \l__examzh_fillin_F_width_dim }
+    \__examzh_fillin_breakable_hspace:NN \use:n \allowbreak
+  }
+\cs_new:Npn \__examzh_fillin_blank_unbreakble_F:
+  {
+    \hspace* { \l__examzh_fillin_F_width_dim }
+    % \__examzh_fillin_breakable_hspace:NN \use:n \allowbreak
+  }
+\tikzset
+  {
+    fillin-circle/.style = 
+      {
+        rounded~rectangle~west~arc = convex,
+        draw, rounded~rectangle,
+        color = \l__examzh_fillin_color_tl, text = \l__examzh_fillin_text_color_tl
+      }
+  }
+\cs_new:Npn \__examzh_fillin_circle_T:
+  {
+    \hspace* { .5em minus .5em }
+    \tikz[baseline=-3pt]
+      {
+        \node [fillin-circle] at (0,0) 
+          { \box_use_drop:N \l_tmpa_box };
+      }
+    \hspace* { .5em minus .5em }
+  }
+\cs_new:Npn \__examzh_fillin_circle_F:
+  {
+    \hspace* { 0.5em plus .5em minus .5em }
+    \tikz[baseline=-3pt]
+      {
+        \node [fillin-circle] at (0,0) 
+          { \phantom{t} };
+      }
+    \hspace* { 0.5em plus .5em minus .5em }
+  }
+\cs_new:Npn \__examzh_fillin_rectangle_T:
+  {
+    \hspace* { .5em minus .5em }
+    \begin{tikzpicture}[baseline = -3pt]
+      \node[draw, color = \l__examzh_fillin_color_tl, text = \l__examzh_fillin_text_color_tl] 
+        { \box_use_drop:N \l_tmpa_box };
+    \end{tikzpicture}
+    \hspace* { .5em minus .5em }
+  }
+\cs_new:Npn \__examzh_fillin_rectangle_F:
+  {
+    \hspace* { 0.5em plus .5em minus .5em }
+    \begin{tikzpicture}[baseline = -3pt]
+      \node[draw, color = \l__examzh_fillin_color_tl, text = \l__examzh_fillin_text_color_tl] 
+        { \phantom{a} };
+    \end{tikzpicture}
+    \hspace* { 0.5em plus .5em minus .5em }
+  }
+
+% 通过循环来达到自动断行的空白下划线
+\cs_generate_variant:Nn \dim_sub:Nn { NV }
+\cs_generate_variant:Nn \dim_add:Nn { NV }
+\cs_generate_variant:Nn \dim_set:Nn { NV, Nx }
+% 用来检测是否处于 list 环境中
+\bool_new:N \l__if_list_bool
+\int_new:N \l__list_depth_int
+\cs_generate_variant:Nn \dim_set:Nn { Nx }
+\AddToHook { cmd / list / after }
+  {
+    \bool_set_true:N \l__if_list_bool
+    \int_incr:N \l__list_depth_int
+    \dim_if_exist:cF { l__list_leftmargin_ \int_to_roman:n { \l__list_depth_int } _dim }
+      {
+        \dim_new:c { l__list_leftmargin_ \int_to_roman:n { \l__list_depth_int } _dim }
+      }
+    % 用来储存相应层级的 \leftmargin 值
+    \dim_set_eq:cN { l__list_leftmargin_ \int_to_roman:n { \l__list_depth_int } _dim } \leftmargin
+  }
+\AddToHook { cmd / endlist  / before } 
+  { \int_zero:N \l__list_depth_int }
+
+\cs_new:Npn \__examzh_fillin_breakable_hspace:NN #1#2
+  % #1: CJKunderline / use:n
+  % #2: \allowbreak
+  {
+    \dim_set_eq:NN \l_tmpb_dim \linegoal
+    % 比较 \l__examzh_fillin_F_width_dim 和 linegoal
+    \dim_compare:nNnTF { \l__examzh_fillin_F_width_dim } > { \l_tmpb_dim }
+      {
+        % 超过 linegoal 就排一段 linegoal，然后 \l__examzh_fillin_F_width_dim 减去 linegoal 长度
+        % \dim_set:NV \l_tmpa_dim \linegoal
+        \dim_set:NV \l_tmpa_dim \l_tmpb_dim
+        % 是否处于 list 环境中
+        \bool_if:NTF \l__if_list_bool
+          {
+            % 加上 1 到 当前层级的 leftmargin 才能让 list 中的 linegoal 正常
+            \int_step_inline:nn { \l__list_depth_int }
+              {
+                \dim_add:Nn \l_tmpa_dim { \dim_use:c { l__list_leftmargin_ \int_to_roman:n { ##1 } _dim } }
+              }
+            #1 { \hspace { \l_tmpa_dim } }
+          }
+          {
+            % 正文中
+            #1 { \hspace { \l_tmpb_dim } }
+          }
+        \dim_sub:NV \l__examzh_fillin_F_width_dim \l_tmpa_dim
+        \dim_while_do:nNnn { \l__examzh_fillin_F_width_dim } > { \linewidth }
+          {
+            % 循环：\l__examzh_fillin_F_width_dim 和 \linewidth 比较，大的话就排一个，然后减掉 linewidth
+            \\ #1 { \hspace* { \linewidth } }
+            \dim_sub:Nn \l__examzh_fillin_F_width_dim { \linewidth }
+          }
+        % \\ #1 { \hspace* { \linewidth } }
+        \dim_compare:nNnT { \l__examzh_fillin_F_width_dim } < { \linewidth }
+          { 
+            % 最后一行是否 fill
+            \bool_if:NTF \l__examzh_fillin_width_fill_bool
+              {
+                \\ #1 { \hspace* { \linewidth } } 
+              }
+              {
+                \\ #1 { \hspace* { \l__examzh_fillin_F_width_dim } } 
+              }
+          }
+      }
+      {
+        #1 { \hspace* { \l__examzh_fillin_F_width_dim } }
+      }
+    #2
+  }
+
+
+\dim_new:N \l__examzh_blacktriangle_length_dim
+\dim_set:Nn \l__examzh_blacktriangle_length_dim { .7em }
+\cs_new:Npn \__examzh_fillin_blacktriangle:
+  {
+    \tikz[rounded~corners=0.5pt,baseline=0pt]
+      {
+        \fill[] (0,0) -- ++(60\c_colon_str \l__examzh_blacktriangle_length_dim) -- ++(-60\c_colon_str \l__examzh_blacktriangle_length_dim) -- cycle ;
+      }
+  }
+
+\str_new:N \l__examzh_solution_blank_type_str
+\keys_define:nn { exam-zh / solution }
+  {
+    show-solution .bool_set:N = \l__examzh_solution_show_bool,
+    show-answer .bool_set:N = \l__examzh_solution_show_bool,
+    show-qed      .bool_set:N = \l__examzh_solution_show_qed_bool,
+    qedsymbol     .tl_set:N = \l__examzh_solution_qedsymbol_tl,
+    label-content  .tl_set:N   = \l__examzh_solution_label_content_tl,
+    label-punct    .tl_set:N   = \l__examzh_solution_label_punct_tl,
+    score-showleader .bool_set:N = \l__examzh_score_show_leader_bool,
+    score-pre-content .tl_set:N = \l__examzh_score_pre_content_tl,
+    score-post-content .tl_set:N = \l__examzh_score_post_content_tl,
+    score-format .tl_set:N = \l__examzh_score_format_tl,
+    text-color .tl_set:N = \l__examzh_solution_text_color_tl,
+    blank-type .choices:nn =
+      { none, manual, hide }
+      {
+        \str_set:Nx \l__examzh_solution_blank_type_str { \l_keys_choice_tl }
+      },
+    blank-vsep .skip_set:N = \l__examzh_solution_blank_vsep_skip,
+    top-sep    .skip_set:N = \l__examzh_solution_top_sep_skip,
+    bottom-sep .skip_set:N = \l__examzh_solution_bottom_sep_skip,
+    parbreak .bool_set:N = \l__examzh_solution_par_break_bool,
+  }
+\keys_set:nn { exam-zh / solution }
+  {
+    show-solution      = false,
+    show-qed           = true,
+    qedsymbol          = $\square$,
+    label-content      = {解答},
+    label-punct        = {},
+    score-showleader   = true,
+    score-pre-content  = {},
+    score-post-content = 分,
+    score-format       = \color{red},
+    text-color         = black,
+    blank-type         = none,
+    blank-vsep         = 12ex plus 1ex minus 1ex,
+    top-sep            = .25em plus .25em minus .1em,
+    bottom-sep         = 0pt,
+    parbreak           = false
+  }
+\keys_define:nn { exam-zh }
+  { solution .meta:nn = { exam-zh / solution } {#1} }
+% 解答题环境
+\NewDocumentEnvironment { solution } { O{ } +b }
+  {
+    % \addvspace { \l__examzh_solution_top_sep_skip }
+    \vspace { \l__examzh_solution_top_sep_skip }
+    \keys_set:nn { exam-zh / solution } {#1}
+    % 放在这是使得 \examsetup 设置 qedsymbol 可以放在正文区
+    \cs_set_eq:NN \qedsymbol \l__examzh_solution_qedsymbol_tl
+    \bool_if:NTF \l__examzh_solution_show_bool
+      {
+        \__examzh_solution_print_answer:n {#2}
+      }
+      {
+        \str_case:VnF \l__examzh_solution_blank_type_str
+          {
+            { none } { }
+            { manual } { \addvspace { \l__examzh_solution_blank_vsep_skip } }
+            { hide } { \__examzh_solution_simply_hide_solution:n {#2} }
+          }
+          {}
+      }
+    \par
+    % \mode_leave_vertical:
+    % \addvspace { \l__examzh_solution_bottom_sep_skip }
+    \vspace { \l__examzh_solution_bottom_sep_skip }
+  }
+  {}
+\cs_new:Npn \__examzh_solution_simply_hide_solution:n #1
+  {
+    \begin{tcolorbox}
+      [
+        invisible,
+        frame~hidden,
+        breakable,
+        opacityback  = 0,
+        opacityframe = 0,
+        size  = minimal,
+        width = \linewidth
+      ]
+      #1
+    \end{tcolorbox}
+  }
+\cs_new:Npn \__examzh_solution_print_answer:n #1
+  {
+    \par
+    \pushQED { \qed }
+    % \normalfont \topsep6 \p@ \@plus6 \p@ \relax
+    % \trivlist
+    % \item \relax
+    \group_begin:
+      % \hspace* { 2\ccwd }
+      \bfseries  \l__examzh_solution_label_content_tl  
+      \@addpunct { \l__examzh_solution_label_punct_tl }
+    \group_end:
+    \hspace{0.5em} 
+    % \ignorespaces
+    % 是否要新起一段开始
+    \bool_if:NT \l__examzh_solution_par_break_bool { \par }
+    % \group_begin:
+    \begingroup
+      \color { \l__examzh_solution_text_color_tl } #1
+    \endgroup
+    % \group_end:
+    \bool_if:NT \l__examzh_solution_show_qed_bool
+      { \popQED }
+    % \endtrivlist 
+    % \@endpefalse
+  }
+
+% https://github.com/CTeX-org/forum/issues/256#issuecomment-1172319787
+\zref@require@unique
+
+\NewDocumentCommand { \score } { O{} m }
+  {
+    \group_begin:
+      \keys_set:nn { exam / question } {#1}
+      \mode_if_math:TF
+        { 
+          \__examzh_score_math_version:n { #2 }
+        }
+        { 
+          \__examzh_score_text_version:n { #2 }
+        }
+    \group_end:
+  }
+\cs_new:Npn \__examzh_score_math_version:n #1
+  {
+    \bool_if:NTF \l__examzh_score_show_leader_bool
+      {
+        \__examzh_math_cdotfill:n 
+          { 
+            \group_begin:
+              \l__examzh_score_format_tl
+              \l__examzh_score_pre_content_tl
+              #1
+              \l__examzh_score_post_content_tl 
+            \group_end:
+          }
+      }
+      {
+        \__examzh_math_nodotfill:n
+          {
+            { 
+              \group_begin:
+                \l__examzh_score_format_tl
+                \l__examzh_score_pre_content_tl
+                #1
+                \l__examzh_score_post_content_tl 
+              \group_end:
+            }
+          }
+      }
+  }
+\cs_new:Npn \__examzh_score_text_version:n #1
+  {
+    \bool_if:NTF \l__examzh_score_show_leader_bool
+      {
+        \group_begin:
+          \__examzh_cdotfill:
+          \l__examzh_score_format_tl
+          \l__examzh_score_pre_content_tl #1 \l__examzh_score_post_content_tl 
+        \group_end:
+      }
+      {
+        \hfill
+        \group_begin:
+          \l__examzh_score_format_tl
+          \l__examzh_score_pre_content_tl #1 \l__examzh_score_post_content_tl
+        \group_end:
+      }
+    \par \noindent \ignorespaces
+  }
+% 仿照 latex.ltx, line 651 的 \dotfill
+\cs_new:Npn \__examzh_cdotfill:
+  {
+    \mode_leave_vertical:
+    \cleaders
+      \hbox_to_wd:nn { .44em } { \hss $\cdot$ \hss }
+      \hfill \kern\z@
+  }
+\cs_new_protected:Npn \__examzh_math_nodotfill:n #1
+  {
+    \stepcounter { zref@unique }
+    \hbox_overlap_right:n
+      {
+        \zsaveposx { \thezref@unique L }
+        \zref@ifrefundefined { \thezref@unique R }
+          { }
+          {
+            \skip_horizontal:n
+              {
+                  \zposx { \thezref@unique R } sp
+                - \zposx { \thezref@unique L } sp
+              }
+          }
+      }
+    \tag * { \zsaveposx { \thezref@unique R } #1 }
+  }
+\cs_new_protected:Npn \__examzh_math_cdotfill:n #1
+  {
+    \stepcounter { zref@unique }
+    \hbox_overlap_right:n
+      {
+        \zsaveposx { \thezref@unique L }
+        \zref@ifrefundefined { \thezref@unique R }
+          { }
+          {
+            \cleaders
+              \hbox_to_wd:nn { .44em } { \hss $\cdot$ \hss }
+              \skip_horizontal:n
+                {
+                    \zposx { \thezref@unique R } sp
+                  - \zposx { \thezref@unique L } sp
+                }
+          }
+      }
+    \tag * { \zsaveposx { \thezref@unique R } #1 }
+  }
+
+\endinput
