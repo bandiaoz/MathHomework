@@ -32,12 +32,8 @@
     numberstyle     =   \zihao{-5}\ttfamily,
     keywordstyle    =   \color{blue}, % 彩色
     keywordstyle    =   [2] \color{teal},% 彩色
-    % keywordstyle    =   \color{black}, % 黑白
-    % keywordstyle    =   [2] \color{black},% 黑白
     stringstyle     =   \color{magenta}, % 彩色
-    stringstyle     =   \color{black}, % 黑白
     commentstyle    =   \color{red}\ttfamily,% 彩色
-    % commentstyle    =   \color{black}\ttfamily, % 黑白
     breaklines      =   true,   % 自动换行，建议不要写太长的行
     columns         =   fixed,  % 如果不加这一句，字间距就不固定，很丑，必须加
     basewidth       =   0.5em,
@@ -60,6 +56,9 @@
             \item $A = \bar{A}$，即：如果 $\left\{x_k\right\}_{k \ge 1} \subset A,\underset{k \to \inf}{\lim}x_k = x$，则 $x \in A$
         \end{itemize}
         \item  紧集：$A$ 是一个有界闭集，即 $A$ 是闭集并且存在开球 $B(x, r)$ 使得 $A \subset B(x, r)$
+        \item 空集是开集，是闭集，是紧集
+        \item $\mathbb{R}^n$ 是开集，是闭集，不是紧集
+        \item $x, y \ge 0$ 不是开集，是闭集，不是紧集
     \end{itemize}
 \end{remark}
 
@@ -76,7 +75,7 @@
 \end{remark}
 
 \begin{remark}
-	$\norm{A}^2 = \tr(AA^t)$
+	$\norm{A}^2 = \sum\limits_{i = 1}^n\sum\limits_{j = 1}^m a_{ij}^2 = \tr(AA^t)$
 \end{remark}
 
 \begin{remark}
@@ -145,7 +144,7 @@
 \end{remark}
 
 \begin{remark}
-	$A^TA$ 的零空间等于 $A$ 的零空间：$\mathcal{N}(A^TA) = \mathcal{N}(A)$。
+	$\mathcal{N}(A^TA) = \mathcal{N}(A)$
 	\begin{itemize}
 		\item $x\in\mathcal{N}(A) \Leftrightarrow Ax=0 \Rightarrow A^TAx=0 \Rightarrow x \in \mathcal{N}(A^TA)$
 		\item $x \in \mathcal{N}(A^TA)\Leftrightarrow A^TAx = 0 \Rightarrow Ax \in \mathcal{N}(A^T) \Rightarrow Ax \in \mathcal{N}(A^T)\cap C(A)=\left\{0\right\} \Rightarrow x\in \mathcal{N}(A)$
@@ -348,6 +347,7 @@
         \item 相关系数：$\rho_{X, Y} = \frac{cov(X, Y)}{\sqrt{D(X)}\sqrt{D(Y)}} \in \left[-1, 1\right]$
         \item 独立 $\Rightarrow E(XY) = E(X)E(Y) \Rightarrow cov(X, Y) = 0 \Rightarrow X, Y$ 不相关 
         \item 变量 $X,Y$ 正交 $\Leftrightarrow E(XY) = 0$
+        \item 变量 $X,Y$ 正交的条件下，不相关 $\Longleftrightarrow E(X) = 0 \qor E(Y) = 0$
     \end{itemize}
 \end{remark}
 
@@ -708,6 +708,7 @@
     \begin{itemize}
         \item 信息散度又称为相对熵、鉴别信息、方向散度、KL距离等，它是两个概率分布函数 $p$ 和 $q$ 之间“差别”的一种度量。
         \item 不满足对称性，不满足三角不等式，所以叫散度。\[D(p//q) \neq D(q//p), \quad D(p//q) \nleq D(r//p) + D(q//r)\]
+        \item KL散度是用概率分布q 来近似p 时所造成的信息损失量。
     \end{itemize}
 \end{remark}
 

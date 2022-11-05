@@ -86,10 +86,10 @@
 		L(x, y, z, \mu) = 3x^2 + 3y^2 - z^2 + xy + xz + \mu(x + y + z - 1)\\
 		\partial_xL = \partial_yL = \partial_zL = 0\\
 		\begin{cases}
-			6x + y + z + \mu = 0\\
-			6y + x + \mu = 0\\
-			-2z + x + \mu = 0\\
-			x + y + z - 1 = 0
+			x + y + z - 1 &= 0\\
+			6x + y + z + \mu &= 0\\
+			6y + x + \mu &= 0\\
+			-2z + x + \mu &= 0
 		\end{cases}
 	\end{gather*}
 	
@@ -159,7 +159,7 @@
 	\begin{align*}
 		u &= (2, 1)^t\\
 		v &= (1, 2)^t\\
-		v^\prime &= \frac{2uu^tv}{\|u\|^2} - v\\
+		u^\prime &= \frac{2vv^tu}{\|v\|^2} - u\\
 		&=\left(-\frac{2}{5}, \frac{11}{5}\right)^t
 	\end{align*}
 \end{problem}
