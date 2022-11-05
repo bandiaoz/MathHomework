@@ -3,14 +3,12 @@
 
 \newcommand\Title{CVX Remark}
 \renewcommand\due{due: 11 weeks}
-\newcommand\tr{\operatorname{tr}} % 迹
 \newcommand\dom{\operatorname{dom}} % 定义域
 \newcommand\diag{\operatorname{diag}} % 对角矩阵
 \newcommand\epi{\operatorname{epi}} % 上镜图
 \newcommand\minimize{\operatorname{minimize}} % 最小化
 \newcommand\maximize{\operatorname{maximize}} % 最大化
 \newcommand\subject{\operatorname{subject\ to}}
-\newcommand\rank{\operatorname{rank}} % 秩
 
 
 
@@ -789,6 +787,56 @@
             \item Lagrange function:\[L(u, \mu)=\sum_{i=1}^{N} \sum_{k=1}^{M} u_{i, k}^{\alpha}\left\|x_{i}-y_{k}\right\|^{2}+\sum_{i=1}^{N} \mu_{i}\left(\sum_{k=1}^{M} u_{i, k}-1\right)\]
             \item $u$ is optimal iff there exists $\mu \in \mathbb{R}^N$ s.t. $(u, \mu)$ satisfy\[\sum_{k=1}^{M} u_{i, k}=1, \quad \alpha u_{i, k}^{\alpha-1}\left\|x_{i}-y_{k}\right\|^{2}+\mu_{i}=0\]
             \item for optimal $u, u_{i, k} = \frac{\left\|x_{i}-y_{k}\right\|^{-\frac{2}{\alpha - 1}}}{\sum_{j=1}^{M}\left\|x_{i}-y_{j}\right\|^{-\frac{2}{\alpha-1}}}$
+        \end{itemize}
+    \end{itemize}
+\end{remark}
+
+\subsection{LLE}
+\begin{remark}
+    For given data $x_1, \dots, x_N \in \mathbb{R}^n$, two-step optimization
+    \begin{itemize}
+        \item assign neighbors to each data point $x_i$ (e.g., by using the $K$ nearest neighbors)
+        \item compute the weights $w_{i, j}$ that best linearly reconstruct $x_i$ from its neighbors\begin{itemize}
+            \item minimize $\sum_{i = 1}^N \|x_i - \sum_{j = 1}^Nw_{i, j}x_j\|$ subject to $\sum_{j = 1}^Nw_{i, j} = 1$
+        \end{itemize}
+        \item compute the low-dimensional vectors $y_i \in \mathbb{R}^m$ best reconstructed by $w_{i, j}$\begin{itemize}
+            \item minimize $\sum_{i = 1}^N \|y_i - \sum_{j = 1}^Nw_{i, j}y_j\|$ subject to $\operatorname{Cov}(y, y) = I$
+        \end{itemize}
+    \end{itemize}
+\end{remark}
+
+\begin{remark}
+    $x_1, \dots, x_N, x \in \mathbb{R}^n$ are given\[\begin{cases}
+        \minimize \quad &\|x - \sum_{i = 1}^Nw_ix_i\|^2\\
+        \subject\quad &\sum_{i = 1}^Nw_i = 1
+    \end{cases}\]
+    \begin{itemize}
+        \item as $\sum_{i = 1}^N = 1, x - \sum_{i = 1}^N w_ix_i = \sum_{i = 1}^N(x - x_i)$, then we have \[\left\|x-\sum_{i=1}^{N} w_{i} x_{i}\right\|^{2}=w^{t} Q w, \quad Q_{i, j}=\left(x-x_{i}\right)^{t}\left(x-x_{j}\right)\]
+        \item Lagrange function: $L(w, \mu) = \frac{1}{2}w^tQw + \mu(\sum_{i = 1}^N w_i - 1)$
+        \item $w$ is optimal iff there exists $\mu \in \mathbb{R}$ s.t. $(w, \mu)$ satisfy\begin{itemize}
+            \item $\sum_{i = 1}^N w_i = 1$
+            \item $\partial_{w} L(w, \mu)=0 \Longleftrightarrow Q w+\mu \mathbf{1}=0 \Longleftrightarrow w=-\mu Q^{-1} \mathbf{1}$
+        \end{itemize}
+        \item $w$ is optimal iff $w = \frac{Q^{-1}\mathbf{1}}{\mathbf{1}^tQ^{-1}\mathbf{1}}$
+    \end{itemize}
+\end{remark}
+
+\begin{remark}
+    $w_{i, j} \in \mathbb{R}$ are given\[\begin{cases}
+        \minimize \quad &\sum_{i = 1}^N\|y_i - \sum_{j = 1}^Nw_{i, j}y_j\|^2\\
+        \subject \quad &\sum_{i = 1}^N y_iy_i^t = NI
+    \end{cases}\]
+    \begin{itemize}
+        \item $\sum_{i=1}^{N}\left\|y_{i}-\sum_{j=1}^{N} w_{i, j} y_{j}\right\|^{2}=\|Y-W Y\|^{2}=\operatorname{tr}\left(Y^{t} M Y\right)$\begin{itemize}
+            \item $Y=\left(y_{1}, \ldots, y_{N}\right)^{t}, W=\left(w_{i, j}\right), M=(I-W)^{t}(I-W)$
+        \end{itemize}
+        \item Lagrange function: $L(Y, \mu) = \tr(T^tMY) + \tr(\mu(Y^Y - NI))$
+        \item $Y$ is optimal $\Longrightarrow$ there exists $\mu$ s.t. $Y, \mu$ satisfy \[\sum_{i=1}^{N} y_{i} y_{i}^{t}=N I, \quad 2 M Y+Y\left(\mu+\mu^{t}\right)=0\]\begin{itemize}
+            \item $-\frac{\mu+\mu^{t}}{2}=P Q P^{t}, 2 M Y+Y\left(\mu+\mu^{t}\right)=0 \Longleftrightarrow M(Y P)=(Y P) Q$
+            \item $Y P \triangleq \tilde{Y} \Longrightarrow \tr\left(Y^{t} M Y\right)=\tr\left(\tilde{Y}^{t} M \tilde{Y}\right)=\tr\left(\tilde{Y}^{t} \widetilde{Y} Q\right)=N \tr(Q)$
+        \end{itemize}
+        \item if $Y$ is composed of the normalized eigenvectors corresponding to the smallest $m$ eigenvalues of $M$, it is optimal\begin{itemize}
+            \item practically, the eigenvector $\mathbf{1} = (1, \dots, 1)^t$ is discarded.
         \end{itemize}
     \end{itemize}
 \end{remark}
