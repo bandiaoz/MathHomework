@@ -119,10 +119,10 @@
     \begin{itemize}
         \item First-order condition: \textbf{differentiable} $f$ with \textbf{convex domain} is convex iff $\forall x, y \in \dom(f)$\[f(y) \geq f(x)+\nabla f(x)^{t}(y-x)\]
         \begin{itemize}
-            \item \proof\text{}\begin{itemize}
+            \item \begin{proof}\text{}\begin{itemize}
                 \item $f$ is convex $\Longleftrightarrow \frac{f(z)-f(x)}{z-x} \leq \frac{f(y)-f(z)}{y-z} \Longrightarrow $ with $z \to x,\frac{f(y)-f(x)}{y-x} \ge f^\prime(x) \Longrightarrow f(y) \ge f(x) + f^\prime(x)(y - x)$
                 \item $f(y) \ge f(x) + f^\prime(x)(y - x) \Longrightarrow \frac{f(y) - f(z)}{y - z} \ge f^\prime(z) \ge \frac{f(x) - f(z)}{x - z} \Longrightarrow $ by $z = \theta x + (1 - \theta)y,f$ is convex
-            \end{itemize}
+            \end{itemize}\end{proof}
             \item $f(x^*) = 0 \Longleftrightarrow x^*$ is global minimum of $f$. 
             \item $f$ is strictly convex $\Longleftrightarrow \forall x \neq y\in \dom(f), f(y) > f(x) + \nabla f(x)^t(y - x)$
         \end{itemize}
@@ -177,7 +177,7 @@
     \end{cases}\]
     \begin{itemize}
         \item objective function $f$ is convex
-        \item inequality constraints $f_1., \dots, f_m$ are convex
+        \item inequality constraints $f_1, \dots, f_m$ are convex
         \item equality constraints are affine: $A \in \mathbb{R}^{p \times n}, b \in \mathbb{R}^p$
         \item the feasible set $X$ of COP is convex \begin{itemize}
             \item $X = \dom(f) \cap (\cap_{i = 1}^m X_i) \cap \text{hyperplanes}$ \begin{itemize}
@@ -187,7 +187,7 @@
         \end{itemize}
         \item any local minimum of a COP is globally optimal.\begin{itemize}
             \item $x^*$ is a local minimum: a solution of the COP in $B(x^*, r) \cap X$
-            \item $\forall y \in X$, take $\theta \to 0$, satisfy $z = \theta x^* + (1 - \theta)y \in B(x^*, r)$, by convexity, $\theta f(x^*) + (1 - \theta)f(y) \ge f(z) \ge f(x^*)$, thus $f(y) \ge f(x^*)$.
+            \item $\forall y \in X$, take $\theta \to 1$, satisfy $z = \theta x^* + (1 - \theta)y \in B(x^*, r)$, by convexity, $\theta f(x^*) + (1 - \theta)f(y) \ge f(z) \ge f(x^*)$, thus $f(y) \ge f(x^*)$.
         \end{itemize}
         \item the set of optimal solutions is convex.
         \item For \textbf{differentiable} $f$, $x \in X$ is optimal iff \[\nabla f(x)^t(y - x) \ge 0, \quad \forall y \in X\]
@@ -367,7 +367,9 @@
             \text{by observe}
             \begin{itemize}
                 \item if $x$ is optimal, $\nabla f(x)^t(y - x) \ge 0$ holds for all feasible $y$
-                \item for $x_i > 0 \Longrightarrow y_i - x_i$ can be positive or negative, so $\partial_j f(x) \ge \partial_i f(x) = 0$ for any j
+                % \item for $x_i > 0 \Longrightarrow y_i - x_i$ can be positive or negative, so $\partial_j f(x) \ge \partial_i f(x) = 0$ for any j
+                \item for $x_i > 0 \Longrightarrow y_i - x_i$ can be positive or negative, so $\partial_i f(x) = 0$
+                \item for $x_i = 0 \Longrightarrow (y_i - x_i) \ge 0, \partial_i f(x) \ge 0$
                 \item $\partial_if(x)$ is a constant $C$ for all $x_i > 0$, and $\partial_jf(x) \ge C$ for all $x_j = 0$.
                 \item the converse is obvious\[\nabla f(x)^t(y - x) = \sum_{x_i > 0}\partial_i f(x)(y_i - x_i) + \sum_{x_i = 0}\partial_i f(x)(y_i - x_i) \ge C\sum_{i = 1}^n(y_i - x_i) = 0\]
             \end{itemize}
@@ -393,7 +395,7 @@
             \item $g$ is concave, can be $-\infty$ for some $(\lambda, \mu)$
             \item lower bound property: if $\lambda \succeq 0$, then $g(\lambda, \mu) \le p^*$\begin{itemize}
                 \item $L(x, \lambda, \mu) = f(x) + \sum_{i = 1}^m\lambda_if_i(x) + \sum_{i = 1}^p \mu_ih_i(x) \le f(x)$
-                \item $g(\lambda, \mu) = \inf_{x \in \mathcal{D}}L(x, \lambda, \mu) \le L(x^*, \lambda, \mu) \le f(x^*) = p^*$.
+                \item $g(\lambda, \mu) = \underset{x \in \mathcal{D}}{\inf}L(x, \lambda, \mu) \le L(x^*, \lambda, \mu) \le f(x^*) = p^*$.
                 \item $\max g(\lambda, \mu) = d^*$ with $\lambda \succeq 0$, get $d^* \le p^*$.
             \end{itemize}
         \end{itemize}
@@ -409,7 +411,7 @@
         \item Lagrangian: $L(x, \mu) = \|x\| + \mu^t(Ax - b)$
         \item dual function: 
             \begin{align*}
-                g(\mu) = \inf_{x \in \mathcal{D}}\left(\|x\| + \mu^tAx - b^t\mu\right) &= \inf_{x \in \mathcal{D}}\left(\|x\|(\boldsymbol{1} + \mu^tA\frac{x}{\|x\|}) - b^t\mu\right)\\ 
+                g(\mu) = \inf_{x \in \mathcal{D}}\left(\|x\| + \mu^tAx - b^t\mu\right) &= \inf_{x \in \mathcal{D}}\left(\|x\|(1 + \mu^tA\frac{x}{\|x\|}) - b^t\mu\right)\\ 
                 &=\begin{cases}
                     -b^t\mu, \quad&\text{if }\|A^t\mu\|_* \le 1\\
                     -\infty, \quad&\text{otherwise}
@@ -843,6 +845,9 @@
 
 
 \section{无约束凸优化问题求解}
+
+
+
 \section{有约束凸优化问题求解}
 
 \end{document}

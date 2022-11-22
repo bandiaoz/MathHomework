@@ -7,13 +7,11 @@
 \newcommand{\dom}{\operatorname{dom}} % 定义域
 \newcommand{\minimize}{\operatorname{minimize}} % 最小化
 \newcommand{\subject}{\operatorname{subject\ to}}
-
 \newcommand{\todo}{{\color{red} to do}} % to do
 \newcommand{\myline}{{\line(1,0){450}}} % 分割线
 
 
 \begin{document}
-
 \begin{problem}[判断]
     集合 $\left\{x \in \mathbb{R}^n: \|x\| \le 1\right\}$ 是凸集.
     \Answer 是.
@@ -37,6 +35,19 @@
 \begin{problem}[判断]
     集合 $\left\{(x, y) \in \mathbb{R}^2: |e^ax + e^{-a}y| \le 1, -1 \le a \le 1\right\}$ 是凸集.
     \Answer 是.
+    \begin{theorem}
+        如果对于 $\forall x, y \in S$，都有 $\lambda x + (1 - \lambda)y \in S$，则集合 $S$ 是一个凸集.
+    \end{theorem}
+    \begin{proof}
+        $\forall (x_1, y_1), (x_2, y_2) \in S, \lambda \in (0, 1)$，$(x_3, y_3) = (\lambda x_1 + (1 - \lambda)x_2, \lambda y_1 + (1 - \lambda)y_2)$
+        \begin{align*}
+            &|e^ax_3 + e^{-a}y_3| \\
+            =& |e^a(\lambda x_1 + (1 - \lambda)x_2) + e^{-a}(\lambda y_1 + (1 - \lambda)y_2)| \\
+            \le& \lambda |e^ax_1 + e^{-a}y_1| + (1 - \lambda) |e^ax_2 + e^{-a}y_2| \\
+            \le& 1
+        \end{align*}
+        $(x_3, y_3) \in S \Longrightarrow$ 集合 $S$ 是一个凸集.
+    \end{proof}
 \end{problem}
 
 \begin{problem}[判断]
@@ -96,12 +107,36 @@
 
 \begin{problem}[问答]
     写出 $f(x) = x\log x$ 的对偶函数.
-    \Answer 
+    \begin{theorem}
+        函数 $f$ 的共轭函数：$f^{*}(y) \triangleq \underset{x \in \dom(f)}{\sup}\left(y^{t} x-f(x)\right)$
+    \end{theorem}
+    \Answer \begin{align*}
+        f^*(y) &\triangleq \underset{x \in \dom(f)}{\sup}\left(y x-f(x)\right)\\
+        &= \underset{x > 0}{\sup} (yx - x\log x)\\
+        &= e^{y - 1}        
+    \end{align*}
 \end{problem}
 
 \begin{problem}[问答]
     若整数 $n \ge 0$ 使得 $f(x, y) = x^2 + xy^{n - 1} + y^n$ 是 $\mathbb{R}^2$ 上的凸函数，则 $n$ 的所有取值是多少？
-    \Answer 
+    \Answer $n \in \left\{1, 2\right\}. $\begin{itemize}
+        \item 当 $n = 0$ 时，$f(x, y) = x^2 + \frac{x}{y} + 1$，$\nabla^2 f = \frac{1}{y^3}\begin{bmatrix}
+            2y^3 & -y\\
+            -y & 2x
+        \end{bmatrix}$ 不是半正定.
+        \item 当 $n = 1$ 时，$f(x, y) = x^2 + x + y$，$\nabla^2 f = \begin{bmatrix}
+            2 & 0 \\
+            0 & 0
+        \end{bmatrix}$ 半正定.
+        \item 当 $n = 2$ 时，$f(x, y) = x^2 + xy + y^2$，$\nabla^2f = \begin{bmatrix}
+            2 & 1\\
+            1 & 2
+        \end{bmatrix}$ 正定.
+        \item 当 $n \ge 3$ 时，$f(x, y) = x^2 + xy^{n - 1} + y^n$，\[\nabla^2f = \begin{bmatrix}
+            2 & (n - 1)y^{n - 2}\\
+            (n - 1)y^{n - 2} & (n - 1)(n - 2)xy^{n - 3} + n(n - 1)y^{n - 2}
+        \end{bmatrix}\] 不是半正定.
+    \end{itemize}
 \end{problem}
 
 \begin{problem}[问答]
@@ -109,7 +144,7 @@
         \minimize \quad & a^tx\\
         \subject \quad & x \succeq 0
     \end{cases}$ 的解，其中 $a\in \mathbb{R}^n$.
-    \Answer 如果 $c \succeq 0$，则 $x^* = 0, p^* = 0$，否则 $c_i < 0$，当 $j \neq i$，$x_j = 0$，$x_i = \lambda c_i$，$\lambda \to -\infty$.
+    \Answer 如果 $a \succeq 0$，则 $x^* = 0, p^* = 0$，否则 $a_i < 0$，当 $j \neq i$，$x_j = 0$，$x_i = \lambda a_i$，$\lambda \to -\infty$，$p^* = -\infty$.
 \end{problem}
 
 \begin{problem}[问答]
@@ -162,11 +197,11 @@
     验证函数 $\|x\|^2 / y$ 是否是凸函数并给出理由，其中 $x \in \mathbb{R}^n$ 以及 $y > 0$.
     \Answer $\nabla^2f = \frac{2}{y^3}\begin{pmatrix}
         y^2I & -yx \\
-        -yx^t & 2x^tx
+        -yx^t & x^tx
     \end{pmatrix}, \begin{vmatrix}
         y^2I & -yx \\
-        -yx^t & 2x^tx
-    \end{vmatrix} = y^2x^tx \ge 0$，所以 $\nabla^2f \succeq 0$，$f(x, y) = \|x\|^2 / y$ 是一个凸函数. 
+        -yx^t & x^tx
+    \end{vmatrix} = 0$，所以 $\nabla^2f \succeq 0$，$f(x, y) = \|x\|^2 / y$ 是一个凸函数. 
 \end{problem}
 
 \begin{problem}[问答]
@@ -174,20 +209,20 @@
         \minimize \quad &-\sum_{i = 1}^m a_i\log(b_i^tx)\\
         \subject \quad &0 \preceq x \preceq 1, \sum_{i = 1}^nx_i = n - 1
     \end{cases}\] 其中 $x\in \mathbb{R}^n, a_i > 0$ 以及 $b_i \succ 0$.
-    \Answer 目标函数 $f(x) = -\sum_{i = 1}^m a_i\log(b_i^tx)$，$\partial_{jk}f = \sum_{i = 1}^m\frac{a_ib_{ij}b_{ik}}{(b_i^tx)^2} = (b_ib_i^t)_{jk}\sum_{i = 1}^m\frac{a_i}{(b_i^tx)^2}$。所以 $\nabla^2f(x)$ 正定，目标函数是凸函数。约束条件是仿射，所以是凸优化问题。
+    \Answer 目标函数 $f(x) = -\sum_{i = 1}^m a_i\log(b_i^tx)$，$\partial_{jk}f = \sum_{i = 1}^m\frac{a_ib_{ij}b_{ik}}{(b_i^tx)^2} = (b_ib_i^t)_{jk}\sum_{i = 1}^m\frac{a_i}{(b_i^tx)^2}$.所以 $\nabla^2f(x)$ 正定，目标函数是凸函数.约束条件是仿射，所以是凸优化问题.
 
     Lagrange 函数: $L(x, \lambda, \mu) = -\sum_{i = 1}^m a_i\log(b_i^tx) - \lambda_1^t x + \lambda_2^t(x - \mathbf{1}) + \mu(\mathbf{1}^tx - n + 1)$
     
     KKT 条件如下：\begin{itemize}
         \item $0 \preceq x \preceq 1, \sum_{i = 1}^nx_i = n - 1$
         \item $\lambda_1 \succeq 0, \lambda_2 \succeq 0$
-        \item $\lambda_{1i}x_i = 0, \lambda_{2i}(x_i - 1) = 0$
+        \item $\lambda_{1i}x_i = 0, \lambda_{2i}(x_i - 1) = 0$·
         \item $\partial_xL = 0, -\sum_{i = 1}^m\frac{a_ib_i}{b_i^tx} - \lambda_1 + \lambda_2 + \mu \mathbf{1} = 0$
     \end{itemize}
 \end{problem}
 
 \begin{problem}[问答]
-    使用梯度下降方法（精确直线搜索）求出三元函数 $f(x, y, z) = x^2 + 2y^2 + 3z^2$ 的极小值点。 假设起始点为 $(1, 0, 0)$，需写出每次更新迭代的详细过程和结果.
+    使用梯度下降方法（精确直线搜索）求出三元函数 $f(x, y, z) = x^2 + 2y^2 + 3z^2$ 的极小值点. 假设起始点为 $(1, 0, 0)$，需写出每次更新迭代的详细过程和结果.
     \Answer 
 \end{problem}
 
@@ -197,7 +232,7 @@
         \subject \quad &x + y + z + u = 1\\
         &x^2 + z^2 \le 1 
     \end{cases}\]
-    \Answer 目标函数是二次函数，等式约束是仿射函数，不等约束是二次函数，QCPQ问题是凸优化问题。
+    \Answer 目标函数是二次函数，等式约束是仿射函数，不等约束是二次函数，QCQP问题是凸优化问题.
 
     Lagrange 函数: $L(x, y, z, \lambda, \mu) = x^2 + 2y^2 + 2z^2 + 3u^2 + \lambda(x^2 + z^2 - 1) + \mu(x + y + z + u - 1)$
 
