@@ -1,0 +1,97 @@
+\input{../../homework.cls}
+
+\usepackage{array,tabularx}
+
+\usepackage{zhnumber} % change section number to chinese
+\renewcommand\thesection{\zhnum{section}}
+\renewcommand\thesubsection{\arabic{section}}
+
+
+\newcommand\Title{2020最优化方法final}
+
+\newcommand\subject{\operatorname{subject\ to}}
+
+\begin{document}
+
+\section{(16分)}
+\begin{problem}
+    你知道几种求解无约束优化问题 $\min f(x)$的迭代算法？请列出三种及其相应的搜索方向的迭代公式.
+\end{problem}
+
+\begin{problem}
+    取初始点 $x^{(0)} = (1, 1)^t$，采用牛顿法求解下面的无约束优化问题：
+    \[\min f(x) = 2x_1^2 + x_2^2 - 4x_1 + 2x_2\]
+    写出迭代步骡，并解释说明最终得到的迭代点就是最优解.
+\end{problem}
+
+\section{(18分)}
+\begin{problem}
+    考虑约束优化问题(P1):\[\begin{cases}
+        \min \quad &x_1x_2\\
+        \subject \quad &2x_1 - x_2 - 3 = 0
+    \end{cases}\]
+    \begin{enumerate}
+        \item 给定 $\bar{x} = (\frac{3}{4}, -\frac{3}{2})^t$，利用约束优化问题局部解的一阶必要条件和二阶充分条件判断 $\bar{x}$ 是否是(P1)的局部最优解？
+        \item 定义外罚函数为 \[G(x, c) = x_1x_2 + \frac{c}{2}(2x_1 - x_2 - 3)^2\]试用外罚函数法求解(P1)，并说明产生的序列趋向点 $\bar{x}$.
+    \end{enumerate}
+\end{problem}
+
+\section{(20分)}
+\begin{problem}
+    考虑下面的线性规划问题(P2)：\[\begin{cases}
+        \max \quad &2x_1 - x_2 + x_3\\
+        \subject \quad &3x_1 + x_2 + x_3 \le b_1\\
+        &x_1 - x_2 + 2x_3 \le b_2\\
+        &x_1 + x_2 - x_3 \le b_3\\
+        &x_1 \ge 0, x_2 \ge 0, x_3 \ge 0
+    \end{cases}\]
+    利用单纯形法求解(P2)得到如下最优单纯形表：
+
+    \begin{center}\begin{tabularx}{30em}%
+        {|*{8}{>{\centering\arraybackslash}X|}}
+        \hline
+        基 & $x_1$ & $x_2$ & $x_3$ & $x_4$ & $x_5$ & $x_6$ & RHS \\ \hline
+         & () & () & () & () & () & () & () \\ \hline
+        $x_4$ & () & () & () & () & $-1$ & $-2$ & $10$ \\ \hline
+        $x_1$ & () & () & () & () & $1 / 2$ & $1 / 2$ & $15$ \\ \hline
+        $x_2$ & () & () & () & () & $-1 / 2$ & $1 / 2$ & $5$ \\ \hline
+    \end{tabularx}\end{center}
+
+    试回答下面的问题：\begin{enumerate}
+        \item 确定 $b_1, b_2, b_3$ 的值，并把最优表补充完整.
+        \item 写出(P2)的对偶问题并根据给出的最优表求其对偶问题的最优解.
+    \end{enumerate}
+\end{problem}
+
+\section{(28分)}
+\begin{problem}
+    设 $S \subseteq \mathbb{R}^n$，函数 $f: S \to R$ 二阶连续可微，考虑约束优化问题(P3)\[\begin{cases}
+        \min \quad &f(x)\\
+        \subject \quad &x \in S
+    \end{cases}\]
+    \begin{enumerate}
+        \item 写出函数 $f$ 是凸函数的定义，并列出你所知道的判定函数 $f$ 是凸函数的充要条件.约束优化问题(P3)在什么条件下是凸规划？对于凸规划，你知道有什么好的性质？
+        \item 设 $f(x_1, x_2) = (x_2 - x_1^2)^2, S = \left\{(x_1, x_2) \mid -1 < x_1 < 1, -1 < x_2 < 1\right\}$，判断函数 $f(x_1, x_2)$ 是否为 $S$ 上的凸函数？说明理由.
+        \item 考虑如下优化问题(P4)：\[\begin{cases}
+            \min \quad &x_1^2 - 5x_1 + 4x_2\\
+            \subject \quad &2 + x_1 - x_2 \ge 0\\
+            &x_1 - 2 \le 0\\
+            &x_1 - (x_2 - 3)^2 + 2 \ge 0
+        \end{cases}\]
+        (P4)是否为凸规划？说明理由.根据最优性条件求(P4)的最优解.
+    \end{enumerate}
+\end{problem}
+
+\section{(18分)}
+\begin{problem}
+    设 $Q \in \mathbb{R}^{n \times n}$ 对称设定，$b \in \mathbb{R}^n$ 且 $b\neq 0$，考虑非线性规划问题(P5)：\[\begin{cases}
+        \min \quad &\frac{1}{2}x^tQx\\
+        \subject \quad &x \ge b
+    \end{cases}\]
+    试回答下面的问题：\begin{enumerate}
+        \item 写出(P5)的 Lagrange 对偶规划. 
+        \item 设 $x^*$是(P5)的最优解，证明 $x^*$ 与 $x^* - b$ 关于 $Q$ 共轭.
+    \end{enumerate}
+\end{problem}
+
+\end{document}

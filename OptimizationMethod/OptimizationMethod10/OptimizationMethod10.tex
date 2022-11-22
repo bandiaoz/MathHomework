@@ -1,0 +1,200 @@
+\input{../../homework.cls}
+
+\newcommand\Title{最优化方法第10次作业}
+
+\newcommand\subject{\operatorname{subject\ to}}
+
+\begin{document}
+
+\begin{problem}[P243 2]
+    考虑非线性规划问题
+    \[\begin{cases}
+        \min \quad &(x_1 - 3)^2 + (x_2 - 2)^2\\
+        \subject \quad &x_1^2 + x_2^2 \le 5\\
+        &x_1 + 2x_2 = 4\\
+        &x_1, x_2 \ge 0
+    \end{cases}\]
+    检验 $\bar{x} = (2, 1)^t$ 是否为K-T点.
+    \Answer 在点 $\bar{x}$，目标函数的梯度为 $\begin{bmatrix}
+        -2 \\ -2
+    \end{bmatrix}$，前两个约束是起作用约束，梯度分别是 $\begin{bmatrix}
+        -4\\-2
+    \end{bmatrix}$ 和 $\begin{bmatrix}
+        1\\2
+    \end{bmatrix}$.K-T 条件如下：\[\left[\begin{array}{l} -2 \\ -2
+        \end{array}\right]-w\left[\begin{array}{l} -4 \\ -2
+        \end{array}\right]-v\left[\begin{array}{l} 1 \\ 2
+        \end{array}\right]=\left[\begin{array}{l} 0 \\ 0
+        \end{array}\right]\]解得 $w = \frac{1}{3}, v = -\frac{2}{3}, w \ge 0$，因此 $\bar{x} = (2, 1)^t$ 是K-T点.
+\end{problem}
+
+\begin{problem}[P243 3]
+    考虑下列非线性规划问题 
+    \[\begin{cases}
+        \min \quad &4x_1 - 3x_2\\
+        \subject \quad &4 - x_1 - x_2 \ge 0\\
+        &x_2 + 7 \ge 0\\
+        &-(x_1 - 3)^2 + x_2 + 1 \ge 0
+    \end{cases}\]
+    求满足K-T必要条件的点.
+    \Answer 最优解的一阶必要条件如下：\[\begin{cases}
+        \nabla f(x) - \sum_{i = 1}^3\lambda_i \nabla g_i(x) = 0\\
+        \lambda_i g_i(x) = 0, \quad i = 1, 2, 3\\
+        \lambda_1, \lambda_2, \lambda_3 \ge 0\\
+        g_i(x) \ge 0, \quad i = 1, 2, 3
+    \end{cases}\]
+    解得 $x^* = (1, 3)$，$(\lambda_1, \lambda_2, \lambda_3) = (\frac{16}{3}, 0, \frac{7}{3})$.
+\end{problem}
+
+\begin{problem}[P243 5]
+    用K-T条件求解下列问题
+    \[\begin{cases}
+        \min \quad &x_1^2 - x_2 - 3x_3\\
+        \subject \quad &-x_1 - x_2 - x_3 \ge 0\\
+        &x_1^2 + 2x_2 - x_3 = 0
+    \end{cases}\]
+    \Answer KKT 条件如下\[\begin{cases}
+        2 x_{1}+w-2 w x_{1}=0, \\
+        -1+w-2 v=0 \\
+        -3+w+v=0 \\
+        w\left(-x_{1}-x_{2}-x_{3}\right)=0 \\
+        w \ge 0 \\
+        -x_{1}-x_{2}-x_{3} \ge 0 \\
+        x_{1}^{2}+2 x_{2}-x_{3}=0
+    \end{cases}\]
+    解得K-T点 $\bar{x} = (-\frac{7}{2}, -\frac{35}{12}, \frac{77}{12}), w = \frac{7}{3}, v = \frac{2}{3}$.最优值 $f(\bar{x}) = -\frac{49}{12}$.
+\end{problem}
+
+\begin{problem}[P243 6]
+    求解下列问题
+    \[\begin{cases}
+        \max \quad &14x_1 - x_1^2 + 6x_2 - x_2^2 + 7\\
+        \subject \quad &x_1 + x_2 \le 2\\
+        &x_1 + 2x_2 \le 3
+    \end{cases}\]
+    \Answer KKT条件如下：\[\begin{cases}
+        2 x_{1}-14+w_{1}+w_{2}=0 \\
+        2 x_{2}-6+w_{1}+2 w_{2}=0 \\
+        w_{1}\left(-x_{1}-x_{2}+2\right)=0 \\
+        w_{2}\left(-x_{1}-2 x_{2}+3\right)=0 \\
+        w_{1}, w_{2} \geqslant 0 \\
+        -x_{1}-x_{2}+2 \geqslant 0 \\
+        -x_{1}-2 x_{2}+3 \geqslant 0
+    \end{cases}\]解得 $\bar{x} = (3, -1)$，$f_{\max} = 33$.
+\end{problem}
+
+\begin{problem}[P243 7]
+    求原点 $x^{(0)} = (0, 0)^t$ 到凸集 \[S = \left\{x \mid x_1 + x_2 \ge 4, 2x_1 + x_2 \ge 5\right\}\] 的最小距离.
+    \Answer 求最小距离可表达成下列凸规划：\[\begin{cases}
+        \min \quad &x_1^2 + x_2^2\\
+        \subject \quad &x_1 + x_2 - 4 \ge 0\\
+        &2x_1 + x_2 - 5 \ge 0
+    \end{cases}\]
+    KKT 条件如下：\[\begin{cases}
+        2 x_{1}-w_{1}-2 w_{2}=0 \\
+        2 x_{2}-w_{1}-w_{2}=0 \\
+        w_{1}\left(x_{1}+x_{2}-4\right)=0 \\
+        w_{2}\left(2 x_{1}+x_{2}-5\right)=0 \\
+        w_{1}, w_{2} \geqslant 0 \\
+        x_{1}+x_{2}-4 \geqslant 0 \\
+        2 x_{1}+x_{2}-5 \geqslant 0
+    \end{cases}\]
+    解得 $\bar{x} = (2, 2)$，$d = 2\sqrt{2}$.
+\end{problem}
+
+\begin{problem}[P243 8]
+    考虑下列非线性规划问题
+    \[\begin{cases}
+        \min \quad &x_2\\
+        \subject \quad &-x_1^2 + (x_2 - 4)^2 + 16 \ge 0\\
+        &(x_1 - 2)^2 + (x_2 - 3)^2 - 13 = 0
+    \end{cases}\]
+    判别下列各点是否为局部最优解：
+    \[x^{(1)} = \begin{bmatrix}
+        0\\0
+    \end{bmatrix}, x^{(2)} = \begin{bmatrix}
+        \frac{16}{5}\\\frac{32}{5}
+    \end{bmatrix}, x^{(3)} = \begin{bmatrix}
+        2\\3 + \sqrt{13}
+    \end{bmatrix}\]
+    \Answer $L(x, w, v) = x_2 - w(-x_1^2 - (x_2 - 4)^2 + 16) - v((x_1 - 2)^2 + (x_2 - 3)^2 - 13)$, $\nabla^2_xL(x, w, v) = \begin{bmatrix}
+        2(w - v) & 0 \\ 0 & 2(w - v)
+    \end{bmatrix}$.
+
+    对 $x^{(1)}$ 两个约束都是起作用约束，并且满足一阶必要条件，并且方向集 \[G = \left\{d \mid d \neq 0, \nabla g(x^{(1)}) d = 0, \nabla h(x^{(1)})^td = 0\right\} = \emptyset\]因此 $x^{(1)} = \begin{bmatrix}
+        0 \\ 0
+    \end{bmatrix}$ 是局部最优解. 同理可得 $x^{(1)}$ 是局部最优解，$x^{(2)}$ 不是局部最优解.
+\end{problem}
+
+\begin{problem}[P243 9]
+    考虑下列非线性规划问题
+    \[\begin{cases}
+        \min \quad &\frac{1}{2}[(x_1 - 1)^2 + x_2^2]\\
+        \subject \quad &-x_1 + \beta x_2^2 = 0
+    \end{cases}\]
+    讨论 $\beta$ 取何值时 $\bar{x} = (0, 0)^t$ 是局部最优解？
+    \Answer K-T 条件为 \[\begin{cases}
+        x_1 - 1 + v = 0\\
+        x_2 - 2\beta vx_2 = 0
+    \end{cases}\]
+    代入 $\bar{x} = (0, 0)^t$，得到 $v = 1$\[\nabla^2_xL(\bar{x}, v) = \begin{bmatrix}
+        1 & 0 \\ 0 & 1 - 2\beta
+    \end{bmatrix}, \nabla h(\bar{x}) = \begin{bmatrix}
+        -1 \\ 0
+    \end{bmatrix}\] 方向集 $G = \left\{d \mid \nabla h(\bar{x})^td = 0\right\} = \left\{(0, d_2)^t\right\}$. 令 \[(0, d_2)\begin{bmatrix}
+        1 & 0 \\ 0 & 1 - 2\beta
+    \end{bmatrix}\begin{bmatrix}
+        0 \\ d_2
+    \end{bmatrix} = (1 - 2\beta)d_2^2 > 0\]得到 $\beta < \frac{1}{2}$. 当 $\beta = \frac{1}{2}$ 时，$\min \frac{1}{2}(x_1^2 + 1)$ 极小点是 $x_1 = 0$. 综上 $\beta \le \frac{1}{2}$.
+\end{problem}
+
+\begin{problem}[P243 10]
+    给定非线性规划问题
+    \[\begin{cases}
+        \min \quad &c^tx\\
+        \subject \quad &Ax = 0\\
+        &x^tx\le \gamma^2
+    \end{cases}\]
+    其中 $A$ 为 $m \times n$ 矩阵($m < n$)，$A$ 的秩为 $m$，$c\in \mathbb{R}^n$且 $c \neq 0$，$\gamma$是一个正数.试求问题的最优解及目标函数最优值．
+    \Answer K-T 条件如下\[\begin{cases}
+        c - A^tv + 2v_{m + 1}x = 0\\
+        Ax = 0\\
+        -x^tx + \gamma^2 = 0
+    \end{cases}\] 解得 $f_{\min} = -\gamma \sqrt{c^t(c - A^tv)}$, $x = \frac{\gamma^2}{f_{\min}}(c - A^tv)$. 当 $c = A^tv$ 时，最优解不唯一，最优值 $f_{\min} = 0$.
+\end{problem}
+
+\begin{problem}[P243 12]
+    给定原问题\[\begin{cases}
+        \min\quad &(x_1 - 3)^2 + (x_2 - 5)^2\\
+        \subject\quad &-x_1^2 + x_2 \ge 0\\
+        &x_1 \ge 1\\
+        &x_1 + 2x_2 \le 10\\
+        &x_1, x_2 \ge 0
+    \end{cases}\]
+    写出上述原问题的对偶问题.将原问题中第3个约束条件和变量的非负限制记作\[x \in D=\left\{x \mid x_{1}+2 x_{2} \le 10, \quad x_{1}, x_{2} \ge 0\right\} \]
+    \Answer 对偶函数\[\theta(w_1, w_2) = \inf\left\{(x_1 - 3)^2 + (x_2 - 5)^2 - w_1(-x_1^2 + x_2) - w_2(x_1 - 1) \mid x \in D\right\}\]对偶问题为 \[\begin{cases}
+        \max \quad &\theta(w_1, w_2)\\
+        \subject \quad &w_1, w_2 \ge 0
+    \end{cases}\]
+\end{problem}
+
+\begin{problem}
+    求如下问题的KKT点并说明其KKT点是否是最优解：
+    \[\begin{cases}
+        \min \quad &f(x) = 2x_1^2 + 2x_1x_2 + x_2^2 - 10x_1 - 10x_2\\
+        \subject \quad &g_1(x) = -x_1^2 - x_2^2 + 5 \ge 0\\
+        &g_2(x) = -3x_1 - x_2 + 6 \ge 0
+    \end{cases}\]
+    \Answer 最优解的一阶必要条件如下：$L(x, \lambda_1, \lambda_2) = 2x_1^2 + 2x_1x_2 + x_2^2 - 10x_1 - 10x_2 + \lambda_1(x_1^2 + x_2^2 - 5) + \lambda_2(3x_1 + x_2 - 6)$\[\begin{cases}
+        x_1^2 + x_2^2 - 5 \le 0\\
+        3x_1 + x_2 - 6 \le 0\\
+        \lambda_1, \lambda_2 \ge 0\\
+        \lambda_1(x_1^2 + x_2^2 - 5) = 0\\
+        \lambda_2(3x_1 + x_2 - 6) = 0\\
+        4x_1 + 2x_2 - 10 + 2\lambda_1x_1 + 3\lambda_2 = 0\\
+        2x_1 + 2x_2 - 10 + 2\lambda_1x_2 + \lambda_2 = 0
+    \end{cases}\]
+    解得 $x = (1, 2)$. 
+\end{problem}
+
+\end{document}
