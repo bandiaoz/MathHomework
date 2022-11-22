@@ -64,14 +64,15 @@
 % 定义解题环境
 \theoremstyle{remark}
 \newtheorem{remark}[thm]{Remark}
-% \newtheorem{remark}[thm]{Remark}
+\newtheorem{theorem}{Theorem}
 \newtheorem{observation}[thm]{Observation}
 
 \theoremstyle{definition}
 \newtheorem{problem}{\text{}}
-\newtheorem{Problem}{\text{}}
+\newtheorem{Problem}{\text{Problem}}
 \newtheorem*{solution}{解}
 \newtheorem*{Answer}{Answer}
+\newtheorem{example}{Example} 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newcommand\name{陈景龙22120307}
