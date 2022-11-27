@@ -1,0 +1,106 @@
+\input{../../homework.cls}
+
+\newcommand\Title{最优化方法第12次作业}
+
+\newcommand\subject{\operatorname{s.t.}}
+
+\renewcommand{\labelenumi}{(\arabic*)}
+
+\begin{document}
+\begin{problem}[P413 1.(1)]
+    用外点法求解下列问题：\[\begin{cases}
+        \min &x_1^2 + x_2^2\\
+        \subject & x_2 = 1
+    \end{cases}\]
+    \Answer $F(x, \sigma) = x_1^2 + x_2^2 + \sigma(x_2 - 1)^2$
+    \begin{align*}
+        \partial_{x_1}F &= 2x_1\\
+        \partial_{x_2}F &= 2x_2 + 2\sigma (x_2 - 1)
+    \end{align*}
+    令 $\partial_{x_1}F = \partial_{x_2}F = 0$，解得 $x_1 = 0, x_2 = \frac{\sigma}{\sigma + 1}$，当 $\sigma \to +\infty$ 时，$\bar{x} = (0, 1)^t, f^* = 1$.
+\end{problem}
+
+\begin{problem}[P413 1.(2)]
+    用外点法求解下列问题：\[\begin{cases}
+        \min &x_1^2 + x_2^2\\
+        \subject & x_1 + x_2 - 1 = 0
+    \end{cases}\]
+    \Answer $F(x, \sigma) = x_1^2 + x_2^2 + \sigma(x_1 + x_2 - 1)^2$
+    \begin{align*}
+        \partial_{x_1}F &= 2x_1 + 2\sigma(x_1 + x_2 - 1)\\
+        \partial_{x_2}F &= 2x_2 + 2\sigma(x_1 + x_2 - 1)
+    \end{align*}
+    令 $\partial_{x_1}F = \partial_{x_2}F = 0$，解得 $x_1 = x_2 = \frac{\sigma}{2\sigma + 1}$，当 $\sigma \to +\infty$ 时，$\bar{x} = (\frac{1}{2}, \frac{1}{2})^t$，$f^* = \frac{1}{2}$.
+\end{problem}
+
+\begin{problem}[P413 1.(3)]
+    用外点法求解下列问题：\[\begin{cases}
+        \min &-x_1 - x_2\\
+        \subject & 1 - x_1^2 - x_2^2 = 0
+    \end{cases}\]
+    \Answer $F(x, \sigma) = -x_1 - x_2 + \sigma(1 - x_1^2 - x_2^2)^2$
+    \begin{align*}
+        \partial_{x_1}F &= -1 - 2\sigma(1 - x_1^2 - x_2^2)2x_1\\
+        \partial_{x_2}F &= -1 - 2\sigma(1 - x_1^2 - x_2^2)2x_2
+    \end{align*} 
+    令 $\partial_{x_1}F = \partial_{x_2}F = 0$，解得 $x_1 = x_2, x_1(2x_1^2 - 1) = \frac{1}{4\sigma}$，当 $\sigma \to +\infty$ 时，$\bar{x} = (\frac{1}{\sqrt{2}}, \frac{1}{\sqrt{2}})^t$，$f^* = -\frac{1}{\sqrt{2}}$.
+\end{problem}
+
+\begin{problem}[P413 1.(4)]
+    用外点法求解下列问题：\[\begin{cases}
+        \min &x_1^2 + x_2^2\\
+        \subject & 2x_1 + x_2 - 2 \le 0\\
+        &x_2 \ge 1
+    \end{cases}\]
+    \Answer $F(x, \sigma) = x_1^2 + x_2^2 + \sigma\left(\max(0, 2x_1 + x_2 - 2)^2 + \max(0, 1 - x_2)^2\right)$
+    \begin{align*}
+        \partial_{x_1}F &= 2x_1 + 4\sigma\max(0, 2x_1 + x_2 - 2)\\
+        \partial_{x_2}F &= 2x_2 + 2\sigma\max(0, 2x_1 + x_2 - 2) - 2\sigma\max(0, 1 - x_2) 
+    \end{align*}  
+    令 $\partial_{x_1}F = \partial_{x_2}F = 0$，当 $\sigma \to +\infty$ 时，$\bar{x} = (0, 1)^t$，$f^* = 1$.
+\end{problem}
+
+\begin{problem}[P413 2]
+    考虑下列非线性规划问题：\[\begin{cases}
+        \min &x_1^3 + x_2^3\\
+        \subject & x_1 + x_2 = 1\\
+    \end{cases}\]
+    \begin{enumerate}
+        \item 求问题的最优解
+        \item 定义罚函数\[F(x, \sigma) = x_1^3 + x_2^3 + \sigma(x_1 + x_2 - 1)^2\] 讨论能否通过求解无约束问题\[\min F(x, \sigma)\]来获得原来约束问题的最优解？为什么？
+    \end{enumerate}
+    \Answer \begin{enumerate}
+        \item 将 $x_2 = 1 - x_1$ 代人目标函数，化成无约束问题：\[\min f(x_1) = 3x_1^2 - 3x_1 + 1\]令 $f^\prime(x_1) = 6x_1 - 3 = 0$，得到 $x_1 = x_2 = \frac{1}{2}$，即 $\bar{x} = (\frac{1}{2}, \frac{1}{2})^t, f^* = \frac{1}{4}$.
+        \item 不能通过解 $\min F(x, \sigma)$ 来获得约束问题的最优解，因为不满足所有无约束问题最优解含于紧集的条件.
+    \end{enumerate}
+\end{problem}
+
+\begin{problem}
+    考虑约束优化问题(P1)\[\begin{cases}
+        \min &-x_1x_2x_3\\
+        \subject &x_1 + 2x_2 + 3x_3 = 90
+    \end{cases}\]
+    \begin{enumerate}
+        \item 定义外罚函数为 \[G(x, c) = -x_1x_2x_3 + \frac{c}{2}(x_1 + 2x_2 + 3x_3 - 90)^2\] 试用外罚函数法求解(P1)
+        \item 利用最优性条件判断 (1) 中得到的极限点是否是 (P1) 的局部最优解？
+    \end{enumerate}
+
+    \Answer \begin{enumerate}
+        \item $G(x, c) = -x_1x_2x_3 + \frac{c}{2}(x_1 + 2x_2 + 3x_3 - 90)^2$
+        \begin{align*}
+            \partial_{x_1}G = -x_2x_3 + c(x_1 + 2x_2 + 3x_3 - 90)\\
+            \partial_{x_1}G = -x_1x_3 + 2c(x_1 + 2x_2 + 3x_3 - 90)\\
+            \partial_{x_1}G = -x_1x_2 + 3c(x_1 + 2x_2 + 3x_3 - 90)
+        \end{align*}
+        解得 $x_1 = 9c - \sqrt{81c^2 - 540c}$，$x_2 = \frac{9c - \sqrt{81c^2 - 540c}}{2}$，$x_3 = \frac{9c - \sqrt{81c^2 - 540c}}{3}$. 令 $c \to +\infty$，则 $\bar{x} = (30, 15, 10)^t$，$f^* = -4500$.
+        \item 由 KKT 条件 \begin{align*}
+            x_1 + 2x_2 + 3x_3 &= 90\\
+            -x_2x_3 + \mu &= 0\\
+            -x_1x_3 + \mu &= 0\\
+            -x_1x_2 + \mu &= 0
+        \end{align*}
+        可得，(1) 中的点 $\bar{x} = (30, 15, 10)^t$ 是局部最优解.
+    \end{enumerate}
+\end{problem}
+
+\end{document}
