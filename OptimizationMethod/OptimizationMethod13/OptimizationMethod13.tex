@@ -1,0 +1,63 @@
+\input{../../homework.cls}
+
+\newcommand\Title{最优化方法第13次作业}
+
+\newcommand\subject{\operatorname{s.t.}}
+
+\renewcommand{\labelenumi}{(\arabic*)}
+
+\begin{document}
+\begin{problem}
+    用外点罚函数方法求解如下问题：\[\begin{cases}
+        \min &x_1^2 + x_2^2\\
+        \subject &2x_1 + x_2 \le 2\\
+        &x_2 \ge 1
+    \end{cases}\]
+    \Answer $F(x, \sigma) = x_1^2 + x_2^2 + \sigma\left(\max(0, 2x_1 + x_2 - 2)^2 + \max(0, 1 - x_2)^2\right)$
+    \begin{align*}
+        \partial_{x_1}F &= 2x_1 + 4\sigma\max(0, 2x_1 + x_2 - 2)\\
+        \partial_{x_2}F &= 2x_2 + 2\sigma\max(0, 2x_1 + x_2 - 2) - 2\sigma\max(0, 1 - x_2) 
+    \end{align*}  
+    令 $\partial_{x_1}F = \partial_{x_2}F = 0$,当 $\sigma \to +\infty$ 时,$\bar{x} = (0, 1)^t$,$f^* = 1$.
+\end{problem}
+
+\begin{problem}
+    考虑如下问题,定义障碍函数为 $P(x, \pi) = x_1x_2 - \frac{\ln g(x)}{\pi}$\[\begin{cases}
+        \min &x_1x_2\\
+        \subject &g(x) = -2x_1 + x_2 \ge 3
+    \end{cases}\]
+    用内点罚函数方法求解此问题.
+    \Answer 令 $\partial_{x_1}P = \partial_{x_2}P = 0$, 发现无解，故不存在最优点.
+\end{problem}
+
+\begin{problem}
+    用乘子罚函数方法求解如下问题：\[\begin{cases}
+        \min &x_1 + \frac{1}{3}(x_2 + 1)^2\\
+        \subject &x_1 \ge 0\\
+        &x_2 \ge 1
+    \end{cases}\]
+    \Answer 定义增广 Lagrange 函数
+    \begin{align*}
+        \Phi(x, w, \sigma) &= f(x) + \frac{1}{2\sigma}\left[(\max\{0, w_1 - \sigma g_1(x)\})^2 - w_1^2 + (\max\{0, w_2 - \sigma g_2(x)\})^2 - w_2^2\right]\\
+    \end{align*}
+    \begin{align*}
+        \frac{\partial \Phi}{\partial x_1} &= \begin{cases}
+            1 - (w_1 - \sigma x_1), \quad &x_1 \le \frac{w_1}{\sigma}\\
+            1, \quad &x_1 > \frac{w_1}{\sigma}
+        \end{cases}\\
+        \frac{\partial \Phi}{\partial x_2} &= \begin{cases}
+            \frac{2}{3}(x_2 + 1) - \left[w_2 - \sigma(x_2 - 1)\right], \quad &x_2 - 1 \le \frac{w_2}{\sigma}\\
+            \frac{2}{3}(x_2 + 1), \quad &x_2 - 1 > \frac{w_2}{\sigma}
+        \end{cases}
+    \end{align*}
+    第 $k$ 次迭代中,令 $\frac{\partial \Phi}{\partial x_1} = \frac{\partial \Phi}{\partial x_2} = 0$,解得 $x^{(k)} = (\frac{w_1^{(k)} - 1}{\sigma}, \frac{3w_2^{(k)} + 3\sigma - 2}{2 + 3\sigma})^t$,修正乘子 $w^{(k)}$,得乘子 $\bar{w} = (1, \frac{4}{3})^t$,最优解 $\bar{x} = (0, 1), f_{\min} = \frac{4}{3}$.
+\end{problem}
+
+% \begin{problem}
+%     用ADMM算法求解如下问题：\[\begin{cases}
+%         \min &|y_1| + |y_2| + (2x_1 + x_2 - 1)^2 + (x_1 + 3x_2 - 2)^2\\
+%         \subject &x_1 - y_1 = 0\\
+%         &x_2 - y_2 = 0
+%     \end{cases}\]
+% \end{problem}
+\end{document}

@@ -66,7 +66,7 @@
         
         \item 设 $S$ 是 $E^n$ 的非空凸集，$y\in \partial S$，则存在非零向量 $p$，使得对 $\forall x \in clS$（$S$ 的闭包，由 $S$ 的内点和边界点组成），有 $p^Ty \ge p^Tx$.
         
-        \item 设 $S_1$ 和 $S_2$ 是 $E^n$ 的两个非空凸集，$S_1 \cap S_2 = \emptyset$，则存在非零向量，使得\[p^Ty \ge p^T x \quad \text{其中}\forall y \in S_1, \forall x \in S_2\]
+        \item 设 $S_1$ 和 $S_2$ 是 $E^n$ 的两个非空凸集，$S_1 \cap S_2 = \varnothing$，则存在非零向量，使得\[p^Ty \ge p^T x \quad \text{其中}\forall y \in S_1, \forall x \in S_2\]
     \end{itemize}
 \end{remark}
 
@@ -507,11 +507,11 @@
 \begin{remark}
     约束优化问题的最优性条件
     \begin{itemize}
-        \item 定义：对$\underset{x \in E^n}{\min}f(x)$，设 $\bar{x} \in E^n$ 是任给一点，$d\neq 0$，若存在 $\delta > 0$，使得对任意的 $\lambda \in (0, \delta)$ 有 $f(\bar{x} + \lambda d) < f(\bar{x})$，则称 $d$ 为 $f(x)$ 在点 $\bar{x}$ 处的下降方向.\[F_0 = \left\{d\ |\ \nabla f(\bar{x})^td < 0\right\}\]称为点 $\bar{x}$ 处的\textbf{下降方向集}.
+        \item 定义：对 $\underset{x \in E^n}{\min}f(x)$，设 $\bar{x} \in E^n$ 是任给一点，$d\neq 0$，若存在 $\delta > 0$，使得对任意的 $\lambda \in (0, \delta)$ 有 $f(\bar{x} + \lambda d) < f(\bar{x})$，则称 $d$ 为 $f(x)$ 在点 $\bar{x}$ 处的下降方向.\[F_0 = \left\{d\ |\ \nabla f(\bar{x})^td < 0\right\}\]称为点 $\bar{x}$ 处的\textbf{下降方向集}.
         \item 定义：设集合 $S \subset E^n$，$\bar{x} \in clS$，$d$ 为非零向量，若存在数 $\delta > 0$，使得对任意 $\lambda \in (0, \delta)$，都有 $\bar{x} + \lambda d \in S$ 则称 $d$ 为集合 $S$ 在 $\bar{x}$ 的\textbf{可行方向}. 
         
         $D=\{d \mid d \neq 0, \bar{x} \in c l S, \exists \delta>0, \forall \lambda \in(0, \delta), \bar{x}+\lambda d \in S\}$ 是 $\bar{x}$ 处的\textbf{可行方向锥}.
-        \item 几何最优性条件：考虑问题\[\min f(x), \quad \text{s.t. } x \in S\]设 $S$ 是 $E^n$ 的非空集合，$\bar{x} \in S$，$f(x)$ 在 $\bar{x}$ 处可微，若 $\bar{x}$ 是局部最优解，则下降方向集和可行方向锥没有交集. 即 $F_0\cap D = \emptyset$.
+        \item 几何最优性条件：考虑问题\[\min f(x), \quad \text{s.t. } x \in S\]设 $S$ 是 $E^n$ 的非空集合，$\bar{x} \in S$，$f(x)$ 在 $\bar{x}$ 处可微，若 $\bar{x}$ 是局部最优解，则下降方向集和可行方向锥没有交集. 即 $F_0\cap D = \varnothing$.
     \end{itemize}
 \end{remark}
 
@@ -526,7 +526,7 @@
         
         记 $I = \left\{i \mid g_i(\bar{x}) = 0, \bar{x} \in S\right\}$ 为起作用约束(等式约束).
         \item $G_0 = \left\{d \mid \nabla g_i(\bar{x})^td > 0, i \in I\right\}$ 称为 $S$ 在点 $\bar{x}$ 处的\textbf{局部约束方向锥(内方向锥)}
-        \item 设 $\bar{x} \in S$，$f(x)$ 和 $g_i(x)(i \in I)$ 在 $\bar{x}$ 处可微，$g_i(x)(i \notin I)$ 在 $\bar{x}$ 处连续，如果 $\bar{x}$ 是局部最优解，则下降方向集和内方向锥的交集为空，即 $F_0\cap G_0 = \emptyset$.
+        \item 几何最优性条件：设 $\bar{x} \in S$，$f(x)$ 和 $g_i(x)(i \in I)$ 在 $\bar{x}$ 处可微，$g_i(x)(i \notin I)$ 在 $\bar{x}$ 处连续，如果 $\bar{x}$ 是局部最优解，则下降方向集和内方向锥的交集为空，即 $F_0\cap G_0 = \varnothing$.
     \end{itemize}
 \end{remark}
 
@@ -548,6 +548,29 @@
 
     对于凸规划，则若在 $\bar{x}$ 点处KKT条件成立，则 $\bar{x}$ 为整体极小值点.
 \end{theorem}
+
+\subsection{一般约束问题的一阶最优性条件}
+\begin{theorem}
+    设 $\bar{x} \in S$，$f(x)$ 和 $g_i(x)(i\in I)$ 在 $\bar{x}$ 处可微，$g_i(x) (i \notin I)$ 在 $\bar{x}$ 处连续，$h_j(j = 1, \dots, l)$ 在 $\bar{x}$ 处连续可微，且 $\bar{x}$ 是 $\S = \{x \mid h(x) = 0\}$ 的正则点.如果 $\bar{x}$ 是问题(NP)的局部最优解，则在 $\bar{x}$ 处，有\[F_{0} \cap G_{0} \cap H_{0}=\varnothing\]其中
+    \begin{align*}
+        F_{0}&=\left\{d \mid \nabla f(\bar{x})^{T} d<0\right\} \\
+        G_{0}&=\left\{d \mid \nabla g_{i}(\bar{x})^{T} d>0, i \in I\right\} \\
+        H_{0}&=\left\{d \mid \nabla h_{j}(\bar{x})^{T} d=0, j=1, \cdots, l\right\}
+    \end{align*}
+\end{theorem}
+
+\begin{theorem}
+    若系统 $Ax < 0$，$Bx = 0$ 无解，则系统 $A^ty + B^tz = 0, y \ge 0$，且 $y \neq 0$ 或 $z \neq 0$ 有解.
+\end{theorem}
+
+\begin{remark}
+    一阶充分条件：\[\begin{cases}
+        \min &f(x)\\
+        \st &g_i(x) \ge 0 \quad i = 1, \dots, m\\
+        &h_j(x) = 0, \quad j = 1, \dots, l
+    \end{cases}\]
+    $f$ 是凸函数，$g_i$ 是凹函数，$h_j$ 是线性函数，$S$ 为可行域，$\bar{x} \in S$，$I = \{i \mid g_i(\bar{x}) = 0\}$. $f$ 和 $g_i(i \in I)$ 在点 $\bar{x}$ 可微，$h_j$ 在点 $\bar{x}$ 连续，$g_i(i \notin I)$ 在点 $\bar{x}$ 连续，且在 $\bar{x}$ 处 KKT 条件成立，则 $\bar{x}$ 为整体极小点.
+\end{remark}
 
 \section{Lagrange对偶}
 
@@ -625,8 +648,8 @@
         \item 需要计算Hesse矩阵，计算量大
     \end{enumerate}
     牛顿迭代法的优点：\begin{enumerate}
-        \item 产生的点列 $\{x^{(k)}\}$ 若收敛，则收敛速度快，具有至少二阶收敛速率。
-        \item 牛顿法具有二次终止性（正定二次函数可以一次迭代到达最优点）。
+        \item 产生的点列 $\{x^{(k)}\}$ 若收敛，则收敛速度快，具有至少二阶收敛速率.
+        \item 牛顿法具有二次终止性（正定二次函数可以一次迭代到达最优点）.
     \end{enumerate}
 \end{remark}
 
@@ -668,14 +691,14 @@
 \end{remark}
 
 \begin{theorem}
-    设 $A$ 是 $n$ 阶对称正定矩阵，$d^{(1)}, \dots, d^{(k)}$ 是 $k$ 个 $A$ 共轭的非零向量，则这 $k$ 个向量线性无关。
+    设 $A$ 是 $n$ 阶对称正定矩阵，$d^{(1)}, \dots, d^{(k)}$ 是 $k$ 个 $A$ 共轭的非零向量，则这 $k$ 个向量线性无关.
     \begin{proof}
         对于正定矩阵 $A$，$\alpha_{1} d^{(1)}+\alpha_{2} d^{(2)}+\cdots+\alpha_{k} d^{(k)}=0$ 必有 $\alpha_i = 0$.
     \end{proof}
 \end{theorem}
 
 \begin{theorem}
-    二次函数 $f(x) = \frac{1}{2}x^tAx + b^tx + c$，其中 $A_{n \times n}$ 是对称正定矩阵，$d^{(1)}, \dots, d^{(n - 1)}$ 是 $A$ 共轭的非零向量，从任意一点 $x^{(0)} \in E^n$ 出发，依次沿这组向量进行一维搜索\[\underset{\lambda \ge 0}{\min} f(x^{(k)} + \lambda d^{(k)})\]$x^{(k + 1)} = x^{(k)} + \lambda_k d^{(k)}, k = 0, \dots, n - 1$，则 $\nabla f(x^{(k + 1)})^t d^{(j)} = 0, j = 0, \dots, k$，即搜索方向和之前所有的搜索方向都正交，并且最多经过 $n$ 步收敛。
+    二次函数 $f(x) = \frac{1}{2}x^tAx + b^tx + c$，其中 $A_{n \times n}$ 是对称正定矩阵，$d^{(1)}, \dots, d^{(n - 1)}$ 是 $A$ 共轭的非零向量，从任意一点 $x^{(0)} \in E^n$ 出发，依次沿这组向量进行一维搜索\[\underset{\lambda \ge 0}{\min} f(x^{(k)} + \lambda d^{(k)})\]$x^{(k + 1)} = x^{(k)} + \lambda_k d^{(k)}, k = 0, \dots, n - 1$，则 $\nabla f(x^{(k + 1)})^t d^{(j)} = 0, j = 0, \dots, k$，即搜索方向和之前所有的搜索方向都正交，并且最多经过 $n$ 步收敛.
 \end{theorem}
 
 \begin{remark}
@@ -754,12 +777,12 @@
 \end{theorem}
 
 \begin{remark}
-    外点罚函数法的重要特点：函数 $F(x, \sigma)$ 是在整个空间 $E^n$ 内进行优化，初始点可任意选择，且外点法也可用于非凸规划的最优化。
+    外点罚函数法的重要特点：函数 $F(x, \sigma)$ 是在整个空间 $E^n$ 内进行优化，初始点可任意选择，且外点法也可用于非凸规划的最优化.
 
     缺点\begin{enumerate}
         \item 惩罚项 $\sigma p(X)$ 的二阶偏导数一般不存在；
         \item 外点法的中间结果不是可行解，不能作为近似解；
-        \item 当点 $x^{(k)}$ 接近最优解时，罚因子 $\sigma_k$ 很大。可能使罚函数性质变坏，使搜索产生极大困难。
+        \item 当点 $x^{(k)}$ 接近最优解时，罚因子 $\sigma_k$ 很大.可能使罚函数性质变坏，使搜索产生极大困难.
     \end{enumerate}
 \end{remark}
 
@@ -782,7 +805,7 @@
             \min \quad &f(x) + r_kB(x)\\
             \subject \quad &x \in \operatorname{int} S
         \end{cases}\]设其极小点为 $x^{(k)}$.
-        \item 若 $r_kB(x^{(k)}) < \varepsilon$，则停止计算，得到点 $x^{(k)}$；否则，令 $r_{k + 1} = \beta r_k$，置 $k := k + 1$，返回2。
+        \item 若 $r_kB(x^{(k)}) < \varepsilon$，则停止计算，得到点 $x^{(k)}$；否则，令 $r_{k + 1} = \beta r_k$，置 $k := k + 1$，返回2.
     \end{enumerate}
 \end{remark}
 
@@ -800,9 +823,9 @@
 
 \begin{remark}
     求初始内点的迭代步骤：\begin{enumerate}
-        \item 任取 $x^{(0)} \in E^n, r_0 > 0$(如取 $r_0 = 1$)，置 $k := 0$。
+        \item 任取 $x^{(0)} \in E^n, r_0 > 0$(如取 $r_0 = 1$)，置 $k := 0$.
         \item 令 $S_k = \left\{i \mid g_i(x^{(k)}) \le 0, 1 \le i \le m\right\}, T_k = \left\{i \mid g_i(x^{k}) > 0, 1 \le i \le m\right\}$
-        \item 若 $S_k = \emptyset$，停止计算；否则，转4。
+        \item 若 $S_k = \varnothing$，停止计算；否则，转4.
         \item 构造函数 \[\widetilde{P}\left(x, r_{k}\right)=-\sum_{i \in S_{k}} g_{i}(x)+r_{k} \sum_{i \in T_{k}} \frac{1}{g_{i}(x)},\left(r_{k}>0\right)\]
         记 $\widetilde{R}_{k}=\left\{x \mid g_{i}(x)>0 ,i \in T_{k}\right\}$
         \item 以 $x^{(k)}$ 为初始点，在 $\tilde{R_k}$ 域内，求障碍函数 $\tilde{P}(x, r_k)$ 的极小点：\[\begin{cases}
@@ -814,12 +837,33 @@
 \end{remark}
 
 \begin{remark}
-    内点罚函数法优点：迭代总在可行域内进行，每一个中间结果都是可行解，可以作为近似解。
+    内点罚函数法优点：迭代总在可行域内进行，每一个中间结果都是可行解，可以作为近似解.
 
-    内点罚函数法缺点：选取初始可行点较困难，且只适用于含不等式约束的非线性规划问题。
+    内点罚函数法缺点：选取初始可行点较困难，且只适用于含不等式约束的非线性规划问题，否则没有严格内点.
 \end{remark}
 
 \subsection{乘子罚函数法}
+\subsubsection{等式约束优化的乘子罚函数法}
+\begin{remark}
+    对于等式约束优化问题\[\begin{cases}
+        \min &f(x)\\
+        \st &c_i(x) = 0, i \in \varepsilon    
+    \end{cases}\]
+    $P(x, \lambda, \pi)$ 为乘子罚函数，也称增广 Lagrange 函数.
+    \[\min_xP(x, \lambda, \pi) := f(x) - \sum_{i \in \varepsilon}\lambda_ic_i(x) + \pi\sum_{i \in \varepsilon}c_i^2(x)\]
+    对于凸规划，任意 $\pi > 0$ 下，原问题的最优解一定是乘子罚函数的最优解.
 
+    并且要使 $c_i(x_k) \to 0$，可以使乘子 $\lambda_i^{(k)}$ 足够靠近最优 Lagrange 乘子 $\lambda_i^*$，而不一定需要罚因子 $\pi_k \to +\infty$.
+\end{remark}
+
+\begin{remark}
+    乘子罚函数算法：\begin{enumerate}
+        \item 给定 $\pi_0 > 0, \lambda^{(0)} = 0$，初始点 $x_{-1} \in \mathbb{R}^n$，增长因子 $\gamma > 1$ 和允许误差 $\varepsilon > 0$. 令 $k = 0$.
+        \item 以 $x_{k - 1}$ 为初始点，用无约束优化方法计算函数 $P(x, \lambda^{(k)}, pi_k)$ 的最小值点 $x_k$.
+        \item 若 $\max\{|c_i(x_k)| \mid i \in \varepsilon\} \le \varepsilon$，算法终止. 否则，转下一步.
+        \item 若 $\norm{c(x_k)}_\infty \ge \norm{c(x_{k - 1})}_\infty$，令 $\pi_{k + 1} = \gamma \pi_k, \lambda^{(k + 1)} = \lambda_k$，置 $\lambda^{(k + 1)} = \lambda^{(k)}$，转步2. 否则，转步5.
+        \item 若 $\pi_k > \pi_{k - 1}$ 或 $\norm{c(x_k)}_\infty \le \frac{1}{4}\norm{c(x_{k - 1})}_\infty$，令 $\pi_{k + 1} = \pi_k$，根据 $\lambda_i^{(k + 1)} = \lambda_i^{(k)} - 2\pi_kc_i(x_k)$ 调整 $\lambda^{(k + 1)}$，置 $k = k + 1$，转步2. 否则，令 $\pi_{k + 1} = \gamma \pi_k$，$\lambda^{(k + 1)} = \lambda^{(k)}$，置 $k = k + 1$，转步2.
+    \end{enumerate}
+\end{remark}
 
 \end{document}
