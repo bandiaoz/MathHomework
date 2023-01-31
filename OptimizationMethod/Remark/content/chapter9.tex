@@ -1,0 +1,139 @@
+\section{罚函数法}
+\textbf{外点罚函数法、内点罚函数法}、乘子罚函数法.
+
+\subsection{外点罚函数法}
+\begin{note}
+    对于有约束优化问题 \[\begin{cases}
+        \min \quad &f(x)\\
+        \subject \quad &g_i(x) \ge 0, i = 1, \dots, m\\
+        &h_j(x) = 0, j = 1, \dots, l
+    \end{cases}\]
+    \begin{itemize}
+        \item 通过引入罚项转换为无约束优化问题 \begin{align*}
+            \min F(x, \sigma) &= f(x) + \sigma p(x)\\
+            &= f(x) + \sigma \left(\sum_{i = 1}^m \varphi(g_i(x)) + \sum_{j = 1}^l \psi(h_j(x))\right)
+        \end{align*}
+        \item 其中 $\sigma$ 是很大的正数，$\varphi(y), \psi(y)$ 是连续函数.
+        \item 一般取 $\varphi(g_i(x)) = \left(\max\left\{0, -g_i(x)\right\}\right)^\alpha$，$\psi(h_j(x)) = |h_j(x)|^\beta$，通常 $\alpha = \beta = 2$.
+    \end{itemize}
+\end{note}
+
+\begin{note}
+    外点罚函数法步骤：\begin{enumerate}
+        \item 给定初始点 $x^{(0)}$，初始罚因子 $\sigma_1 > 0(\sigma_1 = 1)$，放大系数 $c > 1$，允许误差 $\varepsilon > 0$，置 $k = 1$.
+        \item 以 $x^{(k - 1)}$ 为初始点，求解无约束问题 $\min f(x) + \sigma_k p(x)$ 设其极小点为 $x^{(k)}$.
+        \item 若 $\sigma_kp(x^{(k)}) < \varepsilon$，则停止计算，得到点 $x^{(k)}$；否则令 $\sigma_{k + 1} = c\sigma_k$，置 $k := k + 1$，返回步骤2.
+    \end{enumerate}
+\end{note}
+
+\begin{theorem}
+    对于由外点法所产生的序列 $\left\{x^{(k)}\right\}$，总有\begin{enumerate}
+        \item $F(x^{(k + 1)}, \sigma_{k + 1}) \ge F(x^{(k)}, \sigma_k)$
+        \item $p(x^{(k + 1)}) \le p(x^{(k)})$
+        \item $f(x^{(k + 1)}) \ge f(x^{(k)})$
+    \end{enumerate}
+\end{theorem}
+
+\begin{theorem}
+    设 $x^*$ 是问题(A)的一个最优解，则对 $\forall k$，有$f(x^*) \ge F(x^{(k)}, \sigma_k) \ge f(x^{(k)})$
+\end{theorem}
+
+\begin{note}
+    外点罚函数法的重要特点：函数 $F(x, \sigma)$ 是在整个空间 $E^n$ 内进行优化，初始点可任意选择，且外点法也可用于非凸规划的最优化.
+
+    缺点\begin{enumerate}
+        \item 惩罚项 $\sigma p(X)$ 的二阶偏导数一般不存在；
+        \item 外点法的中间结果不是可行解，不能作为近似解；
+        \item 当点 $x^{(k)}$ 接近最优解时，罚因子 $\sigma_k$ 很大.可能使罚函数性质变坏，使搜索产生极大困难.
+    \end{enumerate}
+\end{note}
+
+\subsection{内点罚函数法}
+基本思想：迭代总是从内点出发，并保持在可行域内部进行搜索．
+
+\begin{note}
+    障碍函数：\[G(x, r) = f(X) + rB(x)\]
+    其中 $r$ 是很小的正数，$B(x)$ 定义在可行域内部，它满足两个条件：\begin{enumerate}
+        \item $B(x)$ 是连续函数
+        \item 当点 $x$ 趋向可行域边界时，$B(x) \to +\infty$
+    \end{enumerate}
+    两种最重要的形式：\[B(x) = \sum_{i = 1}^m \frac{1}{g_i(x)} \quad B(x) = -\sum_{i = 1}^m\ln g_i(x)\]
+\end{note}
+
+\begin{note}
+    算法步骤：\begin{enumerate}
+        \item 给定初始点 $x^{(0)} \in \operatorname{int} S$，允许误差 $\varepsilon > 0$，初始参数 $r_1$，缩小系数 $\beta\in (0, 1)$，置 $k=1$.
+        \item 以 $x^{(k - 1)}$ 为初始点，求解下列问题\[\begin{cases}
+            \min \quad &f(x) + r_kB(x)\\
+            \subject \quad &x \in \operatorname{int} S
+        \end{cases}\]设其极小点为 $x^{(k)}$.
+        \item 若 $r_kB(x^{(k)}) < \varepsilon$，则停止计算，得到点 $x^{(k)}$；否则，令 $r_{k + 1} = \beta r_k$，置 $k := k + 1$，返回2.
+    \end{enumerate}
+\end{note}
+
+\begin{theorem}
+    对于由内点法所产生的序列 $\{x^{(k)}\}$，总有\begin{enumerate}
+        \item $G(x^{(k + 1)}, r_{k + 1}) \le G(x^{(k)}, r_k)$
+        \item $B(x^{(k + 1)}) \ge B(x^{(k)})$
+        \item $f(x^{(k + 1)}) \le f(x^{(k)})$
+    \end{enumerate}
+\end{theorem}
+
+\begin{theorem}
+    设 $\{x^{(l)}\}$ 是由内点法产生的一个序列，则 $\{x^{(k)}\}$ 的任何收敛子序列的极限都是原问题的最优解.
+\end{theorem}
+
+\begin{note}
+    求初始内点的迭代步骤：\begin{enumerate}
+        \item 任取 $x^{(0)} \in E^n, r_0 > 0$(如取 $r_0 = 1$)，置 $k := 0$.
+        \item 令 $S_k = \left\{i \mid g_i(x^{(k)}) \le 0, 1 \le i \le m\right\}, T_k = \left\{i \mid g_i(x^{k}) > 0, 1 \le i \le m\right\}$
+        \item 若 $S_k = \varnothing$，停止计算；否则，转4.
+        \item 构造函数 \[\widetilde{P}\left(x, r_{k}\right)=-\sum_{i \in S_{k}} g_{i}(x)+r_{k} \sum_{i \in T_{k}} \frac{1}{g_{i}(x)},\left(r_{k}>0\right)\]
+        记 $\widetilde{R}_{k}=\left\{x \mid g_{i}(x)>0 ,i \in T_{k}\right\}$
+        \item 以 $x^{(k)}$ 为初始点，在 $\tilde{R_k}$ 域内，求障碍函数 $\tilde{P}(x, r_k)$ 的极小点：\[\begin{cases}
+            \min &\tilde{P}(x, r_k)\\
+            \subject & x \in \tilde{R_k}
+        \end{cases}\] 得 $x^{(k + 1)}$，转6
+        \item 令 $ 0 < r_{k + 1} < r_k$ (如取 $r_{k + 1} = \frac{1}{10}r_k$)，置$k:=k+1$，转2.
+    \end{enumerate}
+\end{note}
+
+\begin{note}
+    内点罚函数法优点：迭代总在可行域内进行，每一个中间结果都是可行解，可以作为近似解.
+
+    内点罚函数法缺点：选取初始可行点较困难，且只适用于含不等式约束的非线性规划问题，否则没有严格内点.
+\end{note}
+
+\subsection{乘子罚函数法}
+\subsubsection{等式约束优化的乘子罚函数法}
+\begin{note}
+    对于等式约束优化问题\[\begin{cases}
+        \min &f(x)\\
+        \st &c_i(x) = 0, i \in \varepsilon    
+    \end{cases}\]
+    $P(x, \lambda, \pi)$ 为乘子罚函数，也称增广 Lagrange 函数.
+    \[\min_xP(x, \lambda, \pi) := f(x) - \sum_{i \in \varepsilon}\lambda_ic_i(x) + \pi\sum_{i \in \varepsilon}c_i^2(x)\]
+    对于凸规划，任意 $\pi > 0$ 下，原问题的最优解一定是乘子罚函数的最优解.
+
+    并且要使 $c_i(x_k) \to 0$，可以使乘子 $\lambda_i^{(k)}$ 足够靠近最优 Lagrange 乘子 $\lambda_i^*$，而不一定需要罚因子 $\pi_k \to +\infty$.
+\end{note}
+
+\begin{note}
+    乘子罚函数算法：\begin{enumerate}
+        \item 给定 $\pi_0 > 0, \lambda^{(0)} = 0$，初始点 $x_{-1} \in \mathbb{R}^n$，增长因子 $\gamma > 1$ 和允许误差 $\varepsilon > 0$. 令 $k = 0$.
+        \item 以 $x_{k - 1}$ 为初始点，用无约束优化方法计算函数 $P(x, \lambda^{(k)}, pi_k)$ 的最小值点 $x_k$.
+        \item 若 $\max\{|c_i(x_k)| \mid i \in \varepsilon\} \le \varepsilon$，算法终止. 否则，转下一步.
+        \item 若 $\norm{c(x_k)}_\infty \ge \norm{c(x_{k - 1})}_\infty$，令 $\pi_{k + 1} = \gamma \pi_k, \lambda^{(k + 1)} = \lambda_k$，置 $\lambda^{(k + 1)} = \lambda^{(k)}$，转步2. 否则，转步5.
+        \item 若 $\pi_k > \pi_{k - 1}$ 或 $\norm{c(x_k)}_\infty \le \frac{1}{4}\norm{c(x_{k - 1})}_\infty$，令 $\pi_{k + 1} = \pi_k$，根据 $\lambda_i^{(k + 1)} = \lambda_i^{(k)} - 2\pi_kc_i(x_k)$ 调整 $\lambda^{(k + 1)}$，置 $k = k + 1$，转步2. 否则，令 $\pi_{k + 1} = \gamma \pi_k$，$\lambda^{(k + 1)} = \lambda^{(k)}$，置 $k = k + 1$，转步2.
+    \end{enumerate}
+\end{note}
+
+
+
+% \nocite{*}
+% \printbibliography[heading=bibintoc, title=\ebibname]
+
+% \appendix
+% \appendixpage
+% \addappheadtotoc
+

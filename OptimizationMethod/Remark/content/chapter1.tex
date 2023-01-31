@@ -1,0 +1,115 @@
+\section{Introduction}
+\begin{note}
+    给定二次型 $f(X) = X^T AX$，若对 $\forall X \neq 0$，都有 $f(X) = X^T AX > 0$ 成立，则称 $f(X)$ 为正定二次型，$A$ 为正定矩阵.
+
+    对于 $n$ 阶实对称矩阵 $A$，下列命题等价：
+    \begin{itemize}
+        \item $A^T AX$ 是正定二次型（或 $A$ 是正定矩阵）
+        \item $A$ 的 $n$ 个顺序主子式都大于 0
+        \item $A$ 的 $n$ 个特征值都大于 0
+        \item 存在可逆矩阵 $P$，使得 $A = P^T P$
+    \end{itemize}
+\end{note}
+
+\begin{note}
+    给定二次型 $f(X) = X^T AX$，若对 $\forall X \neq 0$，都有 $f(X) = X^T AX \ge 0$ 成立，则称 $f(X)$ 为半正定二次型，$A$ 为半正定矩阵.
+
+    对于 $n$ 阶实对称矩阵 $A$，下列命题等价：
+    \begin{itemize}
+        \item $A^T AX$ 是半正定二次型（或 $A$ 是半正定矩阵）
+        \item $A$ 的所有主子式都大于等于 0，而且至少有一个等于 0
+        \item $A$ 的 $n$ 个特征值都大于等于 0，而且至少有一个等于 0
+    \end{itemize}
+\end{note}
+
+\begin{note}
+    设 $S \subseteq E^n$，若对 $\forall x, y \in S, \forall \lambda \in [0, 1]$，都有 $\lambda x + (1 - \lambda)y \in S$，则称 $S$ 为凸集.
+    \begin{itemize}
+        \item $x_1, \dots, x_k \in S, \lambda_1 + \cdots + \lambda_k = 1$，称 $\sum_{i = 1}^k \lambda_ix_i$ 为 $x_1, \dots, x_k$ 的凸组合
+        \item $S$ 是非空凸集，$x\in S$，若由 $x = \lambda x_1 + (1 - \lambda)x_2$，其中 $\lambda \in (0, 1), x_1, x_2 \in S$，必推出 $x = x_1 = x_2$，则称 $x$ 是 $S$ 的极点.
+        \item $S$ 是 $E^n$ 中的闭凸集，$d \in E^n, d \neq 0$，如果对 $\forall x \in S$，有 $\left\{x + \lambda d | \lambda > 0\right\} \subset S$，则称向量 $d$ 为 $S$ 的方向.若 $S$ 的方向 $d$ 不能表示为集合的两个不同方向的\textbf{正线性组合}，则称 $d$ 为 $S$ 的极方向.
+    \end{itemize}
+\end{note}
+
+\begin{note}
+    设 $S = \left\{x \mid Ax = b, x \ge 0\right\}$ 为非空多面集，则有
+    \begin{itemize}
+        \item 极点集非空，且存在有限个极点
+        \item 极方向集合为空集的充要条件是 $S$ 有界；若 $S$ 无界，则存在有限个极方向
+        \item (多面集表示定理)$x \in S$ 的充要条件是 \begin{gather*}
+            x = \sum_{j = 1}^k \lambda_j x^{(j)} + \sum_{j = 1}^l \mu_j d^{(j)}\\
+            \lambda_j \ge 0, \forall j = 1, \dots, k\\
+            \sum_{j = 1}^k \lambda_j = 1\\
+            \mu_j \ge 0, \forall j = 1, \dots, l
+        \end{gather*}
+    \end{itemize}
+\end{note}
+
+\begin{note}
+    凸集分离定理：
+    \begin{itemize}
+        \item 设 $S$ 为 $E^n$ 的闭凸集，$y\notin S$，则存在唯一的 $\overline{x} \in S$，使得\[ \|y - \overline{x}\| = \sideset{}{}{\operatorname{inf}}_{x \in S}\|y - x\| > 0 \]
+        $\overline{x}$ 是这一最小距离点 $\Leftrightarrow (y - \overline{x})^T(\overline{x} - x) \ge 0, \forall x \in S$.
+
+        \item 设 $S$ 是 $E^n$ 的非空闭凸集，$y\notin S$，则存在非零向量 $p$ 以及数 $\varepsilon > 0$，使得对 $\forall x \in S$，有 $p^T y \ge \varepsilon + p^T x$
+        
+        \item 设 $S$ 是 $E^n$ 的非空凸集，$y\in \partial S$，则存在非零向量 $p$，使得对 $\forall x \in clS$（$S$ 的闭包，由 $S$ 的内点和边界点组成），有 $p^Ty \ge p^Tx$.
+        
+        \item 设 $S_1$ 和 $S_2$ 是 $E^n$ 的两个非空凸集，$S_1 \cap S_2 = \varnothing$，则存在非零向量，使得\[p^Ty \ge p^T x \quad \text{其中}\forall y \in S_1, \forall x \in S_2\]
+    \end{itemize}
+\end{note}
+
+\begin{note}
+    两个系统恰有一个有解：
+    \begin{itemize}
+        \item Farkas 引理：设 $A$ 为 $m\times n$ 矩阵，$c$ 为 $n$ 维列向量，则 $Ax \le 0, c^Tx > 0$ 有解的充分条件是 $A^Ty = c, y\ge 0$ 无解.
+        \item Gordan定理：给定矩阵 $\boldsymbol{A} \in \mathbb{R}^{m\times n}$，下列两个系统只有一个有解
+        \begin{gather*}
+            \boldsymbol{A}x < 0\\
+            \boldsymbol{y} \ge 0, \boldsymbol{y} \neq 0, \boldsymbol{A}^T\boldsymbol{y} = 0
+        \end{gather*}
+    \end{itemize}
+\end{note}
+
+\begin{note}
+    设 $S$ 是 $E^n$ 中的非空凸集，$f(x)$ 是定义在 $S$ 上的实函数，如果对于每一对 $x_1, x_2 \in S$ 及每一个 $\lambda, 0\le \lambda \le 1$ 都有 \[f(\lambda x_1 + (1 - \lambda)x_2) \le \lambda f(x_1) + (1 - \lambda)f(x_2)\]
+    则称函数 $f(x)$ 为 $S$ 上的凸函数.
+
+    凸函数的根本重要性：设 $S$ 是 $E^n$ 中的非空凸集，$f$ 是定义在 $S$ 上的凸函数，则 $f$ 在 $S$ 上的局部极小点事整体极小点，且极小点的集合是凸集.
+\end{note}
+
+\begin{note}
+    $f(x)$ 是凸集 $S$ 上的凸函数，对每一个实数 $c$，则集合 $S_c = \left\{x | x \in S, f(x) \le c\right\}$ 是凸集.
+\end{note}
+
+\begin{note}
+    凸函数的判别：
+    \begin{itemize}
+        \item (一阶充要条件)设 $S$ 是 $E^n$ 中的非空开凸集，$f(x)$ 是定义在 $S$ 上的\textbf{可微}函数，则 $f(x)$ 为凸函数的充要条件是对任意两点 $x_1, x_2 \in S$，有 \[f(x_2) \ge f(x_1) + \nabla f(x_1)^T(x_2 - x_1)\]
+        $f(x)$ 为严格凸函数的充要条件是对任意互不相同两点 $x_1, x_2 \in S$，有 \[f(x_2) > f(x_1) + \nabla f(x_1)^T(x_2 - x_1)\]
+
+        几何意义：$f(x)$ 是凸函数当且仅当任意点处的切线增量不超过函数的增量.
+        \item (二阶充要条件)设 $S$ 是 $E^n$ 中的非空开凸集，$f(x)$ 是定义在 $S$ 上的\textbf{二次可微}函数，则 $f(x)$ 为凸函数的充要条件是对任意 $x \in S$，$f(x)$ 在 $x$ 处的Hessian矩阵 $\nabla ^2f(x)$ 是半正定的.
+        
+        $f(x)$ 为严格凸函数的充要条件是对任意 $x \in S$，$f(x)$ 在 $x$ 处的Hessian矩阵 $\nabla ^2f(x)$ 是正定的.
+    \end{itemize}
+\end{note}
+
+\begin{note}
+    设 $f(x)$ 是定义在凸集 $S$ 上的可微凸函数，若 $\exists x^* \in S$，使对 $\forall x \in S$，都有 \[\nabla f(x^*)^T(x - x^*) \ge 0\]
+    则 $x^*$ 是 $f(x)$ 在凸集 $S$ 上的全局极小点.
+\end{note}
+
+\begin{note}
+    凸规划：求凸函数在凸集上的极小点.
+    \begin{align*}
+        \min \quad &f(x)\\ 
+        s.t. \quad &g_{i}(x) \le 0, i=1, \cdots, m \\  
+        &h_{j}(x)=0, j=1, \cdots, l 
+    \end{align*}
+    若 $f(x)$ 是凸函数，$g_i(x)$ 是凸函数，$h_j(x)$ 是线性函数，则原问题为凸规划.
+    \begin{itemize} 
+        \item 凸规划的局部极小点就是整体极小点
+        \item 且极小点的集合为凸集
+    \end{itemize}
+\end{note}

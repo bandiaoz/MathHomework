@@ -1,0 +1,94 @@
+\section{非线性规划的最优性条件}
+\subsection{无约束优化的最优性条件}
+\begin{note}
+    无约束优化问题的最优性条件\[\min f(x) \quad \text{s.t. } x \in E^n\]
+    \begin{itemize}
+        \item 定义：对$\min f(x)$，设 $\bar{x} \in E^n$ 是任给一点，$d\neq 0$ ，若存在 $\delta > 0$，使得对任意的 $\lambda \in (0, \delta)$，有 $f(\bar{x} + \lambda d) < f(\bar{x})$，则称 $d$ 为 $f(x)$ 在点 $\bar{x}$ 处的下降方向.
+        \item 引理：设函数 $f(x)$ 在点 $\bar{x}$ 可微，若存在 $d \neq 0$ 使 $\nabla f(\bar{x})^td < 0$，则存在 $\delta > 0$，使对 $\forall \lambda\in (0, \delta)$，有 $f(\bar{x} + \lambda d) < f(\bar{x})$
+    \end{itemize}
+\end{note}
+
+\begin{theorem}
+    无约束优化问题的最优性条件\begin{itemize}
+        \item 一阶必要条件：设函数 $f(x)$ 在点 $\bar{x}$ 处可微，若 $\bar{x}$ 是局部极小点，则 $\nabla f(\bar{x}) = 0$.
+        \item 二阶必要条件：设函数 $f(x)$ 在 $\bar{x}$ 处二阶可微，若 $\bar{x}$ 是局部极小点，则 $\nabla f(\bar{x}) = 0$，且 Hessian 矩阵 $\nabla^2f(\bar{x})$ 是半正定的.
+        \item 充分条件：设函数 $f(x)$ 在点 $\bar{x}$ 处二次可微，若梯度 $\nabla f(\bar{x}) = 0$ ，且 Hessian矩阵 $\nabla^2f(\bar{x})$ 正定，则 $\bar{x}$ 是严格局部极小点.
+        \item 设函数 $f(x)$ 在点 $\bar{x}$ 的邻域内二次可微，若梯度 $\nabla f(\bar{x}) = 0$，且Hessian矩阵 $\nabla^2f(x)$ \textbf{在该邻域内}半正定，则 $\bar{x}$ 是局部极小点.特别地，对于邻域内的任意点 $x\neq \bar{x}$，若 $\nabla^2f(x)$ 是正定矩阵，则 $\bar{x}$ 是一个\textbf{严格}的局部极小点.
+        \item 设 $f(x)$ 是定义在 $E^n$ 上的可微凸函数，$\bar{x} \in E^n$，则 $\bar{x}$ 为整体极小点的充要条件是 $\nabla f(\bar{x}) = 0$.
+    \end{itemize}
+\end{theorem}
+
+\begin{note}
+    驻点\begin{itemize}
+        \item 定义：若 $f(x)$ 在点 $x^*$ 可微，并且 $\nabla f(x^*) = 0$.则 $x^*$ 称为 $f(x)$ 的一个驻点(平稳点)，既不是极小点，也不是极大点的驻点称为鞍点.
+    \end{itemize}
+\end{note}
+
+\subsection{约束优化问题的最优性条件}
+\begin{note}
+    约束优化问题的最优性条件
+    \begin{itemize}
+        \item 定义：对 $\underset{x \in E^n}{\min}f(x)$，设 $\bar{x} \in E^n$ 是任给一点，$d\neq 0$，若存在 $\delta > 0$，使得对任意的 $\lambda \in (0, \delta)$ 有 $f(\bar{x} + \lambda d) < f(\bar{x})$，则称 $d$ 为 $f(x)$ 在点 $\bar{x}$ 处的下降方向.\[F_0 = \left\{d\ |\ \nabla f(\bar{x})^td < 0\right\}\]称为点 $\bar{x}$ 处的\textbf{下降方向集}.
+        \item 定义：设集合 $S \subset E^n$，$\bar{x} \in clS$，$d$ 为非零向量，若存在数 $\delta > 0$，使得对任意 $\lambda \in (0, \delta)$，都有 $\bar{x} + \lambda d \in S$ 则称 $d$ 为集合 $S$ 在 $\bar{x}$ 的\textbf{可行方向}. 
+        
+        $D=\{d \mid d \neq 0, \bar{x} \in c l S, \exists \delta>0, \forall \lambda \in(0, \delta), \bar{x}+\lambda d \in S\}$ 是 $\bar{x}$ 处的\textbf{可行方向锥}.
+        \item 几何最优性条件：考虑问题\[\min f(x), \quad \text{s.t. } x \in S\]设 $S$ 是 $E^n$ 的非空集合，$\bar{x} \in S$，$f(x)$ 在 $\bar{x}$ 处可微，若 $\bar{x}$ 是局部最优解，则下降方向集和可行方向锥没有交集. 即 $F_0\cap D = \varnothing$.
+    \end{itemize}
+\end{note}
+
+\begin{note}
+    不等式约束优化问题的一阶最优性条件\[\begin{cases}
+        \min \quad &f(x)\\
+        \text{s.t.} \quad &g_i(x) \ge 0, \quad i = 1, \dots, m
+    \end{cases}\]
+    可行域 $S = \left\{x\ |\ g_i(x) \ge 0, i = 1, \dots, m\right\}$
+    \begin{itemize}
+        \item 定义：若一个可行点 $\bar{x}$($\bar{x} \in S$)使某个不等式约束$g_i(x) \ge 0$变成等式，即 $g_i(\bar{x}) = 0$，则该不等式约束称为关于可行点 $\bar{x}$ 的起作用约束（或等式约束）；否则，若 $\bar{x}$ 使得某个 $g_i(\bar{x}) > 0$，则该不等式约束称为关于可行点 $\bar{x}$ 的不起作用约束(或松约束).
+        
+        记 $I = \left\{i \mid g_i(\bar{x}) = 0, \bar{x} \in S\right\}$ 为起作用约束(等式约束).
+        \item $G_0 = \left\{d \mid \nabla g_i(\bar{x})^td > 0, i \in I\right\}$ 称为 $S$ 在点 $\bar{x}$ 处的\textbf{局部约束方向锥(内方向锥)}
+        \item 几何最优性条件：设 $\bar{x} \in S$，$f(x)$ 和 $g_i(x)(i \in I)$ 在 $\bar{x}$ 处可微，$g_i(x)(i \notin I)$ 在 $\bar{x}$ 处连续，如果 $\bar{x}$ 是局部最优解，则下降方向集和内方向锥的交集为空，即 $F_0\cap G_0 = \varnothing$.
+    \end{itemize}
+\end{note}
+
+\begin{theorem}
+    Fritz John 条件：设 $\bar{x} \in S$， $f(x), g_i(x)(i \in I)$ 在 $\bar{x}$ 处可微，$g_i(x)(i\notin I)$ 在 $\bar{x}$ 处连续，若 $\bar{x}$ 是局部最优解，则存在不全为零的数 $w_0, w_i(i \in I)$，使得 \[\begin{cases}
+        w_{0} \nabla f(\bar{x})-\sum_{i \in I} w_{i} \nabla g_{i}(\bar{x})=0 \\
+        w_{0}, w_{i} \geq 0, \quad i \in I
+    \end{cases}\] $\bar{x}$ 称为 Fritz John 点，即满足Fritz John条件的点.
+\end{theorem}
+
+\begin{theorem}
+    KKT 条件：设 $\bar{x} \in S$， $f(x), g_i(x)(i \in I)$ 在 $\bar{x}$ 处可微，$g_i(x)(i\notin I)$ 在 $\bar{x}$ 处连续，若 $\bar{x}$ 是局部最优解，存在非负数 $w_i, i \in I$，使得\[\nabla f(\bar{x}) - \sum_{i \in I}w_i\nabla g_i(\bar{x}) = 0\]
+    
+    设 $\bar{x} \in S, f, g_i$ 在 $\bar{x}$ 可微，$\left\{\nabla g_i(\bar{x}) \mid i \in I\right\}$；线性无关，若 $\bar{x}$ 是局部最优解，则存在数 $w_i, i=1, 2, \dots, m$，使得\[\begin{array}{l}
+        \nabla f(\bar{x})-\sum_{\mathrm{i}=1}^{m} w_{i} \nabla g_{i}(\bar{x})=0 \\
+        w_{i} g_{i}(\bar{x})=0 \quad i=1,2, \cdots, m \\
+        w_{i} \geq 0 \quad i=1,2, \cdots, m 
+    \end{array}\]
+
+    对于凸规划，则若在 $\bar{x}$ 点处KKT条件成立，则 $\bar{x}$ 为整体极小值点.
+\end{theorem}
+
+\subsection{一般约束问题的一阶最优性条件}
+\begin{theorem}
+    设 $\bar{x} \in S$，$f(x)$ 和 $g_i(x)(i\in I)$ 在 $\bar{x}$ 处可微，$g_i(x) (i \notin I)$ 在 $\bar{x}$ 处连续，$h_j(j = 1, \dots, l)$ 在 $\bar{x}$ 处连续可微，且 $\bar{x}$ 是 $\S = \{x \mid h(x) = 0\}$ 的正则点.如果 $\bar{x}$ 是问题(NP)的局部最优解，则在 $\bar{x}$ 处，有\[F_{0} \cap G_{0} \cap H_{0}=\varnothing\]其中
+    \begin{align*}
+        F_{0}&=\left\{d \mid \nabla f(\bar{x})^{T} d<0\right\} \\
+        G_{0}&=\left\{d \mid \nabla g_{i}(\bar{x})^{T} d>0, i \in I\right\} \\
+        H_{0}&=\left\{d \mid \nabla h_{j}(\bar{x})^{T} d=0, j=1, \cdots, l\right\}
+    \end{align*}
+\end{theorem}
+
+\begin{theorem}
+    若系统 $Ax < 0$，$Bx = 0$ 无解，则系统 $A^ty + B^tz = 0, y \ge 0$，且 $y \neq 0$ 或 $z \neq 0$ 有解.
+\end{theorem}
+
+\begin{note}
+    一阶充分条件：\[\begin{cases}
+        \min &f(x)\\
+        \st &g_i(x) \ge 0 \quad i = 1, \dots, m\\
+        &h_j(x) = 0, \quad j = 1, \dots, l
+    \end{cases}\]
+    $f$ 是凸函数，$g_i$ 是凹函数，$h_j$ 是线性函数，$S$ 为可行域，$\bar{x} \in S$，$I = \{i \mid g_i(\bar{x}) = 0\}$. $f$ 和 $g_i(i \in I)$ 在点 $\bar{x}$ 可微，$h_j$ 在点 $\bar{x}$ 连续，$g_i(i \notin I)$ 在点 $\bar{x}$ 连续，且在 $\bar{x}$ 处 KKT 条件成立，则 $\bar{x}$ 为整体极小点.
+\end{note}
