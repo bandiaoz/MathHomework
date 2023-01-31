@@ -1,0 +1,321 @@
+%!TEX program = xelatex
+% 完整编译: xelatex -> biber/bibtex -> xelatex -> xelatex
+\documentclass[lang=cn,11pt,a4paper]{elegantpaper}
+
+\title{最优化小论文}
+\author{22120307 陈景龙}
+\institute{北京交通大学}
+
+% \version{0.10}
+\date{\zhtoday}
+
+
+% 本文档命令
+\usepackage{array}
+\newcommand{\ccr}[1]{\makecell{{\color{#1}\rule{1cm}{1cm}}}}
+\addbibresource[location=local]{./reference.bib} % 参考文献，不要删除
+
+% 定义数学命令
+\newcommand{\subject}{s.t.}
+
+% 定义代码风格
+\lstset{
+    basicstyle          =   \sffamily,          % 基本代码风格
+    keywordstyle        =   \bfseries,          % 关键字风格
+    commentstyle        =   \rmfamily\itshape,  % 注释的风格，斜体
+    stringstyle         =   \ttfamily,  % 字符串风格
+    flexiblecolumns,                % 别问为什么，加上这个
+    numbers             =   left,   % 行号的位置在左边
+    showspaces          =   false,  % 是否显示空格，显示了有点乱，所以不现实了
+    numberstyle         =   \zihao{-5}\ttfamily,    % 行号的样式，小五号，tt等宽字体
+    showstringspaces    =   false,
+    captionpos          =   t,      % 这段代码的名字所呈现的位置，t指的是top上面
+    frame               =   l,   % 显示边框
+}
+
+\lstdefinestyle{Python}{
+    language        =   Python, % 语言选Python
+    basicstyle      =   \zihao{-5}\ttfamily,
+    numberstyle     =   \zihao{-5}\ttfamily,
+    keywordstyle    =   \color{blue},
+    keywordstyle    =   [2] \color{teal},
+    stringstyle     =   \color{magenta},
+    commentstyle    =   \color{red}\ttfamily,
+    breaklines      =   true,   % 自动换行，建议不要写太长的行
+    columns         =   fixed,  % 如果不加这一句，字间距就不固定，很丑，必须加
+    basewidth       =   0.5em,
+}
+\lstdefinestyle{C++}{
+    language        =   C++, % 语言选C++
+    basicstyle      =   \zihao{-5}\ttfamily,
+    numberstyle     =   \zihao{-5}\ttfamily,
+    keywordstyle    =   \color{blue},
+    keywordstyle    =   [2] \color{teal},
+    stringstyle     =   \color{magenta},
+    commentstyle    =   \color{red}\ttfamily,
+    breaklines      =   true,   % 自动换行，建议不要写太长的行
+    columns         =   fixed,  % 如果不加这一句，字间距就不固定，很丑，必须加
+    basewidth       =   0.5em,
+}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+
+\keywords{优化问题，01背包，TSP问题}
+\end{abstract}
+
+\newpage
+\definecolor{winered}{rgb}{0,0,0} 
+\tableofcontents
+\newpage
+
+\section{01背包}
+\subsection{问题与格式介绍}
+01背包是在 $n$ 个物品中取出若干个物品，装入容量为 $m$ 的背包。每个物品有其对应的体积和价值，求解将哪些物品装入背包可以使获得的总价值最大。
+
+输入格式包含三行：第一行为两个整数 $n, m$，代表物品的个数和背包的容量：第二行包含 $n$ 个整数 $w_1, w_2, \dots, w_n$，代表每个物品的重量；第三行包含 $n$ 个整数 $v_1, v_2, \dots, v_n$，代表每个物品的价值。
+
+输出为一行一个整数，代表最大价值。
+
+也就是我们需要求解如下优化问题 
+\begin{equation}
+	\begin{cases}
+		\max \quad &\sum_{i = 1}^nc_iv_i\\
+		\subject &\sum_{i = 1}^nc_iw_i \le m\\
+		&c_i \in \{0, 1\}, \quad i = 1, \dots, n
+	\end{cases}
+\end{equation}
+
+\subsection{暴力枚举法(Brute force)}
+\subsubsection{基本思想}
+暴力枚举法对于每个物品枚举其选或者不选的情况，对于枚举出来的每种情况，判断其总重量是否超过 $m$ 的限制。在所有重量小于等于 $m$ 的方案中，选出价值最高的一个即可。
+
+\subsubsection{复杂度分析}
+由于每个物品都存在两种选择方案，因此时间复杂度为 $\mathcal{O}\left(C \cdot 2^n\right)$，视枚举方法的不同，$C$ 也有不同的取值。如果是先枚举选或不选的情况，在扫描一遍统计答案，则 $C = n$，复杂度为 $\mathcal{O}(n2^n)$，一般采用的是二进制方式进行枚举。
+
+
+\subsection{回溯法(Backtracking)}\label{subsec-1.3}
+\subsubsection{基本思想}
+回溯法也是暴力枚举的一种，不过其采取的是边枚举边统计的方式，一般采取Dfs的方式，搜到一种结果后便跳转至上一个解空间树，搜索另一个可行解。由于其在枚举过程中就记录了 $weight$ 和 $value$ 的值，因此如果在枚举的途中发现 $weight > m$，便可以直接中止后序的搜索，这样便可以减少一些无用的搜索状态，称为剪枝(prune)。
+
+\subsubsection{复杂度分析}
+尽管这样剪枝能够在某些情况下减掉一些状态，但其无法动摇复杂度的本质，因此该剪枝算法我们只称其具有\textbf{较小的常数}，并不认为其时间复杂度发生了变化，故该算法时间复杂度仍然为 $\mathcal{O}\left(2^n\right)$。
+
+
+\subsection{贪心法(Greedy)}
+\subsubsection{基本思想}
+贪心法是一种非常直观的算法，也是非常符合人们常识的一种算法，尽管其可能无法得到01背包的正确解。贪心法按照物品的单位价值降序排序，然后依次考虑每个物品，能放则放，最后统计选择的物品价值。
+
+贪心法可以求解背包问题，因为背包问题中每个物品可以只放一部分。但在01背包问题中，物品仅有放与不放两个状态，因此贪心法求解01背包可能无法填满整个背包，从而导致获取的价值无法达到最优解。
+
+\subsubsection{复杂度分析}
+该算法在开始时需要对物品进行排序，然后再依次枚举。一般而言，我们认为排序的最好复杂度为 $\mathcal{O}\left(n\mathrm{lo}\mathrm{g}_\mathrm{2}n\right)$，而枚举的复杂度则为 $\mathcal{O}(n)$，因此该算法的时间复杂度为 $\mathcal{O}\left(n\mathrm{lo}\mathrm{g}_\mathrm{2}n\right)$。
+
+
+\subsection{回溯法 + 分支界限法(剪枝plus)}
+\subsubsection{基本思想}
+\ref{subsec-1.3}中我们已经介绍了回溯法以及一种可行的剪枝算法，而分支界限法则是在其基础之上，进一步提升了剪枝的效果。
+
+分支界限法首先确定一个合理的界限函数，并根据该函数确定解空间的上下界。然后按照广度优先策略搜索问题的解空间，依次扩展该节点的所有子节点，并且计算这些子节点目标函数的（上界）。由于本题是求最大价值，所以如果子节点的上界仍然低于最开始所确定下界，则将该子节点丢弃，因为其生成的解不会比当前节点更优；否则将其加入优先队列，然后每次从队列中取出目标函数价值最大的点进行上述搜索。当然，在搜到一个可行解之后，解空间的下界将改为该可行解，然后不断重复上述过程直到队列为空。
+
+\subsubsection{复杂度分析}
+分支界限法是一个非常优秀的剪枝算法，但是其仍然无法改变回溯法的本质复杂度，因此该算法的时间复杂度仍然为 $\mathcal{O}\left(2^n\right)$。
+
+
+\subsection{动态规划法}
+\subsubsection{基本思想}
+动态规划算法将背包问题划分为若干个阶段，第 $i$ 个阶段表示考了了前i个物品所得最优解，用二维数组表示，则 $F[i][j]$ 表示前 $i$ 个物品凑出重量 $j$ 的最大价值。每一次加入新的物品，我们就从 $F[i][0 \sim m]$ 更新 $F[i+1][0 \sim m]$，更新方程为 $F\left[i\right]\left[j\right]=\max{\left(F\left[i-1\right]\left[j-W\left[i\right]\right]+V\left[i\right]\right)}$。由于动态规划算法每一次都是当前状态的最优解，换句话说，各个子问题的解只和它前面的子问题的解相关，而且子问题的解都是当前情况的最优解。因此我们不管以什么样的顺序添加物品，最终状态都将是考虑 $n$ 个物品的最优解。
+
+\subsubsection{复杂度分析}
+每次添加一个新的物品，都需要扫描 $0 \sim m$去求解，所以动态规划算法的时间复杂度为 $\mathcal{O}\left(nm\right)$。此外，我们如果在枚举 $0 \sim m$ 的时候采用倒序枚举更新的方法，那么我们就可以直接省去数组的第一维，并且可以发现在一次更新过程中，先更新的值不会影响未更新的值，所以空间复杂度可以降至 $\mathcal{O}\left(m\right)$。
+
+此外，在枚举的过程中，我们并不一定要枚举到 $m$，可以加入一些小优化，在考虑第 $i$ 个物品时，枚举到 $\min\left(m,\sum_{j=1}^{i}w_j\right)$ 即可。
+
+
+\section{TSP问题}
+\subsection{问题与格式介绍}
+TSP问题又称旅行商问题，该问题是在寻求单一旅行者由起点出发，通过所有给定的需求点之后，最后再回到原点的最小路径成本。本题我们给定编号为 $0 \sim n$的 $n+1$ 个城市，求旅行商从0号城市出发，周游所有城市后回到0号城市的最小成本。
+
+输入包含若干行，第一行一个整数 $n$，代表城市的个数；之后给出一个 $(n+1) \times (n+1)$的矩阵(行和列都从0开始编号)，第 $i$ 行第 $j$ 列的数 $V_{i,j}$ 代表城市 $i$ 和城市 $j$ 之间的距离，数据保证 $V_{i,i}=0,V_{i,j}=V_{j,i}$，特殊数据要求会在相应算法中说明。
+
+输出包含一行一个整数，代表最小路径成本。
+
+问题可以表示为
+\begin{equation}
+	\begin{cases}
+		\min \quad &\sum_{i = 1}^{n + 1} V_{c_{i - 1}, c_{i}}\\
+		\subject &c_0 = c_{n + 1} = 0\\
+		&\{c_1, \dots, c_n\} = \{1, \dots, n\}
+	\end{cases}
+\end{equation}
+其中 $c_1, \dots, c_n$ 是一个长度为 $n$ 的排列。
+
+\subsection{枚举法(Enumerative)}
+\subsubsection{基本思想}
+我们暴力枚举TSP问题中所有可能的城市路径，即对于 $1 \sim n$ 这 $n$ 座城市，枚举其所有可能的排列情况，假定其排列情况为 $p_1,p_2,\cdots,p_n$，那么TSP问题的一条可行路径为 $0\rightarrow p_1\rightarrow p_2\rightarrow\cdots\rightarrow p_n\rightarrow0$，再按照这样的路径统计成本，最后选取一个最小的即可。
+
+\subsubsection{复杂度分析}
+由于每次排列的统计复杂度是 $\mathcal{O}\left(n\right)$的，枚举所有可能的情况为 $\mathcal{O}\left(n!\right)$，因此该算法的总时间复杂度为$\mathcal{O}\left(n!n\right)$。
+
+
+\subsection{回溯法(Backtracking)}
+\subsubsection{基本思想}
+回溯法也是暴力的一种，枚举法是枚举 $1 \sim n$ 的所有全排列，而回溯法是依次在 $p_i$ 位置填数，然后回溯填其他数。
+
+\subsubsection{复杂度分析}
+回溯法每个位置的枚举复杂度为 $\mathcal{O}\left(n\right)$，总情况数为 $\mathcal{O}\left(n!\right)$，所以总时间复杂度为 $\mathcal{O}\left(n!n\right)$。
+
+不过值得一提的是，回溯法可以方便的进行剪枝操作，在获得了一个可行解后，如果搜索过程中的答案大于等于可行解，便可以直接剪枝，因为它不可能比该可行解更优了。
+
+
+\subsection{贪心法(Greedy)}
+\subsubsection{基本思想}
+贪心法并不是能够得到TSP问题准确解的一种做法，但是它非常符合人们对于TSP问题的直观想法。而且，当点数很多的时候，传统的TSP精确算法往往很难找到正确的解，那么此时贪心法便可以迅速地找到一个较好的可行解。
+
+贪心法从起点开始，每次找未经过且距离当前点最近的点，并且走到该位置，然后不断重复上述过程直至找到一条回路。
+\subsubsection{复杂度分析}
+由于每次找最小距离点的复杂度为 $\mathcal{O}\left(n\right)$，一共需要找 $n$ 次，所以贪心法的时间复杂度为$\mathcal{O}\left(n^2\right)$。
+
+
+\subsection{回溯 + 分支界限法}
+\subsubsection{基本思想}
+分支界限法的重点在于如何确定界限函数。显然，我们可以通过贪心算法确定TSP问题的上界，那么我们该如何确定下界呢？对于无向图的代价矩阵，我们可以选取每一行最小的元素相加，可以得到一个简单的下界。但是，TSP问题存在一个信息量更大的下界，考虑一个TSP问题的完整解，每个城市都有两条邻接边，一条为入边，一条为出边。那么，如果把矩阵中每一行最小的两个值相加，再除以2（取上整），就可以得到一个合理的下界——尽管，这个解可能并不是一个可行解。
+
+那么我们在搜索的时候，对于每个节点判断其下界，如果其下界仍然超过最开始设定的解上限，则舍去该节点。每次从队列中找到下界最小的点进行扩展，找到一个可行解后更新解上限，直到队列为空为止。
+
+\subsubsection{复杂度分析}
+分支界限法并不改变回溯法的复杂度，它只是进行了一个大力度的剪枝，故其时间复杂度为 $\mathcal{O}\left(n!n\right)$。
+
+
+\subsection{动态规划法(Dynamic)}
+\subsubsection{基本思想}
+首先，TSP问题满足最优性原理，因此可以使用动态规划法求解。考虑如何设置状态，我们可以用 $F[i][S]$ 表示从起点出发，经过 $S$ 集合中所有点，目前在 $i$ 点的最小成本（显然起点一定在 $S$ 中）。如何转移？我们枚举一个不在集合中的点 $j$，那么则有转移 $F\left[j\right]\left[S+\{j\}\right]\gets F\left[i\right]\left[S\right]，F\left[j\right]\left[S+\{j\}\right]$ 取所有转移中的最小值即可。
+
+\subsubsection{复杂度分析}
+$S$ 我们一般采用二进制状态压缩进行表示，枚举所有状态的复杂度是 $\mathcal{O}\left(2^n\right)$，枚举该状态中在集合中的点复杂度为 $\mathcal{O}\left(n\right)$，枚举一个不存在的点复杂度为 $\mathcal{O}\left(n\right)$，显然这三个复杂度是嵌套的，因此总时间复杂度为 $\mathcal{O}\left(n^22^n\right)$。
+
+
+\subsection{Clarke – Wright算法}
+\subsubsection{基本思想}
+作为一个NP – Hard问题，TSP问题不存在多项式时间的精确解法。除了上述的贪心法之外，TSP问题存在各种近似算法，它们旨在较为快速的得到一个可行的，较优的解，而并不是为了得到一个精确解——即，牺牲了准确度，换取了计算效率。
+
+Clarke – Wright启发式算法是求解TSP问题的一种近似解算法，算法首先选取一个点作为基准点（假定为0号点），记其他点到基准点的距离为 $D_i$，对于其他点两两计算一个saving值，即 $D_i+D_j-V_{i,j}$，这个值表示直接走这条边比从基准点走向这两个点所节约的值，因此叫做saving值。
+
+首先我们对每个点 $i$ 建一个 $0\rightarrow i\rightarrow0$ 的环，然后按照saving值降序排序考虑每个点对，如果点对 $\langle x, y\rangle$ 属于同一个环，则跳过；如果 $\langle x, y\rangle$ 的均在其各自所在环的顶/末端，则连接 $\langle x, y\rangle$，并且取消两者跟0的连线。重复上述操作直到所有点都在一个环上，所得的路径即为答案。
+
+\subsubsection{复杂度分析}
+该算法首先要对所有点对进行排序，故时间复杂度为 $\mathcal{O}\left(mlog{m}\right)$，即$\mathcal{O}\left(n^2log{n}\right)$，之后对每组点对进行枚举，操作的复杂度可视为常数，故总时间复杂度为 $\mathcal{O}\left(n^2log{n}\right)$。
+
+
+\subsection{MST启发式算法}
+\subsubsection{基本思想}
+除了上述的Clarke – Wright启发式算法，MST启发式算法也是求解TSP问题的一种启发式算法。算法首先生成一棵最小生成树(Minimum Spanning Tree, MST)，然后在MST上指定一个根，从根节点开始按照前序遍历的方式（兄弟节点的顺序不管）生成一条路径，这样得到的路径即为所求的回路。
+
+\subsubsection{复杂度分析}
+求解MST可以用到Kruskal或者Prim算法，这里我选用了前者，复杂度为 $\mathcal{O}\left(mlog{m}\right)$，由于图为完全图，所以 $m=n^2$，故复杂度为 $\mathcal{O}\left(n^2log{n}\right)$；之后前序遍历的复杂度是 $\mathcal{O}\left(n\right)$ 的，所以总时间复杂度为 $\mathcal{O}\left(n^2log{n}\right)$。
+
+
+\subsection{Christofides算法}
+\subsubsection{基本思想}
+TSP问题不存在多项式时间的常数近似，但如果其至于度量空间下，则存在多项式时间的常数近似算法（近似比可低于3/2）。所谓度量空间，就是对于任意三个点 $(u, v, w)$，都满足 $V_{u,w}\le V_{u,v}+V_{v,w}$，即满足三角不等式。也就是说，如果数据保证任意三点均满足三角不等式，我们便可以使用Christofides算法。
+
+Christofides算法首先计算图 $G$ 的最小生成树 $T$，记 $T$ 中所有度数为奇数的点为集合 $V^{'}$，根据握手定理可得 $V^{'}$ 的大小必定是偶数。然后从 $G$ 的导出子图 $G(V^{'})$ 中求出最小权值完美匹配 $M$（可用带权带花树实现），然后记图 $G^{'}=M+T$，我们找到 $G^{'}$的任意一个欧拉回路 $E$，再根据 $E$ 的点序构造一个哈密顿回路 $H$，那么所得到的 $H$ 即为Christofides算法所求的解。在通过 $E$ 构造 $H$ 的过程中，如果 $E_i$所表示的点在 $E_{1\sim i-1}$中出现过，则删去 $E_i$，最后得到的剩余序列 $E$ 即为所求的 $H$ 序列。
+
+显然，如果我们直接按照 $E$ 游览所有的点，那么耗费成本为 $W(T) + W(M)$，由于三角不等式的存在，所以我们按照 $H$ 游览所有点时，若记其成本为 $W$，则必然有 $W \le W(T) + W(M)$，因为删点的时候存在三角不等式的缩放。
+
+假定旅行商问题最优解回路为 $C$，删除 $C$ 中任意一条边则为 $G$ 的一棵生成树 $T^{'}$，那么必然有 $W(T) \le W(T^{'}) \le W(C)$；考虑给 $V^{'}$ 中的点按 $C$ 的路径顺序进行排序，得到 $V_1^\prime,V_2^\prime,\cdots,V_k^\prime$，按该顺序生成一个回路 $C^{'}$，根据三角形不等式显然有 $W(C^{'}) \le W(C)$。由于 $V^{'}$ 的大小为偶数，因此 $C^{'}$ 为一个二分图，故其存在两种二分图匹配方案 $K_1, K_2$，且必然有 $\min\{W(K_1), W(K_2)\} \le W(C^{'})/2$，由于 $M$ 是 $G(V^{'})$ 的最小完备匹配，故 $W(M) \le  \min\{W(K_1), W(K_2)\} \le W(C^{'})/2 \le W(C)/2$。
+
+故综上所示，$W \le W(T) + W(M) \le W(C) + W(C)/2 = 3/2W(C)$。
+
+\subsubsection{复杂度分析}
+最小生成树采用Kruskal算法，复杂度为 $\mathcal{O}\left(m\log{m}\right)$，又因为该图为完全图，则 $m$ 与 $n^2$ 同阶，故 $G$ 生成 $T$ 的复杂度 $\mathcal{O}\left(n^2log{n}\right)$。考虑 $G(V^{'})$中求得 $M$ 的复杂度，由于 $G(V^{'})$ 中点数与 $G$ 同阶，带花树实现一般图最大/小权匹配的复杂度为 $\mathcal{O}\left(mn^2\right)$，而本题代码实现了部分优化，所以复杂度降至 $\mathcal{O}\left(n^3\right)$。显然，图 $T$ 与 $M$ 中点数与边数均同阶，而Euler路径的算法复杂度为 $\mathcal{O}\left(n+m\right)$，即为 $\mathcal{O}\left(n\right)$。最终，总时间复杂度取 $\mathcal{O}\left(n^3\right)$。
+
+
+\subsection{OPT算法}
+\subsubsection{基本思想}
+2 – opt算法是一个局部迭代优化算法，和上述启发式建立回路方式有所差距。2 – opt算法首先随机生成一个回路，然后随机截取回路上的一段区间，将其翻转，得到一个新的回路序列。然后比较新旧回路序列的成本，如果更优则保留新的回路；如果重复上述操作若干次（通常会设置一个上限）仍然无法获得一个新的更优序列，则不再操作，以当前序列当做所求的答案。
+
+由于这样每次操作只会改变两个点，因此称为2 – opt算法，故同理也有3 – opt或者k – opt算法，但这里不再赘述。
+
+\subsubsection{复杂度分析}
+2 – opt算法每次操作的复杂度是 $\mathcal{O}\left(c\right)$ 的，该算法总复杂度较难分析，但可以确定的是，上限越高，操作次数越多，程序越慢，答案约精确；反之则越快，但是答案偏差也会越大。
+
+
+\subsection{遗传算法(GA)}
+\subsubsection{基本思想}
+遗传算法是一种通过模拟自然进化过程搜索最优解的方法，通过数学的方式，利用计算机仿真运算，将问题的求解转化为类似生物进化中的染色体基因交叉、变异的过程，再迭代若干代种群后得到较好的优化结果。
+
+遗传算法的效率与效果取决于参数设置、编码方式、以及染色体变换方式。本题中种群大小设置为50(W)，迭代次数设置为10000(G)，交换概率设置为1，变异概率设置为0.1；染色体编码为一段随机序列，将其升序排序后的原下标组成的序列即为一条TSP回路；染色体交换采取自然界中染色体交换方式，两两交换一段序列；染色体变异采取自交换方式，即自身两段染色体位置发生改变。
+
+设置好了如上参数与规则，我们便可以按照自然界规则进行优胜劣汰模拟，每次迭代诞生新的种群，再从新旧种群中一起淘汰成本过大的染色体，留下成本较低的优秀染色体，再进行如上操作，迭代至上限即可。
+
+\subsubsection{复杂度分析}
+每次迭代的复杂度来自于染色体交换操作，染色体交换需要交换 $W/2$ 对，每次交换需要扫描整个染色体的长度，总共需要迭代 $G$ 次，因此时间复杂度为 $\mathcal{O}\left(nWG\right)$。
+
+
+\subsection{模拟退火算法(SA)}
+\subsubsection{基本思想}
+在高温条件下,粒子的能量较高,可以自由运动和重新排列。在低温条件下,粒子能量较低。如果从高温开始,非常缓慢地降温(这个过程被称为退火),粒子就可以在每个温度下达到热平衡。当系统完全被冷却时,最终形成处于低能状态的晶体。
+
+如果温度下降十分缓慢,而在每个温度都有足够多次的状态转移,使之在每一个温度下达到热平衡,则全局最优解将以概率1被找到。因此可以说模拟退火算法可以找到全局最优解。
+
+对于本题而言，首先我们通过随机算法构造一个较好的在可行序列后，然后每次迭代，我们采用2 – opt 算法，令 $\Delta f$ 为原序列距离和随机变换后的序列距离的差值。如果 $\Delta f<0$，则接受新的路径；否则以 $\exp\{\left(-\Delta f/T\right)\}$ 的概率接受新的路径。每操作一次，$T$ 乘上降温系数 $\alpha$，当温度降至临界值以下后，退出循环，此时我们认为找到了一个近似的全局最优解。
+
+\subsubsection{复杂度分析}
+模拟退火算法的时间复杂度取决于参数设置，温度初值，降温系数，临界值都会影响时间复杂度。假定温度初值为 $T$，降温系数为 $\alpha$，临界值为 $e$，则通过计算可得最低迭代次数为 $\frac{ln{e}-ln{T}}{ln{a}}$。
+
+
+
+
+
+
+
+
+\nocite{*}
+\printbibliography[heading=bibintoc, title=\ebibname]
+
+\appendix
+\appendixpage
+\addappheadtotoc
+
+
+\textbf{01背包 Brute Force 解法}
+\lstinputlisting[style=C++]{./code/Knapsack/Brute_Force.cpp}
+\textbf{01背包 回溯剪枝解法}
+\lstinputlisting[style=C++]{./code/Knapsack/Backtracking_Prune.cpp}
+\textbf{01背包 贪心法}
+\lstinputlisting[style=C++]{./code/Knapsack/Greedy.cpp}
+\textbf{01背包 分支界限法}
+\lstinputlisting[style=C++]{./code/Knapsack/Babm.cpp}
+\textbf{01背包 动态规划法}
+\lstinputlisting[style=C++]{./code/Knapsack/Dynamic.cpp}
+
+\textbf{TSP 枚举法}
+\lstinputlisting[style=C++]{./code/TSP/Enumerative.cpp}
+\textbf{TSP 回溯法}
+\lstinputlisting[style=C++]{./code/TSP/Backtracking.cpp}
+\textbf{TSP 贪心法}
+\lstinputlisting[style=C++]{./code/TSP/Greedy.cpp}
+\textbf{TSP 分治界限法}
+\lstinputlisting[style=C++]{./code/TSP/Babm.cpp}
+\textbf{TSP 动态规划法}
+\lstinputlisting[style=C++]{./code/TSP/Dynamic.cpp}
+\textbf{TSP Clarke -Wright 算法}
+\lstinputlisting[style=C++]{./code/TSP/ClarkeWright.cpp}
+\textbf{TSP MST 启发式算法}
+\lstinputlisting[style=C++]{./code/TSP/MST.cpp}
+\textbf{TSP Christofides 算法}
+\lstinputlisting[style=C++]{./code/TSP/Christofides.cpp}
+\textbf{TSP K-OPT 算法}
+\lstinputlisting[style=C++]{./code/TSP/K_OPT.cpp}
+\textbf{TSP 遗传算法}
+\lstinputlisting[style=C++]{./code/TSP/GA.cpp}
+\textbf{TSP 模拟退火算法}
+\lstinputlisting[style=C++]{./code/TSP/SA.cpp}
+
+
+
+\end{document}
