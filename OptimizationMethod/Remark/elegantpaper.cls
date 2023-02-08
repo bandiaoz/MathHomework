@@ -219,7 +219,7 @@
   % \newtheorem*{remark}{\normalfont\bfseries 评论} %
   \newtheorem{remark}{Remark}[section] %
   % \newtheorem*{note}{\normalfont\bfseries 注} %
-  \newtheorem{note}{note}[section] %
+  \newtheorem{note}{\normalfont\bfseries note}[section] %
   \newtheorem{case}{\normalfont\bfseries 案例} %
   
   \renewcommand*{\proofname}{\normalfont\bfseries 证明} %

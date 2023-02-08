@@ -109,7 +109,7 @@
 \begin{note}
     对于等式约束优化问题\[\begin{cases}
         \min &f(x)\\
-        \st &c_i(x) = 0, i \in \varepsilon    
+        \subject &c_i(x) = 0, i \in \varepsilon    
     \end{cases}\]
     $P(x, \lambda, \pi)$ 为乘子罚函数，也称增广 Lagrange 函数.
     \[\min_xP(x, \lambda, \pi) := f(x) - \sum_{i \in \varepsilon}\lambda_ic_i(x) + \pi\sum_{i \in \varepsilon}c_i^2(x)\]

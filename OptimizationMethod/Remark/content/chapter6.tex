@@ -87,7 +87,7 @@
 \begin{note}
     一阶充分条件：\[\begin{cases}
         \min &f(x)\\
-        \st &g_i(x) \ge 0 \quad i = 1, \dots, m\\
+        \subject &g_i(x) \ge 0 \quad i = 1, \dots, m\\
         &h_j(x) = 0, \quad j = 1, \dots, l
     \end{cases}\]
     $f$ 是凸函数，$g_i$ 是凹函数，$h_j$ 是线性函数，$S$ 为可行域，$\bar{x} \in S$，$I = \{i \mid g_i(\bar{x}) = 0\}$. $f$ 和 $g_i(i \in I)$ 在点 $\bar{x}$ 可微，$h_j$ 在点 $\bar{x}$ 连续，$g_i(i \notin I)$ 在点 $\bar{x}$ 连续，且在 $\bar{x}$ 处 KKT 条件成立，则 $\bar{x}$ 为整体极小点.
