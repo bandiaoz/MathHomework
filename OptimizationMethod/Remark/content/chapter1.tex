@@ -144,38 +144,89 @@
 
         \item 设 $S$ 是 $E^n$ 的\textbf{非空闭凸集}，$y\notin S$，则存在非零向量 $p$ 以及数 $\varepsilon > 0$\footnote{令 $p = y - \overline{x}$，$\varepsilon = p^t(y - \overline{x})$，有 $p^t(y - x) = p^t(y - \overline{x} + \overline{x} - x) = \varepsilon + (y - \overline{x})(\overline{x} - x) \ge \varepsilon$. 即可证明.}，使得对 $\forall x \in S$，有 $p^t y \ge \varepsilon + p^t x$.
         
-        \item 设 $S$ 是 $E^n$ 的非空凸集，$y\in \partial S$，则存在非零向量 $p$，使得对 $\forall x \in clS$（$S$ 的闭包，由 $S$ 的内点和边界点组成），有 $p^Ty \ge p^Tx$.
+        \item 设 $S$ 是 $E^n$ 的非空凸集，$y\in \partial S$，则存在非零向量 $p$，使得对 $\forall x \in clS$（$S$ 的闭包，由 $S$ 的内点和边界点组成），有 $p^ty \ge p^tx$.
         
-        \item 设 $S_1$ 和 $S_2$ 是 $E^n$ 的两个非空凸集，$S_1 \cap S_2 = \varnothing$，则存在非零向量，使得\[p^Ty \ge p^t x \quad \text{其中}\forall y \in S_1, \forall x \in S_2\]
+        \item 设 $S_1$ 和 $S_2$ 是 $E^n$ 的两个非空凸集，$S_1 \cap S_2 = \varnothing$，则存在非零向量，使得\[p^ty \ge p^t x \quad \text{其中}\forall y \in S_1, \forall x \in S_2\]
     \end{itemize}
 \end{theorem}
 
-
-
-\begin{note}
+\begin{theorem}
     两个系统恰有一个有解：
     \begin{itemize}
-        \item Farkas 引理：设 $A$ 为 $m\times n$ 矩阵，$c$ 为 $n$ 维列向量，则 $Ax \le 0, c^Tx > 0$ 有解的充分条件是 $A^Ty = c, y\ge 0$ 无解.
-        \item Gordan定理：给定矩阵 $\boldsymbol{A} \in \mathbb{R}^{m\times n}$，下列两个系统只有一个有解
+        \item Farkas 引理：设 $A$ 为 $m\times n$ 矩阵，$c$ 为 $n$ 维列向量，则 $Ax \le 0, c^tx > 0$ 有解的充分条件是 $A^ty = c, y\ge 0$ 无解.
+        \item Gordan定理：给定矩阵 $A \in \mathbb{R}^{m\times n}$，下列两个系统只有一个有解
         \begin{gather*}
-            \boldsymbol{A}x < 0\\
-            \boldsymbol{y} \ge 0, \boldsymbol{y} \neq 0, \boldsymbol{A}^t\boldsymbol{y} = 0
+            Ax < 0\\
+            y \ge 0, y \neq 0, A^ty = 0
         \end{gather*}
     \end{itemize}
-\end{note}
+\end{theorem}
 
-\begin{note}
+\begin{example}
+    设 $A$ 是 $m\times n$ 矩阵，$B$ 是 $l \times n$ 矩阵，$c\in\mathbb{R}^n$，证明下列两个系统恰有一个有解：
+    \begin{itemize}
+        \item 系统1：$Ax \le 0, Bx = 0, c^tx > 0$，对某些 $x\in\mathbb{R}^n$
+        \item 系统2：$A^ty + B^tz = c, y \ge 0$，对某些 $y \in \mathbb{R}^m$ 和 $z\in\mathbb{R}^l$
+    \end{itemize}  
+
+    \begin{proof}
+        证系统 1 有解，即
+        \[
+            \begin{bmatrix}
+                A\\
+                B\\
+                -B
+            \end{bmatrix}x\le 0, c^tx>0
+        \]
+        有解，则根据 Farkas 定理，有
+        \[
+            \begin{pmatrix}
+                A^t & B^t & -B^t
+            \end{pmatrix}\begin{bmatrix}
+                y\\
+                z_1\\
+                z_2
+            \end{bmatrix}=c,\begin{bmatrix}
+                y\\
+                z_1\\
+                z_2
+            \end{bmatrix}\ge 0
+        \]
+        无解，即 $A^ty + B^tz_1 - B^tz_2 = c, y\ge 0, z_1\ge 0, z_2\ge 0$无解，即 $A^t + B^tz = c, y\ge 0$ 无解。
+        
+        反之，若 $A^t + B^tz = c, y\ge 0$ 有解，即 $A^ty + B^tz_1 - B^tz_2 = c, y\ge 0, z_1\ge 0, z_2\ge 0$ 有解，根据 Farkas定理，有 
+        \[
+            \begin{bmatrix}
+                A\\
+                B\\
+                -B
+            \end{bmatrix}x\le 0, c^tx>0
+        \]
+        无解，即 $Ax \le 0, Bx = 0, c^tx > 0$ 无解。
+    \end{proof}
+\end{example}
+
+\subsection{凸函数}
+\begin{definition}[凸函数]
     设 $S$ 是 $E^n$ 中的非空凸集，$f(x)$ 是定义在 $S$ 上的实函数，如果对于每一对 $x_1, x_2 \in S$ 及每一个 $\lambda, 0\le \lambda \le 1$ 都有 \[f(\lambda x_1 + (1 - \lambda)x_2) \le \lambda f(x_1) + (1 - \lambda)f(x_2)\]
     则称函数 $f(x)$ 为 $S$ 上的凸函数.
+\end{definition}
 
-    凸函数的根本重要性：设 $S$ 是 $E^n$ 中的非空凸集，$f$ 是定义在 $S$ 上的凸函数，则 $f$ 在 $S$ 上的局部极小点事整体极小点，且极小点的集合是凸集.
-\end{note}
+\begin{theorem}
+    凸函数的性质：
+    \begin{itemize}
+        \item 设 $f_1(x)$，$f_2(x)$ 是凸集 $S$ 上的凸函数，则函数 $f_1(x) + f_2(x)$ 在 $S$ 上也是凸函数.
+        \item 设 $f(x)$ 是凸集 $S$ 上的凸函数，则对任意的 $a \ge 0$，函数 $af(x)$ 是凸的.
+        \item 设 $f(x)$ 是凸集 $S$ 上的凸函数，对每一个实数 $c$，则集合 
+        \[
+            S_c = \{x \mid x \in S, f(x) \le c\}  
+        \]
+        是凸集.
+        \item 凸函数的根本重要性：设 $S$ 是 $E^n$ 中的非空凸集，$f$ 是定义在 $S$ 上的凸函数，则 $f$ 在 $S$ 上的局部极小点是整体极小点，且极小点的集合是凸集.
+    \end{itemize}
+\end{theorem}
 
-\begin{note}
-    $f(x)$ 是凸集 $S$ 上的凸函数，对每一个实数 $c$，则集合 $S_c = \left\{x | x \in S, f(x) \le c\right\}$ 是凸集.
-\end{note}
-
-\begin{note}
+\begin{theorem}
     凸函数的判别：
     \begin{itemize}
         \item (一阶充要条件)设 $S$ 是 $E^n$ 中的非空开凸集，$f(x)$ 是定义在 $S$ 上的\textbf{可微}函数，则 $f(x)$ 为凸函数的充要条件是对任意两点 $x_1, x_2 \in S$，有 \[f(x_2) \ge f(x_1) + \nabla f(x_1)^t(x_2 - x_1)\]
@@ -186,18 +237,28 @@
         
         $f(x)$ 为严格凸函数的充要条件是对任意 $x \in S$，$f(x)$ 在 $x$ 处的Hessian矩阵 $\nabla ^2f(x)$ 是正定的.
     \end{itemize}
-\end{note}
+\end{theorem}
 
 \begin{note}
     设 $f(x)$ 是定义在凸集 $S$ 上的可微凸函数，若 $\exists x^* \in S$，使对 $\forall x \in S$，都有 \[\nabla f(x^*)^t(x - x^*) \ge 0\]
     则 $x^*$ 是 $f(x)$ 在凸集 $S$ 上的全局极小点.
 \end{note}
 
-\begin{note}
+\begin{example}
+    判断下列函数是否为凸函数.
+    \begin{enumerate}
+        \item $f(x_1, x_2) = x_1^2 - 2x_1x_2 + x_2^2 + x_1 + x_2$
+        \item $f(x_1, x_2) = x_1e^{-(x_1 + x_2)}$
+        \item $f(x_1, x_2, x_3) = x_1x_2 + 2x_1^2 + x_2^2 + 2x_3^2 - 6x_1x_3$
+    \end{enumerate}
+    \answer 计算 $\nabla^2f(x) \succeq 0$ 即可.
+\end{example}
+
+\begin{definition}
     凸规划：求凸函数在凸集上的极小点.
     \begin{align*}
         \min \quad &f(x)\\ 
-        s.t. \quad &g_{i}(x) \le 0, i=1, \cdots, m \\  
+        \subject \quad &g_{i}(x) \le 0, i=1, \cdots, m \\  
         &h_{j}(x)=0, j=1, \cdots, l 
     \end{align*}
     若 $f(x)$ 是凸函数，$g_i(x)$ 是凸函数，$h_j(x)$ 是线性函数，则原问题为凸规划.
@@ -205,4 +266,4 @@
         \item 凸规划的局部极小点就是整体极小点
         \item 且极小点的集合为凸集
     \end{itemize}
-\end{note}
+\end{definition}
