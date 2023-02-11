@@ -1,8 +1,9 @@
 \section{LP 基本性质}
 LP：线性规划.
 
+\subsection{LP标准形}
 \begin{definition}
-    LP 标准型：
+    LP 标准形：
     \begin{enumerate}
         \item 极小化型
         \item 约束方程为等式
@@ -12,20 +13,299 @@ LP：线性规划.
     \begin{align*}
         \min \quad &z = c^tx\\
         \subject \quad &Ax = b\\
-        &x \ge 0\\
+        &x \succeq 0\\
         &c, x \in \R^n, b \in \R^m_+, A \in \R^{m \times n}
     \end{align*}
 \end{definition}
 
 \begin{note}
-    LP 基本定理：
+    非标准形LP模型转化为标准形LP模型
     \begin{itemize}
-        \item 可行域的极点对应 LP 问题的基本可行解
-        \item LP 的最优解一定可以在基本可行解中找到
-        \item 设 $S$ 是 LP 的可行域，$\bar{x} \in S$，则 $\bar{x}$ 是 $S$ 的极点 $\Longleftrightarrow \bar{x}$ 是 LP 的基本可行解
-        \item 如果LP有可行解，则一定存在基本可行解
-        \item 如果LP有最优解，则存在一个基本可行解是最优解
-        \item 若LP问题有最优解，则要么最优解唯一，要么有无
-        穷多最优解
+        \item 目标函数是极大值的转化
+        \[
+            \max c^tx \Longrightarrow \min -c^tx  
+        \]
+        \item 决策变量无约束转化为非负约束
+        \[
+            x = x^{+} - x^{-}, \quad x^{+}, x^{-} \ge 0
+        \]
+        \item 不等约束转化为等式约束（松弛变量）
+        \begin{gather*}
+            a^tx \le b \Longrightarrow a^tx + s = b, \quad s \ge 0\\
+            a^tx \ge b \Longrightarrow a^tx - s = b, \quad s \ge 0
+        \end{gather*}
+        \item 决策变量有上下界的转换
+        \begin{gather*}
+            1 \le x_1 \le 6\\
+            x_1^{'} = x_1 - 1 \ge 0,x_1^{'} + x_2 = 5, x_2 \ge 0
+        \end{gather*}
+        \item 带绝对值
+        \[\begin{cases}
+            x_1 = \frac{x + |x|}{2}\\
+            x_2 = \frac{x - |x|}{2}
+        \end{cases}\]
+        则 $x_1, x_2 \ge 0$，$x = x_1 - x_2, |x| = x_1 + x_2$.
     \end{itemize}
 \end{note}
+
+\begin{example}
+    \[
+        \begin{cases}
+            \max \quad &3x_1 - 2x_2 + 3\\
+            \subject \quad &x_1 + x_2 \le 7\\
+            &x_1 - x_2 + x_3 \ge 5\\
+            &1 \le x_3 \le 6\\
+            &x_1 \ge 0, x_2 \text{ free}
+        \end{cases}  
+    \]
+    转化为LP模型.
+
+    \answer
+    \[
+        \begin{cases}
+            \min \quad &-3x_1 + 2(x_2^{+} - x_2^{-}) - (x_3^{'} + 1)\\
+            \subject \quad &x_1 + (x_2^{+} - x_2^{-}) + x_4 = 7\\
+            &x_1 - (x_2^{+} - x_2^{-}) + x_3^{'} - x_5 = 4\\
+            &x_3^{'} + x_6 = 5\\
+            &x_1, x_2^{+}, x_2^{-}, x_3^{'}, x_4, x_5, x_6 \ge 0
+        \end{cases}    
+    \]
+\end{example}
+
+\begin{example}
+    \[
+        \begin{cases}
+            \max \quad &-|x| - |y|\\
+            \subject \quad &x + y \ge 2\\
+            &x \le 3
+        \end{cases}  
+    \]
+    转换为LP模型.
+
+    \answer
+    \[
+        \begin{cases}
+            x_1 = \frac{x + |x|}{2}\\
+            x_2 = \frac{x - |x|}{2}
+        \end{cases},
+        \begin{cases}
+            y_3 = \frac{y + |y|}{2}\\
+            y_4 = \frac{y - |y|}{2}
+        \end{cases}
+    \]
+    则 
+    \begin{gather*}
+        x_1 \ge 0, x_2 \ge 0, x = x_1 - x_2, |x| = x_1 + x_2\\
+        x_3 \ge 0, x_4 \ge 0, y = x_3 - x_4, |y| = x_3 + x_4
+    \end{gather*}
+    \[
+        \begin{cases}
+            \min \quad &(x_1 + x_2) + (x_3 + x_4)\\
+            \subject \quad &x_1 - x_2 + x_3 - x_4 - x_5 = 2\\
+            &x_1 - x_2 + x_6 = 3\\
+            &x_i \ge 0, i = 1, \dots, 6
+        \end{cases}  
+    \]
+\end{example}
+
+\begin{example}
+    将下列线性规划变成标准形式
+    \[
+        \begin{cases}
+            \min \quad &3x_1 - x_2\\
+            \subject \quad &x_1 + x_2 \le 9\\
+            &1 \le x_1 \le 5\\
+            &0 \le x_2 \le 6
+        \end{cases}  
+    \]
+
+    \answer
+    \[
+        \begin{cases}
+            \min \quad &3(x_1^{'} + 1) - x_2\\
+            \subject \quad &x_1^{'} + x_2 + x_3 = 8\\
+            &x_1^{'} + x_4 = 4\\
+            &x_2 + x_5 = 6\\
+            &x_1^{'}, x_2, x_3, x_4, x_5 \ge 0
+        \end{cases}
+    \]  
+\end{example}
+
+\subsection{LP的图解法}
+\begin{note}
+    线性不等式的几何意义——半平面.
+
+    图解法步骤：
+    \begin{enumerate}
+        \item 作出LP问题的可行域
+        \item 作出目标函数的等值线
+        \item 移动等值线到可行域边界得到最优点
+    \end{enumerate}
+\end{note}
+
+\begin{theorem}
+    若LP问题存在最优解，则必在可行域的某个极点上找到。
+\end{theorem}
+
+\subsection{LP的基本性质}
+\begin{definition}[可行解]
+    满足LP模型的约束条件且满足非负条件的解是可行解.
+\end{definition}
+
+\begin{example}
+    \[
+        \begin{cases}
+            \max \quad &z = 3x_1 + 2x_2\\
+            \subject \quad &x_1 + 3x_2 \ge 6\\
+            &x_1 - 2x_2 \le 4\\
+            &x_1, x_2 \ge 0
+        \end{cases}
+    \]
+    判断 $X = (5, 1)^t$，$X = (-1, 3)^t$，$X = (2, 1)^t$ 是否为可行解。
+
+    \answer 只有 $X = (5, 1)^t$ 是可行解。
+\end{example}
+
+\begin{theorem}
+    线性规划的可行域是凸集。
+\end{theorem}
+
+\begin{theorem}
+    设线性规划的可行域非空，则
+    \begin{enumerate}
+        \item LP存在有限最优解的充要条件是对任意的 $j$，$cd^{(j)} \ge 0$，其中 $d^{(j)}$ 为可行域的极方向，$c$ 为目标函数的系数。
+        \item 若LP存在有限最优解，则目标函数的最优值可在某个极点达到。
+    \end{enumerate}
+\end{theorem}
+
+\begin{definition}[基矩阵和基变量]\label{def2-3}
+    对LP问题
+    \[
+        \begin{cases}
+            \min \quad &z = cx\\
+            \subject \quad &Ax = b\\
+            &x \ge 0
+        \end{cases}  
+    \]
+    将 $A$ 按列分块为 $(P_1, \dots, P_n)$，则 $Ax = b$ 等价于 
+    \[
+        P_1x_1 + \cdots + P_nx_n = b.
+    \]
+    系数矩阵 $A$ 中任意 $m$ 列所组成的 $m$ 阶可逆子方阵 $B$，称为LP的一个基（矩阵），变量 $x_j$ 对应的 $P_j$ 包含在基 $B$ 中，则称 $x_j$ 为基变量，否则称为非基变量。
+
+    基变量的个数最多为 $\binom{n}{m}$。
+\end{definition}
+
+\begin{definition}[基本解]\label{def2-4}
+    接定义\ref{def2-3}，设 $A = \begin{bmatrix} B & N \end{bmatrix}$，其中 $r(B) = m$，设 $x = \begin{bmatrix}x_B & x_N\end{bmatrix}$.
+
+    由 $Ax = b$ 得
+    \[
+        Bx_B + Nx_N = b  
+    \]
+    解得
+    \[
+        x_B = B^{-1}b - B^{-1}Nx_N    
+    \]
+    令 $x_N = 0$，得
+    \[
+        x = \begin{bmatrix}
+            B^{-1}b\\
+            0
+        \end{bmatrix}    
+    \]
+    称 $x$ 为LP的\textbf{基本解}。
+\end{definition}
+
+\begin{definition}[基本可行解]
+    接定义\ref{def2-3}，若 $B^{-1}b \ge 0$，则称 $x = \begin{bmatrix}
+        B^{-1}b\\
+        0
+    \end{bmatrix}$ 为LP的\textbf{基本可行解}，$B$ 称为可行基矩阵，$x_{B_1}, \dots, x_{B_m}$ 为一组可行基。
+
+    若 $B^{-1}b > 0$，则称基本可行解是非退化的，否则称为退化的。
+\end{definition}
+
+\begin{example}
+    优化问题的约束条件为 
+    \[
+        \begin{cases}
+            x_1 + 3x_2 \ge 6\\
+            x_1 - 2x_2 \le 4\\
+            x_1, x_2 \ge 0
+        \end{cases}    
+    \]
+    首先引入松弛变量，转化为等式约束
+    \[
+        \begin{cases}
+            x_1 + 3x_2 - x_3 = 6\\
+            x_1 - 2x_2 + x_4 = 4
+        \end{cases}
+    \]
+    系数矩阵 
+    \[A = \begin{pmatrix}
+        1 & 3 & -1 & 0\\
+        1 & -2 & 0 & 1
+    \end{pmatrix}\]
+    基矩阵为 
+    \begin{gather*}
+        B_1 = \begin{pmatrix}
+            1 & 3\\
+            1 & -2
+        \end{pmatrix}, B_2 = \begin{pmatrix}
+            1 & -1\\
+            1 & 0
+        \end{pmatrix}, B_3 = \begin{pmatrix}
+            1 & 0\\
+            1 & 1
+        \end{pmatrix},\\
+        B_4 = \begin{pmatrix}
+            3 & -1\\
+            -2 & 0
+        \end{pmatrix}, B_5 = \begin{pmatrix}
+            3 & 0\\
+            -2 & 1
+        \end{pmatrix}, B_6 = \begin{pmatrix}
+            -1 & 0\\
+            0 & 1
+        \end{pmatrix}
+    \end{gather*}
+    对于 $B_1$ 求基解
+    \[
+        B_1^{-1}b = -\frac{1}{5}\begin{pmatrix}
+            -2 & -3\\
+            -1 & 1
+        \end{pmatrix}\begin{pmatrix}
+            6\\
+            4
+        \end{pmatrix} = \begin{pmatrix}
+            \frac{24}{5}\\
+            \frac{2}{5}
+        \end{pmatrix}
+    \]
+    基本解为 $x^{(1)} = \left(\frac{24}{5}, \frac{2}{5}, 0, 0\right)^t$.
+    
+    同理可得
+    \begin{gather*}
+        x^{(1)} = (\frac{24}{5}, \frac{2}{5}, 0, 0)^t, x^{(2)} = (4, 0, -2, 0)^t, x^{(3)} = (6, 0, 0, -2)^t\\
+        x^{(4)} = (0, -2, -12, 0)^t, x^{(5)} = (0, 2, 0, 8)^t, x^{(6)} = (0, 0, -6, 4)^t
+    \end{gather*}
+    只有 $x^{(1)}$ 和 $x^{(5)}$ 为基本可行解。
+\end{example}
+
+\begin{theorem}
+    基本可行解与极点之间的关系：
+    \begin{enumerate}
+        \item 可行解 $\bar{x}$ 是基本可行解 $\Longleftrightarrow$ $\bar{x}$ 的非零分量所对应的 $A$ 的列向量线性无关。
+        \item 设 $S$ 是LP的可行域，$\bar{x} \in S$，则 $\bar{x}$ 是 $S$ 的极点等价于 $\bar{x}$ 是LP的基本可行解。
+    \end{enumerate}
+\end{theorem}
+
+\begin{theorem}
+    基本可行解的存在性：
+    \begin{enumerate}
+        \item 如果LP有可行解，则一定存在基本可行解。
+        \item 如果LP有最优解，则一定存在一个基本可行解是最优解。
+        \item 如果LP问题有最优解，则要么最优解唯一，要么有无穷多最优解。
+    \end{enumerate}
+\end{theorem}
