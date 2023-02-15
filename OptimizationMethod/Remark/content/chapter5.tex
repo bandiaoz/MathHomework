@@ -1,4 +1,8 @@
 \section{算法概述}
+\subsection{算法分类}
+常见的解析法，图解法，智能算法，下降迭代算法。
+
+应用广泛的智能算法有：遗传算法、蚁群算法、模拟退火算法、神经网络算法等。
 \begin{note}
     一类线搜索下降迭代算法的步骤：
     \begin{enumerate}
@@ -8,19 +12,32 @@
         \item 检查 $x^{(k + 1)}$ 是否为极小点或近似极小点，若是，则停止迭代；否则，令 $k:= k + 1$，返回2.
     \end{enumerate}
 
-    选取搜索方向是最关键的一步，各种算法的区别， 主要在于确定搜索方向的方法不同.
+    选取搜索方向是最关键的一步，各种算法的区别， 主要在于确定搜索方向的方法不同。
 \end{note}
 
 \begin{note}
-    解集合：把满足某些条件的点集定义为解集合．当迭代点属于该集合时，停止迭代.
+    确定步长 $\lambda_k$ 的主要方法
+    \begin{enumerate}
+        \item 令它等于某一常数。
+        \item 可接受点算法，即只要能使目标函数值下降，可任意选取步长。
+        \item 精确一维搜索：基于沿搜索方向使目标函数值下降最多，这样确定的步长为最佳步长。
+        \[
+            \lambda_k = \arg\min f(x^{(k)} + \lambda d^{(k)})
+        \]
+    \end{enumerate}
+\end{note}
+
+\subsection{算法收敛性}
+\begin{definition}[解集合]
+    把满足某些条件的点集定义为解集合。当迭代点属于该集合时，停止迭代。
     
     常用的解集合：
     \begin{itemize}
-        \item $\Omega = \left\{\bar{x}\ |\ \|\nabla f(\bar{x})\| = 0\right\}$
-        \item $\Omega = \left\{\bar{x}\ |\ \bar{x} \text{为KKT点}\right\}$
-        \item $\Omega = \left\{\bar{x}\ |\ \bar{x} \in S, f(\bar{x}) \le b\right\}$，其中 $b$ 是某个可接受的目标函数值.
+        \item $\Omega = \{\bar{x} \mid \norm{\nabla f(\bar{x})} = 0\}$
+        \item $\Omega = \{\bar{x} \mid \bar{x} \text{为KKT点}\}$
+        \item $\Omega = \{\bar{x} \mid \bar{x} \in S, f(\bar{x}) \le b\}$，其中 $b$ 是某个可接受的目标函数值。
     \end{itemize}
-\end{note}
+\end{definition}
 
 \begin{note}
     实用收敛准则
@@ -65,12 +82,14 @@
     \end{enumerate}
 \end{note}
 
+\subsection{算法复杂度}
+
 \begin{note}
-    单纯形算法的复杂度为指数时间复杂度.
+    单纯形算法的复杂度为指数时间复杂度。
 \end{note}
 
 \begin{note}
-    对于线性规划问题 \[\min_{\lambda \ge 0} \quad f(x^{(k)} + \lambda d^{(k)})\] 如果求得的 $\lambda_k$，使得 \[f(x^{(k)} + \lambda_kd^{(k)}) = \min_\lambda f(x^{(k)} + \lambda d^{(k)})\]则称该一维搜索为精确一维搜索，$\lambda_k$ 为最优步长.否则，该一维搜索为非精确一维搜索.
+    对于线性规划问题 \[\min_{\lambda \ge 0} \quad f(x^{(k)} + \lambda d^{(k)})\] 如果求得的 $\lambda_k$，使得 \[f(x^{(k)} + \lambda_kd^{(k)}) = \min_\lambda f(x^{(k)} + \lambda d^{(k)})\]则称该一维搜索为精确一维搜索，$\lambda_k$ 为最优步长。否则，该一维搜索为非精确一维搜索。
 \end{note}
 
 \begin{note}

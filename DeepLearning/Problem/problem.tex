@@ -360,6 +360,45 @@
 	\end{choices}
 \end{question}
 
+\begin{question}
+	神经网络中的死神经元 (dead unit) 是什么？\paren[A]
+	\begin{choices}
+		\item 在训练任何其它相邻单元时，不会更新的单元
+		\item 没有完全响应任何训练模式的单元
+		\item 产生最大平方误差的单元
+		\item 以上均不符合
+	\end{choices}
+\end{question}
+
+\begin{question}
+	对于分类任务，我们不是将神经网络中的随机权重初始化，而是将所有权重设为零。下列哪项正确？\paren[B]
+	\begin{choices}
+		\item 没有任何问题，神经网络模型将正常训练
+		\item 神经网络模型可以训练，但所有的神经元最终将识别同样的事情
+		\item 神经网络模型不会进行训练，因为没有净梯度变化
+		\item 这些均不会发生
+	\end{choices}
+\end{question}
+
+\begin{question}
+	开始时有一个停滞期，这是因为神经网络在进入全局最小值之前陷入局部最小值。为了避免这种情况， 下面的哪个策略有效？\paren[C]
+	\begin{choices}
+		\item 增加参数的数量，因为网络不会卡在局部最小值处
+		\item 在开始时把学习率降低10倍，然后使用梯度下降加速算子(momentum)
+		\item 抖动学习速率，即改变几个时期的学习速率
+		\item 以上均不是
+	\end{choices}
+\end{question}
+
+\begin{question}
+	假设在训练时，你遇到这个问题。在几次迭代后，错误突然增加。您确定数据一定有问题。您将数据描绘出来，找到了原始数据有点偏离，这可能是导致出现问题的地方。你将如何应对这个挑战？\paren[B]
+	\begin{choices}
+		\item 归一化
+		\item 应用 PCA然后归一化
+		\item 对数据进行对数变换
+		\item 以上这些都不符合
+	\end{choices}
+\end{question}
 
 % \section{填空题：本题共 4 小题，每小题 5 分，共 20 分。}
 

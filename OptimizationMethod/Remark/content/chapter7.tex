@@ -1,1 +1,67 @@
-\section{Lagrange对偶}
+\section{Lagrange 对偶}
+
+\subsection{Lagrange 对偶}
+\begin{minipage}[c]{0.45\linewidth}
+    \[
+        \begin{cases}
+            \min \quad &f(x)\\
+            \subject \quad &g(x) \ge 0\\
+            &h(x) = 0\\
+            &x \in D
+        \end{cases}
+    \]
+\end{minipage}
+\begin{minipage}[c]{0.45\linewidth}
+    \[
+        \begin{cases}
+            \max \quad &\theta(w, v) = \underset{x \in D}{\inf} L(x, w, v)\\
+            \subject \quad &g(x) \ge 0\\
+            &h(x) = 0\\
+            &x \in D
+        \end{cases}
+    \]
+\end{minipage}
+    
+\subsection{对偶定理}
+\begin{theorem}[弱对偶定理]
+    设 $x$ 和 $(w, v)$ 分别是原问题和对偶问题的可行解，则 
+    \[
+        f(x) \ge \theta(w, v) \text{.}
+    \]
+    记对偶间隙为 $\delta = f_{\min} - \theta_{\max} \ge 0$。
+\end{theorem}
+
+\begin{theorem}[强对偶定理]
+    设 $D$ 为非空开凸集，$f$ 和 $g_i$ 分别是 $E^n$ 上的凸函数和凹函数，$h_j$ 是 $E^n$ 上的线性函数，即 $h(x) = A(x) - b$，存在 $\hat{x} \in D$，使得 
+    \[
+        g(\hat{x}) > 0, h(\hat{x}) = 0, 0 \in \{h(x) \mid x \in D\}    
+    \]
+    则 $f_{\min} = \theta_{\max}$。
+\end{theorem}
+
+\subsection{鞍点问题}
+\begin{definition}[鞍点]
+    设 $L(x, w, v)$ 为 Lagrange 函数，$\bar{x} \in E^n$，$\bar{w} \in E^m$，$\bar{w} \ge 0$，$\bar{v} \in E^l$，如果对任意 $x, w, v$ 都有 
+    \[
+        L(\bar{x}, w, v) \le L(\bar{x}, \bar{w}, \bar{v}) \le L(x, \bar{w}, \bar{v})    
+    \]
+    则称 $L(\bar{x}, \bar{w}, \bar{v})$ 为 $L(x, w, v)$ 的鞍点。
+\end{definition}
+
+\begin{theorem}
+    Lagrange 函数的鞍点必是 Lagrange 函数关于 $x$ 的极小点及关于 $(w, v)(w \ge 0)$ 的极大点。
+\end{theorem}
+
+\begin{theorem}[鞍点定理]
+    设 $(\bar{x}, \bar{w}, \bar{v})$ 是原问题的 Lagrange 函数 $L(x, w, v)$ 的鞍点，则 $\bar{x}$ 和 $(\bar{w}, \bar{v})$ 分别是原问题和对偶问题的最优解。
+\end{theorem}
+
+\begin{theorem}[鞍点定理]
+    假设 $f$ 是凸函数，$g_i(x)$ 是凹函数，$h_j(x)$ 是线性函数，且 $A$ 是行满秩矩阵，又设存在 $\hat{x}$，使 $g(\hat{x}) > 0$，$h(\hat{x}) = 0$，如果 $\bar{x}$ 是原问题的最优解，则存在 $(\bar{w}, \bar{v})(\bar{w} \ge 0)$，使 $(\bar{x}, \bar{w}, \bar{v})$ 是 Lagrange 函数的鞍点。
+\end{theorem}
+
+\begin{theorem}[鞍点和 KKT 条件的关系]
+    凸优化问题中，鞍点一定满足 KKT 条件，KKT 条件成立的点一定是鞍点。
+\end{theorem}
+
+\subsection{Lagrange 乘子的经济学解释}

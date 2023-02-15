@@ -2,8 +2,11 @@
 *.bcf
 *.log
 *.out
+*.toc
 *.synctex.gz
 *.synctex(busy)
 *.run.xml
 *.DS_Store
 tp.py
+*.zip
+paper/
