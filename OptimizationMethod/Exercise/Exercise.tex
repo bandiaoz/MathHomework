@@ -11,23 +11,23 @@
 \begin{Problem}
     设函数 $f:\mathbb{R}^n\to \mathbb{R}$. 矩阵 $A \in \mathbb{R}^{n\times n}$ 对称，向量 $b \in \mathbb{R}^n$.
     \begin{enumerate}
-        \item 写出函数 $f$ 是凸函数的定义, 并列出至少两个判定函数 $f$ 是凸函数的充要条件.
-        \item 设 $f(x_1, x_2) = 10 - 2(x_2 - x_1^2)^2$, $S = \{(x_1, x_2) \mid -11 \le x_1 \le 1, -1 \le x_2 \le 1\}$. 判断函数 $f(x_1, x_2)$ 是否为 $S$ 上的凸函数? 说明理由.
-        \item 证明 $f(x) = \frac{1}{2}x^tAx + b^tx$，为严格凸函数的充要条件是其 Hessian 阵 $A$ 正定.
+        \item 写出函数 $f$ 是凸函数的定义，并列出至少两个判定函数 $f$ 是凸函数的充要条件。
+        \item 设 $f(x_1, x_2) = 10 - 2(x_2 - x_1^2)^2$, $S = \{(x_1, x_2) \mid -11 \le x_1 \le 1, -1 \le x_2 \le 1\}$. 判断函数 $f(x_1, x_2)$ 是否为 $S$ 上的凸函数？说明理由。
+        \item 证明 $f(x) = \frac{1}{2}x^tAx + b^tx$，为严格凸函数的充要条件是其 Hessian 阵 $A$ 正定。
     \end{enumerate}
 
     \Answer \text{} \begin{enumerate}
-        \item 定义：$\dom(f)$ 是凸集, 并且对于 $\forall x, y \in \dom(f), 0 \le \lambda \le 1$, 都有 $f(\lambda x + (1 - \lambda)y) \le \lambda f(x) + (1 - \lambda)f(y)$.
+        \item 定义：$\dom(f)$ 是凸集，并且对于 $\forall x, y \in \dom(f), 0 \le \lambda \le 1$, 都有 $f(\lambda x + (1 - \lambda)y) \le \lambda f(x) + (1 - \lambda)f(y)$.
         
-        判定充要条件: 
+        判定充要条件：
         \begin{enumerate}
-            \item 函数 $f$ 是定义在非空开凸集 $S$ 上的可微函数, $\forall x, y \in \dom(f)$, 都有 $f(y) \ge f(x) + \nabla f(x)^t(y - x)$.
-            \item 函数 $f$ 是定义在非空开凸集 $S$ 上的二次可微函数, $\forall x \in S$, 都有 $\nabla^2f(x) \succeq 0$.
+            \item 函数 $f$ 是定义在非空开凸集 $S$ 上的可微函数，$\forall x, y \in \dom(f)$, 都有 $f(y) \ge f(x) + \nabla f(x)^t(y - x)$.
+            \item 函数 $f$ 是定义在非空开凸集 $S$ 上的二次可微函数，$\forall x \in S$, 都有 $\nabla^2f(x) \succeq 0$.
         \end{enumerate}
         \item $\nabla^2f = \begin{pmatrix}
             8x_2 - 24x_1^2 & 8x_1 \\
             8x_1 & -4
-        \end{pmatrix}$ 不是半正定矩阵, 故函数 $f$ 不是凸函数.
+        \end{pmatrix}$ 不是半正定矩阵，故函数 $f$ 不是凸函数。
         \item \begin{proof}\text{}
             \begin{enumerate}
                 \item 严格凸 $\to$ 正定：
@@ -38,18 +38,18 @@
                 \[f(\bar{x} + \lambda x) = f(\bar{x}) + \lambda \nabla f(\bar{x})^tx + \frac{1}{2}\lambda^2 x^t\nabla^2f(\bar{x})x + \lambda^2\norm{x}^2a,\ \underset{\lambda \to 0}{\lim} a = 0.\] 
                 故 
                 \[\frac{1}{2}\lambda^2 x^t\nabla^2f(\bar{x})x + \lambda^2\norm{x}^2a > 0.\] 
-                两边除 $\lambda^2$, 令 $\lambda \to 0$ 得 $x^t\nabla^2f(\bar{x})x > 0$, 故Hessian 阵 $A$ 正定. 
+                两边除 $\lambda^2$, 令 $\lambda \to 0$ 得 $x^t\nabla^2f(\bar{x})x > 0$, 故 Hessian 阵 $A$ 正定。
                 \item 正定 $\to$ 严格凸：
                 
-                $\forall x, \bar{x} \in \dom(f)$, 二阶Taylar展开可得：
+                $\forall x, \bar{x} \in \dom(f)$, 二阶 Taylar 展开可得：
                 \[f(x) = f(\bar{x}) + \nabla f(\bar{x})^t(x - \bar{x}) + \frac{1}{2}(x - \bar{x})^t\nabla^2f(\xi)(x - \bar{x}).\]
                 其中 $\xi = \lambda \bar{x} + (1 - \lambda)x, \lambda \in (0, 1).$
 
-                因为 $\dom(f)$ 是凸集，故 $\xi \in \dom(f)$, 又 $\nabla^2f$ 正定, 可得 
+                因为 $\dom(f)$ 是凸集，故 $\xi \in \dom(f)$, 又 $\nabla^2f$ 正定，可得 
                 \[\frac{1}{2}(x - \bar{x})\nabla^2f(\xi)(x - \bar{x}) > 0\]
                 故 
                 \[f(x) > f(\bar{x}) + \nabla f(\bar{x})^t(x - \bar{x})\]
-                即 $f$ 是严格凸函数.
+                即 $f$ 是严格凸函数。
             \end{enumerate}
         \end{proof}
     \end{enumerate}
@@ -57,25 +57,25 @@
 
 
 \begin{Problem}
-    设 $S \subseteq \mathbb{R}^n$, 函数 $f: S \to \mathbb{R}$ 二阶连续可微. 考虑约束优化问题(P1):
+    设 $S \subseteq \mathbb{R}^n$, 函数 $f: S \to \mathbb{R}$ 二阶连续可微。考虑约束优化问题 (P1):
     \[\begin{cases}
         \min & f(x)\\
         \subject & x \in S
     \end{cases}\]
     \begin{enumerate}
-        \item 约束优化问题(P1)在什么条件下是凸规划? 对于凸规划, 你知道有什么好的性质? 
+        \item 约束优化问题 (P1) 在什么条件下是凸规划？对于凸规划，你知道有什么好的性质？
         \item 考虑如下优化问题 (P2):\[\begin{cases}
             \min & x_2^2 + 4x_1 - 7x_2\\
             \subject & x_1 - x_2 \le 4\\
             &x_2 \le 3\\
             &6x_1 - x_1^2 + x_2 \ge 8
         \end{cases}\]
-        (P2)是否是凸规划? 说明理由. 根据最优性条件求(P2)的最优解.
+        (P2) 是否是凸规划？说明理由。根据最优性条件求 (P2) 的最优解。
     \end{enumerate}
 
     \Answer \text{}\begin{enumerate}
-        \item 当 $f$ 是凸函数, 不等约束 $g_i(x) \le 0$ 是凸函数, 等式约束是线性函数时, (P1) 是凸规划. 凸规划下, 函数的局部极小点就是整体极小点, 且极小点的集合是凸集.
-        \item 优化目标 $f(x) = x_2^2 + 4x_1 - 7x_2$ 是凸函数, 约束条件都是线性的, 故(P2)是凸规划.
+        \item 当 $f$ 是凸函数，不等约束 $g_i(x) \le 0$ 是凸函数，等式约束是线性函数时，(P1) 是凸规划。凸规划下，函数的局部极小点就是整体极小点，且极小点的集合是凸集。
+        \item 优化目标 $f(x) = x_2^2 + 4x_1 - 7x_2$ 是凸函数，约束条件都是线性的，故 (P2) 是凸规划。
         \[\begin{cases}
             4 + \lambda_1 + (-6 + 2x_1)\lambda_3 &= 0\\
             2x_2 - 7 - \lambda_1 + \lambda_2 - \lambda_3 &= 0\\
@@ -91,7 +91,7 @@
 \begin{Problem}
     用最速下降法，求解下列问题：
     \[\min \ x_1^2 - 2x_1x_2 + 4x_2^2 + x_1 - 3x_2\]
-    取初始点 $x^{(1)} = (1, 1)^t$, 迭代两次.
+    取初始点 $x^{(1)} = (1, 1)^t$, 迭代两次。
     \Answer $f(x) = x_1^2 - 2x_1x_2 + 4x_2^2 + x_1 - 3x_2$, $\nabla f(x) = (2x_1 - 2x_2 + 1, -2x_1 + 8x_2 - 3)^t$. 
     
     第一次迭代 
@@ -110,32 +110,32 @@
 \end{Problem}
 
 \begin{Problem}
-    设 $Q \in \mathbb{R}^{n \times n}$ 对称正定, $b \in \mathbb{R}^n$ 且 $b\neq 0$, 考虑非线性规划问题(P3):
+    设 $Q \in \mathbb{R}^{n \times n}$ 对称正定，$b \in \mathbb{R}^n$ 且 $b\neq 0$, 考虑非线性规划问题 (P3):
     \[\begin{cases}
         \min &\frac{1}{2}x^tQx\\
         \subject &x \ge b.
     \end{cases}\]
     \begin{enumerate}
-        \item 写出(P3)的 Lagrange 对偶规划.
-        \item 设 $x^*$ 是(P3)的最优解，证明 $x^*$ 与 $x^* - b$ 关于 $Q$ 共轭.
+        \item 写出 (P3) 的 Lagrange 对偶规划。
+        \item 设 $x^*$ 是 (P3) 的最优解，证明 $x^*$ 与 $x^* - b$ 关于 $Q$ 共轭。
     \end{enumerate}
 
     \Answer \text{} \begin{enumerate}
         \item $g(\lambda) = \underset{x}{\inf}\ \frac{1}{2}x^tQx + \lambda(b - x)$
         \item \begin{proof}
-            由 Lagrange 对偶可得, $L(x, \lambda) = \frac{1}{2}x^tQx + \lambda^t(b - x)$
+            由 Lagrange 对偶可得，$L(x, \lambda) = \frac{1}{2}x^tQx + \lambda^t(b - x)$
             \[\begin{cases}
                 Qx - \lambda &= 0\\
                 \lambda &\succeq 0\\
                 \lambda_i(b_i - x_i) &= 0
             \end{cases}\]
-            由 $\lambda = Qx$ 以及 $\lambda_i(b_i - x_i) = 0$ 可得, 最优解 $x^*$ 满足 $x^tQ(b - x) = 0$, 即 $x^*$ 与 $x^* - b$ 关于 $Q$ 共轭. 
+            由 $\lambda = Qx$ 以及 $\lambda_i(b_i - x_i) = 0$ 可得，最优解 $x^*$ 满足 $x^tQ(b - x) = 0$, 即 $x^*$ 与 $x^* - b$ 关于 $Q$ 共轭。
         \end{proof}
     \end{enumerate}
 \end{Problem}
 
 \begin{Problem}
-    考虑线性规划问题(P4):
+    考虑线性规划问题 (P4):
     \[\begin{cases}
         \max & 8x_1 - 9x_2 + 12x_3 + 4x_3 + 11x_5\\
         \subject &2x_1 - 3x_2 + 4x_3 + x_4 + 3x_5 \le 1\\
@@ -144,8 +144,8 @@
         &x_1, x_2, x_3, x_4, x_5 \ge 0\text{.}
     \end{cases}\]
     \begin{enumerate}
-        \item 写出(P4)的对偶规划.
-        \item 利用对偶理论判断 $x^* = (0, 2, 0, 7, 0)$ 是否是(P4)的最优解, 说明理由.
+        \item 写出 (P4) 的对偶规划。
+        \item 利用对偶理论判断 $x^* = (0, 2, 0, 7, 0)$ 是否是 (P4) 的最优解，说明理由。
     \end{enumerate}
 
     \Answer \text{} \begin{enumerate}
@@ -158,30 +158,30 @@
             &3w_1 + w_2 + 3w_3 \ge 11\\
             &w_1, w_2, w_3 \ge 0
         \end{cases}\]
-        \item 如果 $x^* = (0, 2, 0, 7, 0)^t$ 是最优解, 那么由互补松弛定理可得 
+        \item 如果 $x^* = (0, 2, 0, 7, 0)^t$ 是最优解，那么由互补松弛定理可得 
         \[\begin{cases}
             -3w_1 + 7w_2 + 4w_3 &= -9\\
             w_1 - 2w_2 + 2w_3 &= 4\\
             w_2 &= 0
         \end{cases}\]
-        解得对偶问题的最优解为 $(w_1, w_2, w_3) = \left(\dfrac{34}{10}, 0, \dfrac{3}{10}\right)$. 两个问题最优解相同, 故 $x^* = (0, 2, 0, 7, 0)$ 是最优解.
+        解得对偶问题的最优解为 $(w_1, w_2, w_3) = \left(\dfrac{34}{10}, 0, \dfrac{3}{10}\right)$. 两个问题最优解相同，故 $x^* = (0, 2, 0, 7, 0)$ 是最优解。
     \end{enumerate}
 \end{Problem}
 
 \begin{Problem}
-    考虑下列问题(P5):
+    考虑下列问题 (P5):
     \[\begin{cases}
         \min &x_1x_2\\
         \subject &g(x) = -2x_1 + x_2 + 3 \ge 0.
     \end{cases}\]
     \begin{enumerate}
-        \item 用二阶最优性条件证明点 $\bar{x} = \left(\frac{3}{4}, -\frac{3}{2}\right)$ 是局部最优解, 并说明它是否为全局最优解.
-        \item 定义障碍函数 \[G(x, r) = x_1x_2 - r\ln g(x)\text{,}\]试用内点法求解(P5), 并说明内点法产生的序列趋向点 $\bar{x}$.
+        \item 用二阶最优性条件证明点 $\bar{x} = \left(\frac{3}{4}, -\frac{3}{2}\right)$ 是局部最优解，并说明它是否为全局最优解。
+        \item 定义障碍函数 \[G(x, r) = x_1x_2 - r\ln g(x)\text{,}\] 试用内点法求解 (P5), 并说明内点法产生的序列趋向点 $\bar{x}$.
     \end{enumerate}
 
     \Answer \text{}
     \begin{enumerate}
-        \item $L(x, \lambda) = x_1x_2 + \lambda(2x_1 - x_2 - 3)$, 由KKT条件
+        \item $L(x, \lambda) = x_1x_2 + \lambda(2x_1 - x_2 - 3)$, 由 KKT 条件
         \[\begin{cases}
             \lambda(2x_1 - x_2 - 3) &= 0\\
             \lambda &\ge 0\\
@@ -205,9 +205,9 @@
             &=4d_2^2\\
             &> 0
         \end{align*} 
-        故矩阵 $\nabla^2L_x(x, \lambda)$ 在子空间 $G$ 上正定, 故是极小值点.
+        故矩阵 $\nabla^2L_x(x, \lambda)$ 在子空间 $G$ 上正定，故是极小值点。
 
-        只有唯一的KKT点, 故也是全局最优解.
+        只有唯一的 KKT 点，故也是全局最优解。
         \item 令 
         \[\begin{cases}
             \partial_{x_1}G = x_2 + \dfrac{2r}{-2x_1 + x_2 + 3} = 0\\
@@ -215,28 +215,28 @@
         \end{cases}.\] 可得 \[x = \frac{1}{8}(3 \mp \sqrt{9 - 16r}, -6 \pm 2\sqrt{9 - 16r})^t.\] 
         需在 $r > 0$ 时满足约束条件，故 
         \[x = \frac{1}{8}(3 + \sqrt{9 - 16r}, -6 - 2\sqrt{9 - 16r})^t.\] 
-        令 $r \to 0$, 可得 $x = \left(\dfrac{3}{4}, -\dfrac{3}{2}\right)^t$ 是全局最优解.
+        令 $r \to 0$, 可得 $x = \left(\dfrac{3}{4}, -\dfrac{3}{2}\right)^t$ 是全局最优解。
     \end{enumerate}
 \end{Problem}
 
 \begin{Problem}
-    考虑约束优化问题(P6):
+    考虑约束优化问题 (P6):
     \[\begin{cases}
         \min \quad &x_1x_2\\
         \subject \quad &2x_1 - x_2 - 3 = 0
     \end{cases}\]
     \begin{enumerate}
-        \item 给定 $\bar{x} = \left(\frac{3}{4}, -\frac{3}{2}\right)^t$, 利用约束优化问题局部解的一阶必要条件合二阶充分条件判断 $\bar{x}$ 是否是 (P6) 的局部最优解?
+        \item 给定 $\bar{x} = \left(\frac{3}{4}, -\frac{3}{2}\right)^t$, 利用约束优化问题局部解的一阶必要条件合二阶充分条件判断 $\bar{x}$ 是否是 (P6) 的局部最优解？
         \item 定义外罚函数为
         \[G(x, c) = x_1x_2 + \dfrac{c}{2}\left(2x_1 - x_2 - 3\right)^2\]
-        试用外罚函数法求解(P6)，并说明产生的序列趋向点.
+        试用外罚函数法求解 (P6)，并说明产生的序列趋向点。
     \end{enumerate}
 
     \Answer \text{}
     \begin{enumerate}
         \item Lagrange 乘子函数为 $L(x, \mu) = x_1x_2 + \mu(2x_1 - x_2 - 3)$.
         
-        由KKT条件可得 
+        由 KKT 条件可得 
         \[\begin{cases}
             2x_1 - x_2 - 3 &= 0\\
             \partial_{x_1}L = x_2 + 2\mu &= 0\\
@@ -248,7 +248,7 @@
         \[\nabla h(x)^td = 0\]
         故
         \[d = \left(d_1, d_2\right) \neq 0,\quad 2d_1 - d_2 = 0\]
-        则Lagrange 乘子函数的 Hessian 矩阵在空间 $G$ 上 
+        则 Lagrange 乘子函数的 Hessian 矩阵在空间 $G$ 上 
         \begin{align*}
             d^t\nabla^2L_x(x, \mu)d &= \begin{pmatrix}
                 d_1 & 2d_1
@@ -260,7 +260,7 @@
             &= 4d_1^2\\
             &> 0
         \end{align*}
-        故 $\nabla^2L_x(x, \mu)$ 正定, $\bar{x} = \left(\dfrac{3}{4}, -\dfrac{3}{2}\right)$ 是(P6)的局部最优解.
+        故 $\nabla^2L_x(x, \mu)$ 正定，$\bar{x} = \left(\dfrac{3}{4}, -\dfrac{3}{2}\right)$ 是 (P6) 的局部最优解。
         \item 对 $x$ 求偏导可得 
         \begin{align*}
             \partial_{x_1}G &= x_2 + c(2x_1 - x_2 - 3) \cdot 2 = 0\\
@@ -282,7 +282,7 @@
         \hline x_{1} & 1 & 0 & 4 & \beta & 3 \\
         \hline
     \end{array}\]
-    设 $\bar{c_3} = 0$, 求另一个不同于表中的最优解.
+    设 $\bar{c_3} = 0$, 求另一个不同于表中的最优解。
 
     \Answer 
     \[\begin{array}{|l|rccc|c|}

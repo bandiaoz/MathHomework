@@ -1,20 +1,24 @@
 \section{罚函数法}
-\textbf{外点罚函数法、内点罚函数法}、乘子罚函数法.
+\textbf{外点罚函数法、内点罚函数法}、乘子罚函数法。
 
 \subsection{外点罚函数法}
 \begin{note}
-    对于有约束优化问题 \[\begin{cases}
-        \min \quad &f(x)\\
-        \subject \quad &g_i(x) \ge 0, i = 1, \dots, m\\
-        &h_j(x) = 0, j = 1, \dots, l
-    \end{cases}\]
+    对于有约束优化问题 
+    \[
+        \begin{cases}
+            \min \quad &f(x)\\
+            \subject \quad &g_i(x) \ge 0, i = 1, \dots, m\\
+            &h_j(x) = 0, j = 1, \dots, l
+        \end{cases}
+    \]
     \begin{itemize}
-        \item 通过引入罚项转换为无约束优化问题 \begin{align*}
+        \item 通过引入罚项转换为无约束优化问题 
+        \begin{align*}
             \min F(x, \sigma) &= f(x) + \sigma p(x)\\
             &= f(x) + \sigma \left(\sum_{i = 1}^m \varphi(g_i(x)) + \sum_{j = 1}^l \psi(h_j(x))\right)
         \end{align*}
-        \item 其中 $\sigma$ 是很大的正数，$\varphi(y), \psi(y)$ 是连续函数.
-        \item 一般取 $\varphi(g_i(x)) = \left(\max\left\{0, -g_i(x)\right\}\right)^\alpha$，$\psi(h_j(x)) = |h_j(x)|^\beta$，通常 $\alpha = \beta = 2$.
+        \item 其中 $\sigma$ 是很大的正数，$\varphi(y), \psi(y)$ 是连续函数。
+        \item 一般取 $\varphi(g_i(x)) = \left(\max\left\{0, -g_i(x)\right\}\right)^\alpha$，$\psi(h_j(x)) = |h_j(x)|^\beta$，通常 $\alpha = \beta = 2$。
     \end{itemize}
 \end{note}
 
@@ -22,31 +26,151 @@
     外点罚函数法步骤：\begin{enumerate}
         \item 给定初始点 $x^{(0)}$，初始罚因子 $\sigma_1 > 0(\sigma_1 = 1)$，放大系数 $c > 1$，允许误差 $\varepsilon > 0$，置 $k = 1$.
         \item 以 $x^{(k - 1)}$ 为初始点，求解无约束问题 $\min f(x) + \sigma_k p(x)$ 设其极小点为 $x^{(k)}$.
-        \item 若 $\sigma_kp(x^{(k)}) < \varepsilon$，则停止计算，得到点 $x^{(k)}$；否则令 $\sigma_{k + 1} = c\sigma_k$，置 $k := k + 1$，返回步骤2.
+        \item 若 $\sigma_kp(x^{(k)}) < \varepsilon$，则停止计算，得到点 $x^{(k)}$；否则令 $\sigma_{k + 1} = c\sigma_k$，置 $k := k + 1$，返回步骤 2.
     \end{enumerate}
 \end{note}
 
 \begin{theorem}
-    对于由外点法所产生的序列 $\left\{x^{(k)}\right\}$，总有\begin{enumerate}
-        \item $F(x^{(k + 1)}, \sigma_{k + 1}) \ge F(x^{(k)}, \sigma_k)$
-        \item $p(x^{(k + 1)}) \le p(x^{(k)})$
-        \item $f(x^{(k + 1)}) \ge f(x^{(k)})$
+    对于由外点法所产生的序列 $\left\{x^{(k)}\right\}$，总有
+    \begin{enumerate}
+        \item $F\left(x^{(k + 1)}, \sigma_{k + 1}\right) \ge F\left(x^{(k)}, \sigma_k\right)$
+        \item $p\left(x^{(k + 1)}\right) \le p\left(x^{(k)}\right)$
+        \item $f\left(x^{(k + 1)}\right) \ge f\left(x^{(k)}\right)$
     \end{enumerate}
 \end{theorem}
 
 \begin{theorem}
-    设 $x^*$ 是问题(A)的一个最优解，则对 $\forall k$，有$f(x^*) \ge F(x^{(k)}, \sigma_k) \ge f(x^{(k)})$
+    设 $x^*$ 是问题 (A) 的一个最优解，则对 $\forall k$，有$f(x^*) = F(x^*, \sigma^*) \ge F(x^{(k)}, \sigma_k) \ge f(x^{(k)})$。
 \end{theorem}
 
 \begin{note}
-    外点罚函数法的重要特点：函数 $F(x, \sigma)$ 是在整个空间 $E^n$ 内进行优化，初始点可任意选择，且外点法也可用于非凸规划的最优化.
+    外点罚函数法的重要特点：函数 $F(x, \sigma)$ 是在整个空间 $E^n$ 内进行优化，初始点可任意选择，且外点法也可用于非凸规划的最优化。
 
     缺点\begin{enumerate}
         \item 惩罚项 $\sigma p(X)$ 的二阶偏导数一般不存在；
         \item 外点法的中间结果不是可行解，不能作为近似解；
-        \item 当点 $x^{(k)}$ 接近最优解时，罚因子 $\sigma_k$ 很大.可能使罚函数性质变坏，使搜索产生极大困难.
+        \item 当点 $x^{(k)}$ 接近最优解时，罚因子 $\sigma_k$ 很大。可能使罚函数性质变坏，使搜索产生极大困难。
     \end{enumerate}
 \end{note}
+
+\begin{example}
+    使用外点罚函数法求解优化问题
+    \[
+        \begin{cases}
+            \min \quad &x_1 + x_2\\
+            \subject \quad &x_1 - x_2^2 = 0    
+        \end{cases}
+    \]
+
+    \answer 
+    定义罚函数
+    \[
+        F(x, \sigma) = x_1 + x_2 + \sigma(x_1 - x_2^2)^2
+    \]
+    求偏导 
+    \begin{align*}
+        \partial_{x_1}F &= 1 + 2\sigma(x_1 - x_2^2)\\
+        \partial_{x_2}F &= 1 - 4\sigma x_2(x_1 - x_2^2)
+    \end{align*}
+    令 $\partial_{x}F = 0$，解得
+    \[
+        \bar{x}_\sigma = \left(\frac{1}{4} - \frac{1}{\sigma}, -\frac{1}{2}\right)^t \to \left(\frac{1}{4}, -\frac{1}{2}\right)(\sigma \to \infty)
+    \]
+\end{example}
+
+\begin{example}
+    使用外点罚函数法求解优化问题
+    \[
+        \begin{cases}
+            \min \quad &f(x) = x_1 + x_2\\
+            \subject \quad &g_1(x) = -x_1^2 + x_2 \ge 0\\
+            &g_2(x) = x_1 \ge 0
+        \end{cases}
+    \]
+
+    \answer 定义外罚函数
+    \[
+        F(x, \sigma) = x_1 + x_2 + \sigma\left(\max(0, x_1^2 - x_2)\right)^2 + \sigma\left(\max(0, -x_1)\right)^2
+    \]
+    求偏导
+    \begin{align*}
+        \partial_{x_1}F &= 1 + 4\sigma x_1\max(0, x_1^2 - x_2) - 2\sigma\max(0, -x_1)\\
+        \partial_{x_2}F &= 1 - 2\sigma x_2\max(0, x_1^2 - x_2)
+    \end{align*}
+    令 $\partial_{x}F = 0$，解得
+    \[
+        \bar{x}_\sigma = \left(-\frac{1}{2 + 2\sigma}, \frac{1}{(2 + 2\sigma)^2} - \frac{1}{2\sigma}\right)^t \to (0, 0)^t(\sigma \to \infty)
+    \]
+\end{example}
+
+\begin{example}
+    考虑下列问题：
+    \[
+        \begin{cases}
+            \min &x_1x_2\\
+            \subject &g(x) = -2x_1 + x_2 + 3 \ge 0.
+        \end{cases}
+    \]
+    \begin{enumerate}
+        \item 用二阶最优性条件证明点 $\bar{x} = \left(\frac{3}{4}, -\frac{3}{2}\right)$ 是局部最优解，并说明它是否为全局最优解。
+        \item 定义障碍函数 
+        \[
+            G(x, r) = x_1x_2 - r\ln g(x)\text{,}
+        \]
+        试用内点法求解，并说明内点法产生的序列趋向点 $\bar{x}$.
+    \end{enumerate}
+
+    \answer \text{}
+    \begin{enumerate}
+        \item $L(x, \lambda) = x_1x_2 + \lambda(2x_1 - x_2 - 3)$, 由 KKT 条件
+        \[
+            \begin{cases}
+                \lambda(2x_1 - x_2 - 3) &= 0\\
+                \lambda &\ge 0\\
+                \partial_{x_1}L = x_2 + 2\lambda &= 0\\
+                \partial_{x_2}L = x_1 - \lambda &= 0\\
+            \end{cases}
+        \]
+        解得 
+        \[
+            x = \left(\frac{3}{4}, -\frac{3}{2}\right)^t, \quad \lambda = \dfrac{3}{4}.
+        \]
+        由 \[\lambda > 0, \nabla g(x)^td = 0\]
+        可得 
+        \[d = (d_1, d_2)^t, \quad  d_1 - 2d_2 = 0,\ d \neq 0.\] 
+        此时 
+        \begin{align*}
+            d^t\nabla^2_xL(x, \lambda)d &= \begin{pmatrix}
+                2d_2 & d_2
+            \end{pmatrix} \begin{pmatrix}
+                0 & 1 \\ 1 & 0
+            \end{pmatrix} \begin{pmatrix}
+                2d_2 \\ d_2
+            \end{pmatrix}\\
+            &=4d_2^2\\
+            &> 0
+        \end{align*} 
+        故矩阵 $\nabla^2L_x(x, \lambda)$ 在子空间 $G$ 上正定，故是极小值点。
+
+        只有唯一的 KKT 点，故也是全局最优解。
+        \item 令 
+        \[
+            \begin{cases}
+                \partial_{x_1}G = x_2 + \dfrac{2r}{-2x_1 + x_2 + 3} = 0\\
+                \partial_{x_2}G = x_1 - \dfrac{r}{-2x_1 + x_2 + 3} = 0\\
+            \end{cases}.
+        \] 
+        可得 
+        \[
+            x = \frac{1}{8}(3 \mp \sqrt{9 - 16r}, -6 \pm 2\sqrt{9 - 16r})^t.
+        \] 
+        需在 $r > 0$ 时满足约束条件，故 
+        \[
+            x = \frac{1}{8}(3 + \sqrt{9 - 16r}, -6 - 2\sqrt{9 - 16r})^t.
+        \] 
+        令 $r \to 0$, 可得 $x = \left(\dfrac{3}{4}, -\dfrac{3}{2}\right)^t$ 是全局最优解。
+    \end{enumerate}
+\end{example}
 
 \subsection{内点罚函数法}
 基本思想：迭代总是从内点出发，并保持在可行域内部进行搜索．
@@ -66,8 +190,8 @@
         \item 以 $x^{(k - 1)}$ 为初始点，求解下列问题\[\begin{cases}
             \min \quad &f(x) + r_kB(x)\\
             \subject \quad &x \in \operatorname{int} S
-        \end{cases}\]设其极小点为 $x^{(k)}$.
-        \item 若 $r_kB(x^{(k)}) < \varepsilon$，则停止计算，得到点 $x^{(k)}$；否则，令 $r_{k + 1} = \beta r_k$，置 $k := k + 1$，返回2.
+        \end{cases}\] 设其极小点为 $x^{(k)}$.
+        \item 若 $r_kB(x^{(k)}) < \varepsilon$，则停止计算，得到点 $x^{(k)}$；否则，令 $r_{k + 1} = \beta r_k$，置 $k := k + 1$，返回 2.
     \end{enumerate}
 \end{note}
 
@@ -80,28 +204,99 @@
 \end{theorem}
 
 \begin{theorem}
-    设 $\{x^{(l)}\}$ 是由内点法产生的一个序列，则 $\{x^{(k)}\}$ 的任何收敛子序列的极限都是原问题的最优解.
+    设 $\{x^{(l)}\}$ 是由内点法产生的一个序列，则 $\{x^{(k)}\}$ 的任何收敛子序列的极限都是原问题的最优解。
 \end{theorem}
 
 \begin{note}
     求初始内点的迭代步骤：\begin{enumerate}
         \item 任取 $x^{(0)} \in E^n, r_0 > 0$(如取 $r_0 = 1$)，置 $k := 0$.
         \item 令 $S_k = \left\{i \mid g_i(x^{(k)}) \le 0, 1 \le i \le m\right\}, T_k = \left\{i \mid g_i(x^{k}) > 0, 1 \le i \le m\right\}$
-        \item 若 $S_k = \varnothing$，停止计算；否则，转4.
+        \item 若 $S_k = \varnothing$，停止计算；否则，转 4.
         \item 构造函数 \[\widetilde{P}\left(x, r_{k}\right)=-\sum_{i \in S_{k}} g_{i}(x)+r_{k} \sum_{i \in T_{k}} \frac{1}{g_{i}(x)},\left(r_{k}>0\right)\]
         记 $\widetilde{R}_{k}=\left\{x \mid g_{i}(x)>0 ,i \in T_{k}\right\}$
         \item 以 $x^{(k)}$ 为初始点，在 $\tilde{R_k}$ 域内，求障碍函数 $\tilde{P}(x, r_k)$ 的极小点：\[\begin{cases}
             \min &\tilde{P}(x, r_k)\\
             \subject & x \in \tilde{R_k}
-        \end{cases}\] 得 $x^{(k + 1)}$，转6
-        \item 令 $ 0 < r_{k + 1} < r_k$ (如取 $r_{k + 1} = \frac{1}{10}r_k$)，置$k:=k+1$，转2.
+        \end{cases}\] 得 $x^{(k + 1)}$，转 6
+        \item 令 $ 0 < r_{k + 1} < r_k$ (如取 $r_{k + 1} = \frac{1}{10}r_k$)，置$k:=k+1$，转 2.
     \end{enumerate}
 \end{note}
 
-\begin{note}
-    内点罚函数法优点：迭代总在可行域内进行，每一个中间结果都是可行解，可以作为近似解.
+\begin{example}
+    考虑约束优化问题：
+    \[
+        \begin{cases}
+            \min \quad &x_1x_2\\
+            \subject \quad &2x_1 - x_2 - 3 = 0
+        \end{cases}
+    \]
+    \begin{enumerate}
+        \item 给定 $\bar{x} = \left(\frac{3}{4}, -\frac{3}{2}\right)^t$, 利用约束优化问题局部解的一阶必要条件合二阶充分条件判断 $\bar{x}$ 是否是局部最优解？
+        \item 定义外罚函数为
+        \[
+            G(x, c) = x_1x_2 + \dfrac{c}{2}\left(2x_1 - x_2 - 3\right)^2
+        \]
+        试用外罚函数法求解，并说明产生的序列趋向点。
+    \end{enumerate}
 
-    内点罚函数法缺点：选取初始可行点较困难，且只适用于含不等式约束的非线性规划问题，否则没有严格内点.
+    \answer \text{}
+    \begin{enumerate}
+        \item Lagrange 乘子函数为 $L(x, \mu) = x_1x_2 + \mu(2x_1 - x_2 - 3)$.
+        
+        由 KKT 条件可得 
+        \[
+            \begin{cases}
+                2x_1 - x_2 - 3 &= 0\\
+                \partial_{x_1}L = x_2 + 2\mu &= 0\\
+                \partial_{x_2}L = x_1 - \mu &= 0
+            \end{cases}
+        \]
+        解得
+        \[
+            x^* = \left(\dfrac{3}{4}, -\dfrac{3}{2}\right).
+        \]
+        由二阶最优性条件可得 
+        \[
+            \nabla h(x)^td = 0
+        \]
+        故
+        \[
+            d = \left(d_1, d_2\right) \neq 0,\quad 2d_1 - d_2 = 0
+        \]
+        则 Lagrange 乘子函数的 Hessian 矩阵在空间 $G$ 上 
+        \begin{align*}
+            d^t\nabla^2L_x(x, \mu)d &= \begin{pmatrix}
+                d_1 & 2d_1
+            \end{pmatrix}\begin{pmatrix}
+                0 & 1 \\ 1 & 0
+            \end{pmatrix}\begin{pmatrix}
+                d_1 \\ 2d_1
+            \end{pmatrix}\\
+            &= 4d_1^2\\
+            &> 0
+        \end{align*}
+        故 $\nabla^2L_x(x, \mu)$ 正定，$\bar{x} = \left(\dfrac{3}{4}, -\dfrac{3}{2}\right)$ 是局部最优解。
+        \item 对 $x$ 求偏导可得 
+        \begin{align*}
+            \partial_{x_1}G &= x_2 + c(2x_1 - x_2 - 3) \cdot 2 = 0\\
+            \partial_{x_2}G &= x_1 + c(2x_1 - x_2 - 3) \cdot (-1) = 0
+        \end{align*}
+        解得 
+        \[
+            x^* = \left(\dfrac{3c}{4c - 1}, \dfrac{-6c}{4c - 1}\right).
+        \]
+        令 $c \to +\infty$, 得
+        \[
+            x^* = \left(\dfrac{3}{4}, -\dfrac{3}{2}\right).
+        \]
+    \end{enumerate}
+\end{example}
+
+
+\begin{note}
+    内点罚函数法优点：迭代总在可行域内进行，每一个中间结果都是可行解，可以作为近似解。
+
+    内点罚函数法缺点：选取初始可行点较困难，且只适用于含不等式约束的非线性规划问题，否则没有严格内点。
 \end{note}
 
 \subsection{乘子罚函数法}
@@ -111,9 +306,9 @@
         \min &f(x)\\
         \subject &c_i(x) = 0, i \in \varepsilon    
     \end{cases}\]
-    $P(x, \lambda, \pi)$ 为乘子罚函数，也称增广 Lagrange 函数.
+    $P(x, \lambda, \pi)$ 为乘子罚函数，也称增广 Lagrange 函数。
     \[\min_xP(x, \lambda, \pi) := f(x) - \sum_{i \in \varepsilon}\lambda_ic_i(x) + \pi\sum_{i \in \varepsilon}c_i^2(x)\]
-    对于凸规划，任意 $\pi > 0$ 下，原问题的最优解一定是乘子罚函数的最优解.
+    对于凸规划，任意 $\pi > 0$ 下，原问题的最优解一定是乘子罚函数的最优解。
 
     并且要使 $c_i(x_k) \to 0$，可以使乘子 $\lambda_i^{(k)}$ 足够靠近最优 Lagrange 乘子 $\lambda_i^*$，而不一定需要罚因子 $\pi_k \to +\infty$.
 \end{note}
@@ -122,9 +317,9 @@
     乘子罚函数算法：\begin{enumerate}
         \item 给定 $\pi_0 > 0, \lambda^{(0)} = 0$，初始点 $x_{-1} \in \mathbb{R}^n$，增长因子 $\gamma > 1$ 和允许误差 $\varepsilon > 0$. 令 $k = 0$.
         \item 以 $x_{k - 1}$ 为初始点，用无约束优化方法计算函数 $P(x, \lambda^{(k)}, pi_k)$ 的最小值点 $x_k$.
-        \item 若 $\max\{|c_i(x_k)| \mid i \in \varepsilon\} \le \varepsilon$，算法终止. 否则，转下一步.
-        \item 若 $\norm{c(x_k)}_\infty \ge \norm{c(x_{k - 1})}_\infty$，令 $\pi_{k + 1} = \gamma \pi_k, \lambda^{(k + 1)} = \lambda_k$，置 $\lambda^{(k + 1)} = \lambda^{(k)}$，转步2. 否则，转步5.
-        \item 若 $\pi_k > \pi_{k - 1}$ 或 $\norm{c(x_k)}_\infty \le \frac{1}{4}\norm{c(x_{k - 1})}_\infty$，令 $\pi_{k + 1} = \pi_k$，根据 $\lambda_i^{(k + 1)} = \lambda_i^{(k)} - 2\pi_kc_i(x_k)$ 调整 $\lambda^{(k + 1)}$，置 $k = k + 1$，转步2. 否则，令 $\pi_{k + 1} = \gamma \pi_k$，$\lambda^{(k + 1)} = \lambda^{(k)}$，置 $k = k + 1$，转步2.
+        \item 若 $\max\{|c_i(x_k)| \mid i \in \varepsilon\} \le \varepsilon$，算法终止。否则，转下一步。
+        \item 若 $\norm{c(x_k)}_\infty \ge \norm{c(x_{k - 1})}_\infty$，令 $\pi_{k + 1} = \gamma \pi_k, \lambda^{(k + 1)} = \lambda_k$，置 $\lambda^{(k + 1)} = \lambda^{(k)}$，转步 2. 否则，转步 5.
+        \item 若 $\pi_k > \pi_{k - 1}$ 或 $\norm{c(x_k)}_\infty \le \frac{1}{4}\norm{c(x_{k - 1})}_\infty$，令 $\pi_{k + 1} = \pi_k$，根据 $\lambda_i^{(k + 1)} = \lambda_i^{(k)} - 2\pi_kc_i(x_k)$ 调整 $\lambda^{(k + 1)}$，置 $k = k + 1$，转步 2. 否则，令 $\pi_{k + 1} = \gamma \pi_k$，$\lambda^{(k + 1)} = \lambda^{(k)}$，置 $k = k + 1$，转步 2.
     \end{enumerate}
 \end{note}
 
