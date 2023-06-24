@@ -2,7 +2,7 @@
 
 \subsection{基本概念}
 \begin{definition}[二次型的正定性]
-    给定二次型 $f(X) = X^t AX$，若对 $\forall X \neq 0$，都有 $f(X) = X^t AX > 0$ 成立，则称 $f(X)$ 为正定二次型，$A$ 为正定矩阵.
+    给定二次型 $f(X) = X^t AX$，若对 $\forall X \neq 0$，都有 $f(X) = X^t AX > 0$ 成立，则称 $f(X)$ 为正定二次型，$A$ 为正定矩阵。
 \end{definition}
 
 \begin{theorem}
@@ -16,7 +16,7 @@
 \end{theorem}
 
 \begin{definition}[二次型的半正定性]
-    给定二次型 $f(X) = X^t AX$，若对 $\forall X \neq 0$，都有 $f(X) = X^t AX \ge 0$ 成立，则称 $f(X)$ 为半正定二次型，$A$ 为半正定矩阵.
+    给定二次型 $f(X) = X^t AX$，若对 $\forall X \neq 0$，都有 $f(X) = X^t AX \ge 0$ 成立，则称 $f(X)$ 为半正定二次型，$A$ 为半正定矩阵。
 \end{definition}
 
 \begin{theorem}
@@ -30,9 +30,9 @@
 
 \subsection{凸集}
 \begin{definition}[凸集]
-    设 $S \subseteq E^n$，若对 $\forall x, y \in S$，$\forall \lambda \in [0, 1]$，都有 $\lambda x + (1 - \lambda)y \in S$，则称 $S$ 为凸集.
+    设 $S \subseteq E^n$，若对 $\forall x, y \in S$，$\forall \lambda \in [0, 1]$，都有 $\lambda x + (1 - \lambda)y \in S$，则称 $S$ 为凸集。
     \begin{itemize}
-        \item $x_1, \dots, x_k \in S, \lambda_1 + \cdots + \lambda_k = 1$，称 $\sum_{i = 1}^k \lambda_ix_i$ 为 $x_1, \dots, x_k$ 的凸组合.
+        \item $x_1, \dots, x_k \in S, \lambda_1 + \cdots + \lambda_k = 1$，称 $\sum_{i = 1}^k \lambda_ix_i$ 为 $x_1, \dots, x_k$ 的凸组合。
     \end{itemize}
 \end{definition}
 
@@ -44,27 +44,27 @@
         \item $S_1 + S_2 = \{x^{(1)} + x^{(2)} \mid x^{(1)} \in S_1, x^{(2)} \in S_2\}$
         \item $S_1 - S_2 = \{x^{(1)} - x^{(2)} \mid x^{(1)} \in S_1, x^{(2)} \in S_2\}$
     \end{enumerate}
-    都是凸集.
+    都是凸集。
 \end{theorem}
 
 \begin{definition}[凸锥]
-    给定集合 $C \subset E^n$，若对 $C$ 中每一个 $x$，及任意的 $\lambda \ge 0$，都有 $\lambda x \in C$，则称 $C$ 为锥；若 $C$ 为凸集，则称 $C$ 为凸锥.
+    给定集合 $C \subset E^n$，若对 $C$ 中每一个 $x$，及任意的 $\lambda \ge 0$，都有 $\lambda x \in C$，则称 $C$ 为锥；若 $C$ 为凸集，则称 $C$ 为凸锥。
 \end{definition}
 
 \begin{definition}[极点]
-    $S$ 是非空凸集，$x\in S$，若由 $x = \lambda x_1 + (1 - \lambda)x_2$，其中 $\lambda \in (0, 1), x_1, x_2 \in S$，必推出 $x = x_1 = x_2$，则称 $x$ 是 $S$ 的极点.
+    $S$ 是非空凸集，$x\in S$，若由 $x = \lambda x_1 + (1 - \lambda)x_2$，其中 $\lambda \in (0, 1), x_1, x_2 \in S$，必推出 $x = x_1 = x_2$，则称 $x$ 是 $S$ 的极点。
 \end{definition}
 
 \begin{definition}[极方向]
     $S$ 是 $E^n$ 中的闭凸集，$d \in E^n$，$d \neq 0$，如果对 $\forall x \in S$，有 
     \[\left\{x + \lambda d \mid \lambda > 0\right\} \subset S\]
-    则称向量 $d$ 为 $S$ 的方向.
+    则称向量 $d$ 为 $S$ 的方向。
     
-    若 $S$ 的方向 $d$ 不能表示为集合的两个不同方向的\textbf{正线性组合}，则称 $d$ 为 $S$ 的极方向.
+    若 $S$ 的方向 $d$ 不能表示为集合的两个不同方向的\textbf{正线性组合}，则称 $d$ 为 $S$ 的极方向。
 \end{definition}
 
 \begin{example}
-    给定 $S = \{(x_1, x_2)^t \mid x_2 \ge |x_1|\}$，$d^{(1)} = (1, 1)^t$，$d^{(2)} = (-1, 1)^t$，证明 $d^{(1)}$，$d^{(2)}$ 是 $S$ 的极方向.
+    给定 $S = \{(x_1, x_2)^t \mid x_2 \ge |x_1|\}$，$d^{(1)} = (1, 1)^t$，$d^{(2)} = (-1, 1)^t$，证明 $d^{(1)}$，$d^{(2)}$ 是 $S$ 的极方向。
 
     \begin{proof}
         $\forall x = (x_1, x_2) \in S$，$x_2 \ge |x_1|$，
@@ -73,7 +73,7 @@
         \[x_2 + \lambda \ge |x_1| + \lambda \ge |x_1 + \lambda|\]
         可得，
         \[x + \lambda d^{(1)} \in S.\]
-        故 $d^{(1)}$ 是 $S$ 的方向.
+        故 $d^{(1)}$ 是 $S$ 的方向。
 
         设
         \[d^{(1)} = \lambda_1\begin{pmatrix}
@@ -101,7 +101,7 @@
         \end{pmatrix}$ 和 $\begin{pmatrix}
             v_1 \\
             v_2
-        \end{pmatrix}$ 是两个相同的方向. 所以 $d^{(1)}$ 是 $S$ 的极方向. 同理可证 $d^{(2)}$ 是 $S$ 的极方向.
+        \end{pmatrix}$ 是两个相同的方向。所以 $d^{(1)}$ 是 $S$ 的极方向。同理可证 $d^{(2)}$ 是 $S$ 的极方向。
     \end{proof}
 \end{example}
 
@@ -120,7 +120,7 @@
 \end{theorem}
 
 \begin{example}
-    用定义验证下列集合为凸集.
+    用定义验证下列集合为凸集。
     \[S = \{(x_1, x_2) \mid x_1 + 2x_2 \ge 1, x_1 - x_2 \ge 1\}\]
 
     \answer $\forall x, y \in S$，设 $\lambda \in [0, 1]$，$z = \lambda x + (1 - \lambda)y$.
@@ -132,7 +132,7 @@
         z_1 + 2z_2 = \lambda(x_1 + 2x_2) + (1 - \lambda)(y_1 + 2y_2) \ge \lambda + (1 - \lambda) \ge 1\\
         z_1 + 2z_2 = \lambda(x_1 - x_2) + (1 - \lambda)(y_1 - y_2) \ge \lambda + (1 - \lambda) \ge 1\\
     \end{gather*}
-    故 $z \in S$，$S$ 为凸集.
+    故 $z \in S$，$S$ 为凸集。
 \end{example}
 
 \subsection{凸集分离定理}
@@ -153,8 +153,8 @@
 \begin{theorem}
     两个系统恰有一个有解：
     \begin{itemize}
-        \item Farkas 引理：设 $A$ 为 $m\times n$ 矩阵，$c$ 为 $n$ 维列向量，则 $Ax \le 0, c^tx > 0$ 有解的充分条件是 $A^ty = c, y\ge 0$ 无解.
-        \item Gordan定理：给定矩阵 $A \in \mathbb{R}^{m\times n}$，下列两个系统只有一个有解
+        \item Farkas 引理：设 $A$ 为 $m\times n$ 矩阵，$c$ 为 $n$ 维列向量，则 $Ax \le 0, c^tx > 0$ 有解的充分条件是 $A^ty = c, y\ge 0$ 无解。
+        \item Gordan 定理：给定矩阵 $A \in \mathbb{R}^{m\times n}$，下列两个系统只有一个有解
         \begin{gather*}
             Ax < 0\\
             y \ge 0, y \neq 0, A^ty = 0
@@ -163,7 +163,7 @@
 \end{theorem}
 
 \begin{example}
-    证明 $Ax \le 0$，$c^tx > 0$ 有解. 其中
+    证明 $Ax \le 0$，$c^tx > 0$ 有解。其中
     \[
         A = \begin{bmatrix}
             1 & -2 & 1\\
@@ -177,7 +177,7 @@
     \]
 
     \begin{proof}
-        证明 $Ax \le 0$，$c^tx > 0$ 有解，即证 $A^ty = c, y \ge 0$ 无解.
+        证明 $Ax \le 0$，$c^tx > 0$ 有解，即证 $A^ty = c, y \ge 0$ 无解。
         \begin{align*}
             A^ty &= c\\
             \begin{bmatrix}
@@ -203,15 +203,15 @@
                 y_1 + y_2 &= 0
             \end{cases}    
         \]
-        该方程组无解，故原系统有解.
+        该方程组无解，故原系统有解。
     \end{proof}
 \end{example}
 
 \begin{example}
     设 $A$ 是 $m\times n$ 矩阵，$B$ 是 $l \times n$ 矩阵，$c\in\mathbb{R}^n$，证明下列两个系统恰有一个有解：
     \begin{itemize}
-        \item 系统1：$Ax \le 0, Bx = 0, c^tx > 0$，对某些 $x\in\mathbb{R}^n$
-        \item 系统2：$A^ty + B^tz = c, y \ge 0$，对某些 $y \in \mathbb{R}^m$ 和 $z\in\mathbb{R}^l$
+        \item 系统 1：$Ax \le 0, Bx = 0, c^tx > 0$，对某些 $x\in\mathbb{R}^n$
+        \item 系统 2：$A^ty + B^tz = c, y \ge 0$，对某些 $y \in \mathbb{R}^m$ 和 $z\in\mathbb{R}^l$
     \end{itemize}  
 
     \begin{proof}
@@ -239,7 +239,7 @@
         \]
         无解，即 $A^ty + B^tz_1 - B^tz_2 = c, y\ge 0, z_1\ge 0, z_2\ge 0$无解，即 $A^t + B^tz = c, y\ge 0$ 无解。
         
-        反之，若 $A^t + B^tz = c, y\ge 0$ 有解，即 $A^ty + B^tz_1 - B^tz_2 = c, y\ge 0, z_1\ge 0, z_2\ge 0$ 有解，根据 Farkas定理，有 
+        反之，若 $A^t + B^tz = c, y\ge 0$ 有解，即 $A^ty + B^tz_1 - B^tz_2 = c, y\ge 0, z_1\ge 0, z_2\ge 0$ 有解，根据 Farkas 定理，有 
         \[
             \begin{bmatrix}
                 A\\
@@ -254,59 +254,59 @@
 \subsection{凸函数}
 \begin{definition}[凸函数]
     设 $S$ 是 $E^n$ 中的非空凸集，$f(x)$ 是定义在 $S$ 上的实函数，如果对于每一对 $x_1, x_2 \in S$ 及每一个 $\lambda, 0\le \lambda \le 1$ 都有 \[f(\lambda x_1 + (1 - \lambda)x_2) \le \lambda f(x_1) + (1 - \lambda)f(x_2)\]
-    则称函数 $f(x)$ 为 $S$ 上的凸函数.
+    则称函数 $f(x)$ 为 $S$ 上的凸函数。
 \end{definition}
 
 \begin{theorem}
     凸函数的性质：
     \begin{itemize}
-        \item 设 $f_1(x)$，$f_2(x)$ 是凸集 $S$ 上的凸函数，则函数 $f_1(x) + f_2(x)$ 在 $S$ 上也是凸函数.
-        \item 设 $f(x)$ 是凸集 $S$ 上的凸函数，则对任意的 $a \ge 0$，函数 $af(x)$ 是凸的.
+        \item 设 $f_1(x)$，$f_2(x)$ 是凸集 $S$ 上的凸函数，则函数 $f_1(x) + f_2(x)$ 在 $S$ 上也是凸函数。
+        \item 设 $f(x)$ 是凸集 $S$ 上的凸函数，则对任意的 $a \ge 0$，函数 $af(x)$ 是凸的。
         \item 设 $f(x)$ 是凸集 $S$ 上的凸函数，对每一个实数 $c$，则集合 
         \[
             S_c = \{x \mid x \in S, f(x) \le c\}  
         \]
-        是凸集.
-        \item 凸函数的根本重要性：设 $S$ 是 $E^n$ 中的非空凸集，$f$ 是定义在 $S$ 上的凸函数，则 $f$ 在 $S$ 上的局部极小点是整体极小点，且极小点的集合是凸集.
+        是凸集。
+        \item 凸函数的根本重要性：设 $S$ 是 $E^n$ 中的非空凸集，$f$ 是定义在 $S$ 上的凸函数，则 $f$ 在 $S$ 上的局部极小点是整体极小点，且极小点的集合是凸集。
     \end{itemize}
 \end{theorem}
 
 \begin{theorem}
     凸函数的判别：
     \begin{itemize}
-        \item (一阶充要条件)设 $S$ 是 $E^n$ 中的非空开凸集，$f(x)$ 是定义在 $S$ 上的\textbf{可微}函数，则 $f(x)$ 为凸函数的充要条件是对任意两点 $x_1, x_2 \in S$，有 \[f(x_2) \ge f(x_1) + \nabla f(x_1)^t(x_2 - x_1)\]
+        \item (一阶充要条件) 设 $S$ 是 $E^n$ 中的非空开凸集，$f(x)$ 是定义在 $S$ 上的\textbf{可微}函数，则 $f(x)$ 为凸函数的充要条件是对任意两点 $x_1, x_2 \in S$，有 \[f(x_2) \ge f(x_1) + \nabla f(x_1)^t(x_2 - x_1)\]
         $f(x)$ 为严格凸函数的充要条件是对任意互不相同两点 $x_1, x_2 \in S$，有 \[f(x_2) > f(x_1) + \nabla f(x_1)^t(x_2 - x_1)\]
 
-        几何意义：$f(x)$ 是凸函数当且仅当任意点处的切线增量不超过函数的增量.
-        \item (二阶充要条件)设 $S$ 是 $E^n$ 中的非空开凸集，$f(x)$ 是定义在 $S$ 上的\textbf{二次可微}函数，则 $f(x)$ 为凸函数的充要条件是对任意 $x \in S$，$f(x)$ 在 $x$ 处的Hessian矩阵 $\nabla ^2f(x)$ 是半正定的.
+        几何意义：$f(x)$ 是凸函数当且仅当任意点处的切线增量不超过函数的增量。
+        \item (二阶充要条件) 设 $S$ 是 $E^n$ 中的非空开凸集，$f(x)$ 是定义在 $S$ 上的\textbf{二次可微}函数，则 $f(x)$ 为凸函数的充要条件是对任意 $x \in S$，$f(x)$ 在 $x$ 处的 Hessian 矩阵 $\nabla ^2f(x)$ 是半正定的。
         
-        $f(x)$ 为严格凸函数的充要条件是对任意 $x \in S$，$f(x)$ 在 $x$ 处的Hessian矩阵 $\nabla ^2f(x)$ 是正定的.
+        $f(x)$ 为严格凸函数的充要条件是对任意 $x \in S$，$f(x)$ 在 $x$ 处的 Hessian 矩阵 $\nabla ^2f(x)$ 是正定的。
     \end{itemize}
 \end{theorem}
 
 \begin{note}
     设 $f(x)$ 是定义在凸集 $S$ 上的可微凸函数，若 $\exists x^* \in S$，使对 $\forall x \in S$，都有 \[\nabla f(x^*)^t(x - x^*) \ge 0\]
-    则 $x^*$ 是 $f(x)$ 在凸集 $S$ 上的全局极小点.
+    则 $x^*$ 是 $f(x)$ 在凸集 $S$ 上的全局极小点。
 \end{note}
 
 \begin{example}
-    判断下列函数是否为凸函数.
+    判断下列函数是否为凸函数。
     \begin{enumerate}
         \item $f(x_1, x_2) = x_1^2 - 2x_1x_2 + x_2^2 + x_1 + x_2$
         \item $f(x_1, x_2) = x_1e^{-(x_1 + x_2)}$
         \item $f(x_1, x_2, x_3) = x_1x_2 + 2x_1^2 + x_2^2 + 2x_3^2 - 6x_1x_3$
     \end{enumerate}
-    \answer 计算 $\nabla^2f(x) \succeq 0$ 即可.
+    \answer 计算 $\nabla^2f(x) \succeq 0$ 即可。
 \end{example}
 
 \begin{definition}
-    凸规划：求凸函数在凸集上的极小点.
+    凸规划：求凸函数在凸集上的极小点。
     \begin{align*}
         \min \quad &f(x)\\ 
         \subject \quad &g_{i}(x) \le 0, i=1, \cdots, m \\  
         &h_{j}(x)=0, j=1, \cdots, l 
     \end{align*}
-    若 $f(x)$ 是凸函数，$g_i(x)$ 是凸函数，$h_j(x)$ 是线性函数，则原问题为凸规划.
+    若 $f(x)$ 是凸函数，$g_i(x)$ 是凸函数，$h_j(x)$ 是线性函数，则原问题为凸规划。
     \begin{itemize} 
         \item 凸规划的局部极小点就是整体极小点
         \item 且极小点的集合为凸集

@@ -23,7 +23,8 @@
 \end{note}
 
 \begin{note}
-    外点罚函数法步骤：\begin{enumerate}
+    外点罚函数法步骤：
+    \begin{enumerate}
         \item 给定初始点 $x^{(0)}$，初始罚因子 $\sigma_1 > 0(\sigma_1 = 1)$，放大系数 $c > 1$，允许误差 $\varepsilon > 0$，置 $k = 1$.
         \item 以 $x^{(k - 1)}$ 为初始点，求解无约束问题 $\min f(x) + \sigma_k p(x)$ 设其极小点为 $x^{(k)}$.
         \item 若 $\sigma_kp(x^{(k)}) < \varepsilon$，则停止计算，得到点 $x^{(k)}$；否则令 $\sigma_{k + 1} = c\sigma_k$，置 $k := k + 1$，返回步骤 2.
@@ -173,7 +174,7 @@
 \end{example}
 
 \subsection{内点罚函数法}
-基本思想：迭代总是从内点出发，并保持在可行域内部进行搜索．
+基本思想：迭代总是从内点出发，并保持在可行域内部进行搜索。
 
 \begin{note}
     障碍函数：\[G(x, r) = f(X) + rB(x)\]

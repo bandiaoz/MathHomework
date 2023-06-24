@@ -1,11 +1,11 @@
 \section{对偶理论}
-\subsection{LP对偶问题的形式}
+\subsection{LP 对偶问题的形式}
 \begin{note}
-    \figref{fig2}中，左边是对偶问题(D)，右边是原问题(P)。
+    \figref{fig2}中，左边是对偶问题 (D)，右边是原问题 (P)。
     \begin{figure}[htbp]
         \centering
         \includegraphics[width=0.4\textwidth]{./figures/img2.png}
-        \caption{LP问题的对偶问题转换规则 \label{fig2}}
+        \caption{LP 问题的对偶问题转换规则 \label{fig2}}
     \end{figure}
     \[\begin{cases}
         \min \quad & 2x_1 + x_2 + 2x_3\\
@@ -22,14 +22,14 @@
     \end{cases}\]
     \begin{itemize}
         \item 原问题的变量对应对偶问题的约束，并且\textbf{符号改变}。
-        \item 原问题的约束对应对偶问题的变量，符号保持，等号对应free。
+        \item 原问题的约束对应对偶问题的变量，符号保持，等号对应 free。
     \end{itemize}
 \end{note}
 
 \subsection{对偶问题的基本性质}
 \begin{minipage}[c]{15em}
     \[
-        \text{原问题(P)}
+        \text{原问题 (P)}
         \begin{cases}
             \min \quad &c^tx\\
             \subject \quad &Ax \ge b\\
@@ -39,7 +39,7 @@
 \end{minipage}
 \begin{minipage}[c]{15em}
     \[
-        \text{对偶问题(D)}
+        \text{对偶问题 (D)}
         \begin{cases}
             \max \quad &b^tw\\
             \subject \quad &A^tw \le c\\
@@ -49,22 +49,22 @@
 \end{minipage}
 
 \begin{theorem}[弱对偶定理]
-    弱对偶定理：若 $x^{(0)}, w^{(0)}$ 分别是原问题(P)和对偶问题(D)的可行解，则 $c^Tx^{(0)} \ge b^Tw^{(0)}$，即最小化目标的函数值大于等于最大化目标的函数值。
+    弱对偶定理：若 $x^{(0)}, w^{(0)}$ 分别是原问题 (P) 和对偶问题 (D) 的可行解，则 $c^Tx^{(0)} \ge b^Tw^{(0)}$，即最小化目标的函数值大于等于最大化目标的函数值。
 \end{theorem}
 
 \begin{theorem}[弱对偶推论]
-    若问题(P)或(D)有无界解，则其对偶问题(D)或(P)无可行解。
+    若问题 (P) 或 (D) 有无界解，则其对偶问题 (D) 或 (P) 无可行解。
 \end{theorem}
 
 \begin{theorem}[最优性准则]
-    若 $x^{(0)}$，$w^{(0)}$ 分别为(P)，(D)的可行解且 $c^tx^{(0)} = b^tw^{(0)}$，则 $x^{(0)}$，$w^{(0)}$ 分别为(P)，(D)问题的最优解。
+    若 $x^{(0)}$，$w^{(0)}$ 分别为 (P)，(D) 的可行解且 $c^tx^{(0)} = b^tw^{(0)}$，则 $x^{(0)}$，$w^{(0)}$ 分别为 (P)，(D) 问题的最优解。
 \end{theorem}
 
 \begin{theorem}[强对偶定理]
-    若原问题(P)和对偶问题(D)均有可行解，则原问题(P)和对偶问题(D)均有最优解，且(P)和(D)的最优目标函数值相等.\begin{itemize}
-        \item 推论：若问题(P)或(D)无可行解，则其对偶问题(D)或(P)或者无可行解,或者目标函数值趋于无穷.
-        \item 推论：在用单纯形法求解LP问题(P)的松弛变量的检验数的相反数为对偶问题(D)的最优解.
-        \item 推论：在用单纯形法求解LP问题(D)的松弛变量的检验数的为原问题(P)的最优解.
+    若原问题 (P) 和对偶问题 (D) 均有可行解，则原问题 (P) 和对偶问题 (D) 均有最优解，且 (P) 和 (D) 的最优目标函数值相等。\begin{itemize}
+        \item 推论：若问题 (P) 或 (D) 无可行解，则其对偶问题 (D) 或 (P) 或者无可行解，或者目标函数值趋于无穷。
+        \item 推论：在用单纯形法求解 LP 问题 (P) 的松弛变量的检验数的相反数为对偶问题 (D) 的最优解。
+        \item 推论：在用单纯形法求解 LP 问题 (D) 的松弛变量的检验数的为原问题 (P) 的最优解。
     \end{itemize}
 \end{theorem}
 
@@ -148,7 +148,7 @@
     即 $\begin{cases}
         (c - w^{(0)}A)x^{(0)} = 0\\
         w^{(0)}(Ax^{(0)} - b) = 0
-    \end{cases}$，其中 $P_j$ 是 $A$ 的第 $j$ 列，$A_i$ 是 $A$ 的第 $i$ 行.
+    \end{cases}$，其中 $P_j$ 是 $A$ 的第 $j$ 列，$A_i$ 是 $A$ 的第 $i$ 行。
 \end{theorem}
 
 \begin{theorem}[互补松弛定理非对称形式]
@@ -195,7 +195,7 @@
         \]
     \end{minipage}
 
-    己知(D)的最优解为 $y^* = \left(\frac{6}{5}, \frac{1}{5}\right)^t$，用互不松弛定理求出(P)的最优解。
+    己知 (D) 的最优解为 $y^* = \left(\frac{6}{5}, \frac{1}{5}\right)^t$，用互补松弛定理求出 (P) 的最优解。
 
     \answer
     \[
@@ -211,7 +211,7 @@
 \subsection{对偶问题的经济解释}
 \subsection{对偶单纯形法}
 \begin{note}
-    对偶单纯形法步骤(\textbf{找的两次都要小于0，和单纯形两次都要大于0相反})：
+    对偶单纯形法步骤 (\textbf{找的两次都要小于 0，和单纯形两次都要大于 0 相反})：
     \begin{enumerate}
         \item 化标准型，建立初始单纯形表
         \item 判断，若 $B^{-1}b \ge 0$，则已得到最优解
@@ -227,8 +227,8 @@
 \begin{note}
     对偶单纯形法与原单纯形法的区别：
     \begin{itemize}
-        \item 原单纯形法保持原问题的可行性，对偶单纯形法保持所有检验数 $wP_j - c_j \le 0$，即保持对偶问题的可行性.
-        \item 特点：先选择出基变量，再选择进基变量.
+        \item 原单纯形法保持原问题的可行性，对偶单纯形法保持所有检验数 $wP_j - c_j \le 0$，即保持对偶问题的可行性。
+        \item 特点：先选择出基变量，再选择进基变量。
     \end{itemize}
 \end{note}
 
@@ -293,5 +293,5 @@
     \end{itemize}    
 \end{note}
 
-\subsection{原-对偶算法}
-原-对偶算法不考。
+\subsection{原 - 对偶算法}
+原 - 对偶算法不考。
